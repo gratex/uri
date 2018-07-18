@@ -1,0 +1,19 @@
+{
+  "name": "uri",
+  "version": "1.0.0",
+  "description": "hello world",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab01.hq.gratex.com:node/uri.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
