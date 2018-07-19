@@ -1,14 +1,11 @@
-const uri = require("../src/_uri.js");
+const uri = require('../src/_uri.js');
 
 
-
-test("match string and Regex", function(){
-    expect(uri.decomposeComponents)
+test('match string and Regex', () => {
+    expect(uri.decomposeComponents);
 });
 
 
-test("recompose ", function(){
-    expect(uri.recomposeAuthorityComponents)
+test('recompose ', () => {
+    expect(uri.recomposeAuthorityComponents);
 });
-
-
