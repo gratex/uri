@@ -18,7 +18,7 @@ module.exports = exports = {
 
     "rules": {
         // Possible Errors (overrides from recommended set)
-        "no-extra-parens": ERROR,
+        "no-extra-parens": OFF,
         "no-unexpected-multiline": ERROR,
         // All JSDoc comments must be valid
         //TODO: ar: now turned of temporarily
@@ -201,7 +201,7 @@ module.exports = exports = {
         "no-spaced-func": WARN,
         "no-ternary": OFF,
         "no-trailing-spaces": WARN,
-        "no-underscore-dangle": WARN,
+        "no-underscore-dangle": OFF,
         "no-unneeded-ternary": WARN,
         "object-curly-spacing": [WARN, "always"],
         "one-var": OFF,

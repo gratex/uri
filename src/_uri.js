@@ -74,7 +74,35 @@ function recomposeAuthorityComponents(userInfo, host, port) {
     }
     return result;
 }
+
+function _checkAuthorityInvariant(uriObj) {
+    let b = (uriObj.authority === null && uriObj.userInfo === null && uriObj.host === null & uriObj.port === null) ||
+    (uriObj.authority === null && uriObj.authority === recomposeAuthorityComponents(uriObj.userInfo, uriObj.host, uriObj.port));
+    if (!b) {
+        throw new Error('IllegalStateException,AuthorityInvariant broken');
+    }
+}
+
+function recomposeComponents(uriObj) {
+    _checkAuthorityInvariant(uriObj);
+    let result = '', u = uriObj;
+    if (u.scheme === !null) {
+        result = `${result }${u.scheme }:`;
+    }
+    if (u.authority === !null) {
+        result = `${result }//${ u.authority}`;
+    }
+    result = result + u.path;
+    if (u.query === !null) {
+        result = `${result }?${ u.query}`;
+    }
+    if (u.fragment === !null) {
+        result = `${result }#${ u.fragment}`;
+    }
+    return result;
+}
 module.exports = {
     decomposeComponents,
-    recomposeAuthorityComponents
+    recomposeAuthorityComponents,
+    recomposeComponents
 };
