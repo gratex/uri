@@ -164,6 +164,7 @@ module.exports = exports = {
             "after": true
         }],
         "comma-style": [WARN, "last"],
+        "comma-dangle": [WARN, "never"],
         "computed-property-spacing": [WARN, "never"],
         "consistent-this": [WARN, "self"],
         "eol-last": WARN,

@@ -26,7 +26,7 @@ function decomposeComponents(uriStr) {
         fragment: gs[15],
         userInfo: undefined,
         host: undefined,
-        port: undefined,
+        port: undefined
         // TODO: maybe do not add if authority is not defined
     };
     if (!reMissingGroupSupport) {
