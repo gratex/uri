@@ -157,18 +157,18 @@ const componentsData = [ // s, a, p, q, f
 //         // let resStr = uri.recomposeComponents(res);
 //     }
 // }
-function component() {
-    for (let i = 0; i < componentsData.length; i++) {
-        let original = componentsData[i];
-        let decomposed = uri.decomposeComponents(original);
-        let recomposed = uri.recomposeComponents(decomposed);
+// test('match string and Regex', resolve);
+test('component test', (() => { // TODO: is component really the best name??
+
+    function testComponent(original) {
+        const decomposed = uri.decomposeComponents(original);
+        const recomposed = uri.recomposeComponents(decomposed);
         expect(original).toEqual(recomposed);
     }
-}
 
+    componentsData.forEach((item) => testComponent(item));
 
-// test('match string and Regex', resolve);
-test('component test', component);
+}));
 
 
 // test('recompose ', () => {

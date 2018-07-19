@@ -52,6 +52,7 @@ module.exports = exports = {
         "no-div-regex": WARN,
         "no-else-return": WARN,
         "no-labels": OFF,
+        "no-console": OFF,
         "no-empty-pattern": WARN,
         "no-eq-null": OFF,
         "no-eval": ERROR,
@@ -133,7 +134,7 @@ module.exports = exports = {
         "no-sync": WARN,
 
         // ECMAScript 6 support
-        "arrow-body-style": [ERROR, "always"],
+        "arrow-body-style": [ERROR, "as-needed"],
         "arrow-parens": [ERROR, "always"],
         "arrow-spacing": [ERROR, {
             "before": true,
