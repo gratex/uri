@@ -1,14 +1,14 @@
 const splitUriRegex = new RegExp( // IRI lib regexp
     '^' +
-        '(([^:/?#]*):)?' + // scheme
-        '(//((([^/?#@]*)@)?' + // user
-        '(\\[[^/?#]*\\]|([^/?#:]*))?' + // host
-        '(:([^/?#]*))?))?' + // port
-        '([^#?]*)?' + // path
-        '(\\?([^#]*))?' + // query
-        '(#(.*))?' + // frag
-        '$');//
-    // TODO: get rid of RFC2396 constants
+    '(([^:/?#]*):)?' + // scheme
+    '(//((([^/?#@]*)@)?' + // user
+    '(\\[[^/?#]*\\]|([^/?#:]*))?' + // host
+    '(:([^/?#]*))?))?' + // port
+    '([^#?]*)?' + // path
+    '(\\?([^#]*))?' + // query
+    '(#(.*))?' + // frag
+    '$'); //
+// TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
     /* eslint-disable no-unused-vars */
@@ -18,17 +18,17 @@ function decomposeComponents(uriStr) {
         scheme,
         authorityWithSlashes,
         authority,
-        authorityWithUri,
+        authorityWithSign,
         userInfo,
         host,
         _hostName,
         portWithColon,
         port,
         path,
+        queryWithQuestionMark,
         query,
-        queryWithoutQuestionMark,
-        fragment,
-        fragmentWithoutHashTag
+        fragmentWithHashTag,
+        fragment
     ] = uriStr.match(splitUriRegex);
     /* eslint-enable no-unused-vars */
     const u = {
@@ -36,21 +36,22 @@ function decomposeComponents(uriStr) {
         authority,
         path,
         query,
-        fragment,
-        userInfo: undefined,
-        host: undefined,
-        port: undefined
+        fragment
         // TODO: maybe do not add if authority is not defined
     };
-    if (u.authority === !null) {
+    if (u.authority != null) {
         // TODO: host null vs "" if authority defined but host not ?
         u.userInfo = userInfo;
         u.host = host;
         u.port = port;
-        if (u.host === null) {
+        if (u.host == null) {
             u.host = '';
         }
     }
+    if (u.path == null) {
+        u.path = '';
+    }
+
     return u;
 }
 
@@ -61,23 +62,23 @@ function decomposeComponents(uriStr) {
  ignores "authority sub components"
  **/
 function recomposeAuthorityComponents(userInfo, host, port) {
-    if (host === null) {
+    if (host == null) {
         throw new Error(`Illegal host:${ host}`);
     }
     let result = '';
-    if (userInfo === !null) {
+    if (userInfo != null) {
         result = `${result }${userInfo }@`;
     }
     result = result + host;
-    if (port === !null) {
+    if (port != null) {
         result = `${result }:${ port}`;
     }
     return result;
 }
 
 function _checkAuthorityInvariant(uriObj) {
-    let b = (uriObj.authority === null && uriObj.userInfo === null && uriObj.host === null & uriObj.port === null) ||
-    (uriObj.authority === null && uriObj.authority === recomposeAuthorityComponents(uriObj.userInfo, uriObj.host, uriObj.port));
+    let b = (uriObj.authority == null && uriObj.userInfo == null && uriObj.host == null & uriObj.port == null) ||
+        (uriObj.authority != null && uriObj.authority === recomposeAuthorityComponents(uriObj.userInfo, uriObj.host, uriObj.port));
     if (!b) {
         throw new Error('IllegalStateException,AuthorityInvariant broken');
     }
@@ -85,20 +86,22 @@ function _checkAuthorityInvariant(uriObj) {
 
 function recomposeComponents(uriObj) {
     _checkAuthorityInvariant(uriObj);
-    let result = '', u = uriObj;
-    if (u.scheme === !null) {
-        result = `${result }${u.scheme }:`;
+    let result = '';
+    let u = uriObj;
+    if (u.scheme != null) {
+        result += `${u.scheme}:`;
     }
-    if (u.authority === !null) {
-        result = `${result }//${ u.authority}`;
+    if (u.authority != null) {
+        result += `//${u.authority}`;
     }
-    result = result + u.path;
-    if (u.query === !null) {
-        result = `${result }?${ u.query}`;
+    result += u.path;
+    if (u.query != null) {
+        result += `?${u.query}`;
     }
-    if (u.fragment === !null) {
-        result = `${result }#${ u.fragment}`;
+    if (u.fragment != null) {
+        result += `#${u.fragment}`;
     }
+
     return result;
 }
 module.exports = {
