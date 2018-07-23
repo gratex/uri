@@ -13,10 +13,8 @@ const componentsData = [ // s, a, p, q, f
 ];
 const encodeQueryData = [
     // test data //encoded expected value
-    'abcd',
-    'abcd',
-    ' ',
-    '%20'
+    [ 'abcd', 'abcd' ],
+    [ ' ', '%20' ]
 ];
 // const resolveData = [
 //     // ref //base //expected value
@@ -128,10 +126,10 @@ const encodeQueryData = [
 //     'http://a/b/c/g/h',
 //     'g/../h',
 //     'http://a/b/c/d;p?q',
-//     'http://a/b/c/h',
+//     'http://a/b/c/h',data, i, arr
 //     'g;x=1/./y',
-//     'http://a/b/c/d;p?q',
-//     'http://a/b/c/g;x=1/y',
+//     'http://a/b/c/d;pdata, i, arrq',
+//     'http://a/b/c/g;xdata, i, arr1/y',
 //     'g;x=1/../y',
 //     'http://a/b/c/d;p?q',
 //     'http://a/b/c/y',
@@ -166,26 +164,20 @@ const encodeQueryData = [
 // }
 // test('match string and Regex', resolve);
 test('component test', (() => {
-    // TODO: is component really the best name??
-
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
         expect(original).toEqual(recomposed);
     }
-
     componentsData.forEach((item) => testComponent(item));
 }));
 
 test('encode query test', (() => {
-    function testEncodeQuery(data, i, arr) {
-        const res = uri.encodeQuery(data);
-        const expected = arr[i + 1];
-        encodeQueryData.shift();
+    function testEncodeQuery([ original, expected ]) {
+        const res = uri.encodeQuery(original);
         expect(res).toEqual(expected);
     }
-
-    encodeQueryData.forEach((data, i, arr) => testEncodeQuery(data, i, arr));
+    encodeQueryData.forEach((item) => testEncodeQuery(item));
 }));
 
 

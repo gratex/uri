@@ -91,37 +91,31 @@ function recomposeComponents({
 }
 
 function percentEncode(str, legalRange) {
-    let retVal = '';
-    const reLegal = legalRange != null ? new RegExp('[' + legalRange + ']') : null;
+    const reLegal = legalRange != null ? new RegExp(`[${legalRange}]`) : null;
     let enc = 0;
+    const c = str.split('');
 
-    for (let i = 0; i < str.length; i++) { // TODO: change to glyphs
-        const c = str.charAt(i);
-        if (reLegal == null || !c.match(reLegal)) {
-            // should encode all non ASCII and system and SMP etc...
-            // THIS IS NOT VALID ! encodeURIComponent(SMPString)==encodeURIComponent(SMPString[0])+encodeURIComponent(SMPString[1])
+    return c.reduce((retVal, item, i) => {
+        if (reLegal == null || !item.match(reLegal)) {
             try {
-                enc = encodeURIComponent(str.charAt(i));
-                // encodeURIComponent(HIGH surogate) fails
+                enc = encodeURIComponent(item);
             } catch (ex) {
-                // TODO: mega naive (still trying to avoid Character.js dependency ?)
-                enc = encodeURIComponent(str.charAt(i) + str.charAt(i + 1));
-                i++;
+                enc = encodeURIComponent(item + item(i + 1));
+                c.shift();
             }
-            if (enc.length === 1) { // was not encoded by system, I EXPECT THAT IT IS ASCII !!!
-                enc = `'%'${str.charCodeAt(i).toString(16).toUpperCase()}`;
+            if (enc.length === 1) {
+                enc = `%${item.charCodeAt().toString(16).toUpperCase()}`;
             }
-            retVal += enc;
-        } else {
-            retVal += c;
+            return retVal + enc;
         }
-    }
-    return retVal;
+        return retVal + item;
+    }, '');
 }
 
 function encodeQuery(str) {
     return percentEncode(str, RFC3986_QUERY);
 }
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
