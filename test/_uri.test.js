@@ -11,6 +11,20 @@ const componentsData = [ // s, a, p, q, f
     'http://l:p@host:8080/s1/s2?q#f',
     'http://host'
 ];
+const removeDotSegmentsData = [
+    '/a/b/c/./../../g',
+    '/a/g',
+    '/.',
+    '/',
+    '/x/..',
+    '/',
+    '/x/../',
+    '/',
+    '/a/../../.',
+    '/',
+    '/./x/../b/c/d',
+    '/b/c/d' // modified from 6.2.2.
+];
 // const resolveData = [
 //     // ref //base //expected value
 //     'g:h',
@@ -159,7 +173,6 @@ const componentsData = [ // s, a, p, q, f
 // }
 // test('match string and Regex', resolve);
 test('component test', (() => { // TODO: is component really the best name??
-
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
@@ -167,7 +180,15 @@ test('component test', (() => { // TODO: is component really the best name??
     }
 
     componentsData.forEach((item) => testComponent(item));
-
+}));
+test('removeDotSegments test', (() => {
+    function testRemoveDotSegments(data, i, arr) {
+        const res = uri.removeDotSegments(data);
+        const expected = arr[i + 1];
+        removeDotSegmentsData.shift();
+        expect(res).toEqual(expected);
+    }
+    removeDotSegmentsData.forEach((data, i, arr) => testRemoveDotSegments(data, i, arr));
 }));
 
 
