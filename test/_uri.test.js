@@ -172,13 +172,12 @@ test('component test', (() => { // TODO: is component really the best name??
         const recomposed = uri.recomposeComponents(decomposed);
         expect(original).toEqual(recomposed);
     }
-
     componentsData.forEach((item) => testComponent(item));
 }));
 test('removeDotSegments test', (() => {
-    function testRemoveDotSegments(item) {
-        const res = uri.removeDotSegments(item[0]);
-        expect(res).toEqual(item[1]);
+    function testRemoveDotSegments([ original, expected ]) {
+        const res = uri.removeDotSegments(original);
+        expect(res).toEqual(expected);
     }
     removeDotSegmentsData.forEach((item) => testRemoveDotSegments(item));
 }));
