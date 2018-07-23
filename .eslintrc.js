@@ -86,7 +86,9 @@ module.exports = exports = {
         "no-script-url": ERROR,
         "no-self-compare": ERROR,
         "no-throw-literal": ERROR,
-        "no-unused-expressions": ERROR,
+        "no-unused-expressions": [ERROR, {
+            allowShortCircuit:true
+        }],
         "no-useless-call": ERROR,
         "no-useless-concat": ERROR,
         "no-void": WARN,
@@ -235,6 +237,7 @@ module.exports = exports = {
         "space-return-throw-case": OFF,
         "space-unary-ops": ERROR,
         "spaced-comment": [WARN, "always"],
-        "wrap-regex": WARN
+        "wrap-regex": WARN,
+        "prefer-const": ERROR
     }
 };

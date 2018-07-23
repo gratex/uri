@@ -11,47 +11,14 @@ const splitUriRegex = new RegExp( // IRI lib regexp
 // TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
-    /* eslint-disable no-unused-vars */
-    const [
-        _uriStr,
-        schemeWithColon,
-        scheme,
-        authorityWithSlashes,
-        authority,
-        authorityWithSign,
-        userInfo,
-        host,
-        _hostName,
-        portWithColon,
-        port,
-        path,
-        queryWithQuestionMark,
-        query,
-        fragmentWithHashTag,
-        fragment
-    ] = uriStr.match(splitUriRegex);
-    /* eslint-enable no-unused-vars */
-    const u = {
-        scheme,
-        authority,
-        path,
-        query,
-        fragment
-        // TODO: maybe do not add if authority is not defined
-    };
+    const [ , , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment ] = uriStr.match(splitUriRegex);
+    const u = { scheme, authority, path, query, fragment };
     if (u.authority != null) {
+        Object.assign(u, { userInfo, port, host });
         // TODO: host null vs "" if authority defined but host not ?
-        u.userInfo = userInfo;
-        u.host = host;
-        u.port = port;
-        if (u.host == null) {
-            u.host = '';
-        }
+        u.host == null && (u.host = '');
     }
-    if (u.path == null) {
-        u.path = '';
-    }
-
+    u.path == null && (u.path = '');
     return u;
 }
 
@@ -66,41 +33,29 @@ function recomposeAuthorityComponents(userInfo, host, port) {
         throw new Error(`Illegal host:${ host}`);
     }
     let result = '';
-    if (userInfo != null) {
-        result = `${result }${userInfo }@`;
-    }
-    result = result + host;
-    if (port != null) {
-        result = `${result }:${ port}`;
-    }
+    result += userInfo != null ? `${userInfo}@` : '';
+    result += host;
+    result += port != null ? `:${port}` : '';
     return result;
 }
 
-function _checkAuthorityInvariant(uriObj) {
-    let b = (uriObj.authority == null && uriObj.userInfo == null && uriObj.host == null & uriObj.port == null) ||
-        (uriObj.authority != null && uriObj.authority === recomposeAuthorityComponents(uriObj.userInfo, uriObj.host, uriObj.port));
+function _checkAuthorityInvariant(authority, userInfo, host, port) {
+    const b = (authority == null && userInfo == null && host == null && port == null) ||
+        (authority != null && authority === recomposeAuthorityComponents(userInfo, host, port));
     if (!b) {
         throw new Error('IllegalStateException,AuthorityInvariant broken');
     }
 }
 
-function recomposeComponents(uriObj) {
-    _checkAuthorityInvariant(uriObj);
+function recomposeComponents({ scheme, authority, userInfo, host, port, path, query, fragment }) {
+    _checkAuthorityInvariant(authority, userInfo, host, port);
+
     let result = '';
-    let u = uriObj;
-    if (u.scheme != null) {
-        result += `${u.scheme}:`;
-    }
-    if (u.authority != null) {
-        result += `//${u.authority}`;
-    }
-    result += u.path;
-    if (u.query != null) {
-        result += `?${u.query}`;
-    }
-    if (u.fragment != null) {
-        result += `#${u.fragment}`;
-    }
+    result += scheme != null ? `${scheme}:` : '';
+    result += authority != null ? `//${authority}` : '';
+    result += path;
+    result += query != null ? `?${query}` : '';
+    result += fragment != null ? `#${fragment}` : '';
 
     return result;
 }
