@@ -5,12 +5,20 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "esformatter": "^0.10.0",
     "eslint": "^5.1.0",
-    "jest": "^23.4.1"
+    "jest": "^23.4.1",
+    "pre-commit": "^1.2.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint-hook": "bash ./scripts/lint-hook.sh",
+    "formatter-hook": "bash ./scripts/formatter-hook.sh"
   },
+  "pre-commit": [
+    "lint-hook",
+    "formatter-hook"
+  ],
   "repository": {
     "type": "git",
     "url": "git@gitlab01.hq.gratex.com:node/uri.git"
