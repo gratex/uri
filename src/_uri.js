@@ -11,7 +11,7 @@ const splitUriRegex = new RegExp( // IRI lib regexp
 // TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
-    const [ , , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment ] = uriStr.match(splitUriRegex);
+    const [, , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment] = uriStr.match(splitUriRegex);
     const u = { scheme, authority, path, query, fragment };
     if (u.authority != null) {
         Object.assign(u, { userInfo, port, host });
@@ -30,7 +30,7 @@ function decomposeComponents(uriStr) {
  **/
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
-        throw new Error(`Illegal host:${ host}`);
+        throw new Error(`Illegal host:${host}`);
     }
     let result = '';
     result += userInfo != null ? `${userInfo}@` : '';
@@ -66,7 +66,7 @@ function removeDotSegments(path) {
     let output = '';
     let xi = '';
     while (inputBufferStart < inputBufferEnd) {
-        let	_in = path.substring(inputBufferStart);
+        let _in = path.substring(inputBufferStart);
         if (_in.indexOf('./') === 0) {
             inputBufferStart += 2;
             continue;
@@ -118,9 +118,66 @@ function removeDotSegments(path) {
     // 5.2.4 3
     return output;
 }
+
+/**
+	 5.2.2.  Transform References
+	 **/
+const STRICT_TRANSFORMREFERENCES = true;
+function _transformReference(base, ref) {
+    let t = ref;
+    if (!STRICT_TRANSFORMREFERENCES && ref.scheme === base.scheme) {
+        ref.scheme = undef;
+    }
+    (ref.scheme != null) ?
+        t.path = removeDotSegments(ref.path) :
+        ((ref.authority != null) ?
+            t.path = removeDotSegments(ref.path) :
+            ((ref.path === '') ?
+                (t.path = base.path, (ref.query != null) ?
+                    t.query = ref.query :
+                    t.query = base.query) :
+                (ref.path.charAt(0) === '/') ?
+                    t.path = removeDotSegments(ref.path) :
+                    t.path = _merge(base, ref.path), t.path = removeDotSegments(t.path), t.query = ref.query,
+                t.authority = base.authority,
+                t.userInfo = base.userInfo,
+                t.host = base.host,
+                t.port = base.port),
+            t.scheme = base.scheme);
+    t.fragment = ref.fragment;
+    return t;
+}
+
+/**
+5.2.3.  Merge Paths
+**/
+function _merge({ authority, path }, refPath)//object,string
+{
+    if (authority != null && path === '') {
+        return `/${refPath}`
+    } else {
+        const xi = path.lastIndexOf('/');
+        return (xi === -1) ? refPath : path.substring(0, xi + 1) + refPath;
+    }
+}
+
+function resolve(base, ref) {
+    _preParseBaseUri(base);
+    return _transformReference(base, ref);
+}
+
+/**
+ 5.2.1.  Pre-parse the Base URI
+ **/
+function _preParseBaseUri({ base }) {
+    if (base === null)
+        throw new Error("Violation 5.2.1, scheme component required");
+}
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
     recomposeComponents,
-    removeDotSegments
+    removeDotSegments,
+    resolve
 };
