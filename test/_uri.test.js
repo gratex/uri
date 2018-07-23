@@ -12,18 +12,12 @@ const componentsData = [ // s, a, p, q, f
     'http://host'
 ];
 const removeDotSegmentsData = [
-    '/a/b/c/./../../g',
-    '/a/g',
-    '/.',
-    '/',
-    '/x/..',
-    '/',
-    '/x/../',
-    '/',
-    '/a/../../.',
-    '/',
-    '/./x/../b/c/d',
-    '/b/c/d' // modified from 6.2.2.
+    [ '/a/b/c/./../../g', '/a/g' ],
+    [ '/.', '/' ],
+    [ '/x/..', '/' ],
+    [ '/x/../', '/' ],
+    [ '/a/../../.', '/' ],
+    [ '/./x/../b/c/d', '/b/c/d' ] // modified from 6.2.2.
 ];
 // const resolveData = [
 //     // ref //base //expected value
@@ -182,13 +176,11 @@ test('component test', (() => { // TODO: is component really the best name??
     componentsData.forEach((item) => testComponent(item));
 }));
 test('removeDotSegments test', (() => {
-    function testRemoveDotSegments(data, i, arr) {
-        const res = uri.removeDotSegments(data);
-        const expected = arr[i + 1];
-        removeDotSegmentsData.shift();
-        expect(res).toEqual(expected);
+    function testRemoveDotSegments(item) {
+        const res = uri.removeDotSegments(item[0]);
+        expect(res).toEqual(item[1]);
     }
-    removeDotSegmentsData.forEach((data, i, arr) => testRemoveDotSegments(data, i, arr));
+    removeDotSegmentsData.forEach((item) => testRemoveDotSegments(item));
 }));
 
 
