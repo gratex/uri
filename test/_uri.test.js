@@ -11,6 +11,13 @@ const componentsData = [ // s, a, p, q, f
     'http://l:p@host:8080/s1/s2?q#f',
     'http://host'
 ];
+const encodeQueryData = [
+    // test data //encoded expected value
+    'abcd',
+    'abcd',
+    ' ',
+    '%20'
+];
 // const resolveData = [
 //     // ref //base //expected value
 //     'g:h',
@@ -158,7 +165,8 @@ const componentsData = [ // s, a, p, q, f
 //     }
 // }
 // test('match string and Regex', resolve);
-test('component test', (() => { // TODO: is component really the best name??
+test('component test', (() => {
+    // TODO: is component really the best name??
 
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
@@ -167,7 +175,17 @@ test('component test', (() => { // TODO: is component really the best name??
     }
 
     componentsData.forEach((item) => testComponent(item));
+}));
 
+test('encode query test', (() => {
+    function testEncodeQuery(data, i, arr) {
+        const res = uri.encodeQuery(data);
+        const expected = arr[i + 1];
+        encodeQueryData.shift();
+        expect(res).toEqual(expected);
+    }
+
+    encodeQueryData.forEach((data, i, arr) => testEncodeQuery(data, i, arr));
 }));
 
 
