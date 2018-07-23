@@ -60,8 +60,68 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 
     return result;
 }
+
+function removeDotSegments(path) {
+    let inputBufferStart = 0;
+    const inputBufferEnd = path.length;
+    let output = '';
+    let xi = '';
+    while (inputBufferStart < inputBufferEnd) {
+        let	_in = path.substring(inputBufferStart);
+        if (_in.indexOf('./') === 0) {
+            inputBufferStart += 2;
+            continue;
+        }
+        if (_in.indexOf('../') === 0) {
+            inputBufferStart += 3;
+            continue;
+        }
+        if (_in.indexOf('/./') === 0) {
+            inputBufferStart += 2;
+            continue;
+        }
+        if (_in === '/.') {
+            _in = '/';
+            inputBufferStart += 2;
+            // force end of loop
+        }
+        if (_in.indexOf('/../') === 0) {
+            inputBufferStart += 3;
+            xi = output.lastIndexOf('/');
+            if (xi !== -1 && xi !== output.length) {
+                output = output.substring(0, xi);
+            }
+            continue;
+        }
+        if (_in === '/..') {
+            _in = '/';
+            inputBufferStart += 3;
+            xi = output.lastIndexOf('/');
+            if (xi !== -1 && xi !== output.length) {
+                output = output.substring(0, xi);
+            }
+        }
+        if (_in === '.') {
+            inputBufferStart += 1;
+            continue;
+        }
+        if (_in === '..') {
+            inputBufferStart += 2;
+            continue;
+        }
+        let nextSlash = _in.indexOf('/', 1);
+        if (nextSlash === -1) {
+            nextSlash = _in.length;
+        }
+        inputBufferStart += nextSlash;
+        output += (_in.substring(0, nextSlash));
+    }
+    // 5.2.4 3
+    return output;
+}
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
-    recomposeComponents
+    recomposeComponents,
+    removeDotSegments
 };
