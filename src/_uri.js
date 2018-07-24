@@ -31,11 +31,7 @@ function decomposeComponents(uriStr) {
     const u = { scheme, authority, path, query, fragment };
 
     if (u.authority != null) {
-        Object.assign(u, {
-            userInfo,
-            port,
-            host
-        });
+        Object.assign(u, { userInfo, port, host });
         // TODO: host null vs "" if authority defined but host not ?
         u.host == null && (u.host = '');
     }
