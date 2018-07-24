@@ -9,20 +9,21 @@ const splitUriRegex = new RegExp( // IRI lib regexp
     '(#(.*))?' + // frag
     '$'); //
 
+
 // TODO: get rid of RFC2396 constants
 const RFC2396_DIGIT = '0-9';
 const RFC2396_LOWALPHA = 'a-z';
 const RFC2396_UPALPHA = 'A-Z';
 const RFC2396_ALPHA = RFC2396_LOWALPHA + RFC2396_UPALPHA;
 const RFC2396_ALPHANUM = RFC2396_DIGIT + RFC2396_ALPHA;
-const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}'\u002d\u002e\u005f\u007e'`;
+const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}'-._~'`;
 const RFC3986_SUBDELIMS = '\u0021\u0024\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u003b\u003d';
 const RFC3986_PCT_ENCODED = '';
 const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
-const RFC3986_PCHAR = `${RFC3986_REG_NAME}'\u003a\u0040'`;
-const RFC3986_QUERY = `${RFC3986_PCHAR}'\u003f\u002f'`;
+const RFC3986_PCHAR = `${RFC3986_REG_NAME}':@'`;
+const RFC3986_QUERY = `${RFC3986_PCHAR}'?/'`;
 
-    // TODO: get rid of RFC2396 constants
+// TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
@@ -67,16 +68,7 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
     }
 }
 
-function recomposeComponents({
-    scheme,
-    authority,
-    userInfo,
-    host,
-    port,
-    path,
-    query,
-    fragment
-}) {
+function recomposeComponents({ scheme, authority, userInfo, host, port, path, query, fragment }) {
     _checkAuthorityInvariant(authority, userInfo, host, port);
 
     let result = '';
@@ -90,25 +82,21 @@ function recomposeComponents({
 }
 
 function percentEncode(str, legalRange) {
-    const reLegal = legalRange != null ? new RegExp(`[${legalRange}]`) : null;
-    let enc = 0;
-    const c = str.split('');
+    const retVal = Array.from(str);
+    const reLegal = legalRange && new RegExp(`[${legalRange}]`);
 
-    return c.reduce((retVal, item, i) => {
-        if (reLegal == null || !item.match(reLegal)) {
-            try {
-                enc = encodeURIComponent(item);
-            } catch (ex) {
-                enc = encodeURIComponent(item + item(i + 1));
-                c.shift();
-            }
-            if (enc.length === 1) {
-                enc = `%${item.charCodeAt().toString(16).toUpperCase()}`;
-            }
-            return retVal + enc;
+    function encode(cp, i, buff) {
+        if (reLegal && cp.match(reLegal)) {
+            return;
         }
-        return retVal + item;
-    }, '');
+        let enc = encodeURIComponent(cp);
+        if (enc.length === 1) {
+            enc = `%${cp.charCodeAt(0).toString(16).toUpperCase()}`;
+        }
+        buff[i] = enc;
+    }
+    retVal.forEach(encode);
+    return retVal.join('');
 }
 
 function encodeQuery(str) {

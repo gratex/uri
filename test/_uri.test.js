@@ -13,7 +13,6 @@ const componentsData = [ // s, a, p, q, f
 ];
 
 const encodeQueryData = [
-    // test data //encoded expected value
     [ 'abcd', 'abcd' ],
     [ ' ', '%20' ]
 ];
@@ -136,10 +135,10 @@ const removeDotSegmentsData = [
 //     'http://a/b/c/g/h',
 //     'g/../h',
 //     'http://a/b/c/d;p?q',
-//     'http://a/b/c/h',data, i, arr
+//     'http://a/b/c/h',
 //     'g;x=1/./y',
-//     'http://a/b/c/d;pdata, i, arrq',
-//     'http://a/b/c/g;xdata, i, arr1/y',
+//     'http://a/b/c/d;pq',
+//     'http://a/b/c/g;x1/y',
 //     'g;x=1/../y',
 //     'http://a/b/c/d;p?q',
 //     'http://a/b/c/y',
