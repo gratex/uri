@@ -78,6 +78,13 @@ const resolveData = [
     [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ]
 ];
 
+const segmentsData = [
+		'',
+		'/',
+		'/a/b',
+		'/a/b/'
+];
+
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
@@ -139,4 +146,12 @@ test('encodeSegments tests', (() => {
     data = [ 'a', 'b', '' ];
     stringPath = uri.encodeSegments(data);
     expect(stringPath).toBe('/a/b/');
+}));
+test('segments test', (() => {
+    function testSegments(original) {
+        const decoded = uri.decodeSegments(original);
+        const res = uri.encodeSegments(decoded);
+        expect(res).toEqual(original);
+    }
+    segmentsData.forEach((item) => testSegments(item));
 }));
