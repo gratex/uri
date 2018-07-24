@@ -79,10 +79,10 @@ const resolveData = [
 ];
 
 const segmentsData = [
-		'',
-		'/',
-		'/a/b',
-		'/a/b/'
+    '',
+    '/',
+    '/a/b',
+    '/a/b/'
 ];
 
 test('resolve test', (() => {
