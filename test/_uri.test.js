@@ -133,17 +133,10 @@ test('encodeSegments tests', (() => {
     let data = [];
     let stringPath = uri.encodeSegments(data);
     expect(stringPath).toBe('');
-    data = [
-        'a',
-        'b'
-    ];
+    data = [ 'a', 'b' ];
     stringPath = uri.encodeSegments(data);
     expect(stringPath).toBe('/a/b');
-    data = [
-        'a',
-        'b',
-        ''
-    ];
+    data = [ 'a', 'b', '' ];
     stringPath = uri.encodeSegments(data);
     expect(stringPath).toBe('/a/b/');
 }));

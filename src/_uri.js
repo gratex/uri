@@ -223,10 +223,7 @@ function decodeSegments(encodedPath) {
     if (segments.shift() !== '') {
         Error('path-abempty expected');
     }
-    for (let i = 0; i < segments.length; i++) {
-        segments[i] = decodeURIComponent(segments[i]);
-    }
-    return segments;
+    return segments.map((segment) => decodeURIComponent(segment));
 }
 
 function encodeSegments(segments) {
@@ -245,10 +242,8 @@ function encodeSegments(segments) {
     if (segments.length === 0) {
         return '';
     }
-    for (let i = 0; i < segments.length; i++) {
-        segments[i] = percentEncode(segments[i], RFC3986_SEGMENT);
-    }
-    return `/${segments.join('/')}`;
+
+    return `/${segments.map((segment) => percentEncode(segment, RFC3986_SEGMENT)).join('/')}`;
 }
 
 module.exports = {
