@@ -7,8 +7,23 @@ const splitUriRegex = new RegExp( // IRI lib regexp
     '([^#?]*)?' + // path
     '(\\?([^#]*))?' + // query
     '(#(.*))?' + // frag
-    '$'); //
-    // TODO: get rid of RFC2396 constants
+    '$'
+); //
+
+// TODO: get rid of RFC2396 constants
+const RFC2396_DIGIT = '0-9';
+const RFC2396_LOWALPHA = 'a-z';
+const RFC2396_UPALPHA = 'A-Z';
+const RFC2396_ALPHA = RFC2396_LOWALPHA + RFC2396_UPALPHA;
+const RFC2396_ALPHANUM = RFC2396_DIGIT + RFC2396_ALPHA;
+const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}'-._~'`;
+const RFC3986_SUBDELIMS = '\u0021\u0024\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u003b\u003d';
+const RFC3986_PCT_ENCODED = '';
+const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
+const RFC3986_PCHAR = `${RFC3986_REG_NAME}':@'`;
+const RFC3986_QUERY = `${RFC3986_PCHAR}'?/'`;
+
+// TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
@@ -59,6 +74,28 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
     result += fragment != null ? `#${fragment}` : '';
 
     return result;
+}
+
+function percentEncode(str, legalRange) {
+    const retVal = Array.from(str);
+    const reLegal = legalRange && new RegExp(`[${legalRange}]`);
+
+    function encode(cp, i, buff) {
+        if (reLegal && cp.match(reLegal)) {
+            return;
+        }
+        let enc = encodeURIComponent(cp);
+        if (enc.length === 1) {
+            enc = `%${cp.charCodeAt(0).toString(16).toUpperCase()}`;
+        }
+        buff[i] = enc;
+    }
+    retVal.forEach(encode);
+    return retVal.join('');
+}
+
+function encodeQuery(str) {
+    return percentEncode(str, RFC3986_QUERY);
 }
 
 function removeDotSegments(path) {
@@ -119,9 +156,11 @@ function removeDotSegments(path) {
     // 5.2.4 3
     return output;
 }
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
     recomposeComponents,
+    encodeQuery,
     removeDotSegments
 };
