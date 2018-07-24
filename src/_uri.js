@@ -31,7 +31,7 @@ function decomposeComponents(uriStr) {
     const u = { scheme, authority, path, query, fragment };
     if (u.authority != null) {
         Object.assign(u, { userInfo, port, host });
-        // TODO: host null vs "" if authority defined but host not ?
+        // TODO: host null vs '' if authority defined but host not ?
         u.host == null && (u.host = '');
     }
     u.path == null && (u.path = '');
@@ -42,11 +42,11 @@ function decomposeComponents(uriStr) {
  @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
  Remarks:
  defined(x) is coded with !=null (means undefined and null are handled the same way)
- ignores "authority sub components"
+ ignores 'authority sub components'
  **/
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
-        throw new Error(`Illegal host:${ host}`);
+        throw new Error(`Illegal host:${host}`);
     }
     let result = '';
     result += userInfo != null ? `${userInfo}@` : '';
@@ -157,10 +157,60 @@ function removeDotSegments(path) {
     return output;
 }
 
+/**
+5.2.3.  Merge Paths
+**/
+function _merge({ authority, path }, refPath) { // object,string
+    if (authority != null && path === '') {
+        return `/${refPath}`;
+    }
+    const xi = path.lastIndexOf('/');
+    return (xi === -1) ? refPath : path.substring(0, xi + 1) + refPath;
+}
+
+/**
+	 5.2.2.  Transform References
+	 **/
+const STRICT_TRANSFORMREFERENCES = true;
+function _transformReference(base, { scheme, authority, userInfo, host, port, path, query, fragment }) {
+    if (!STRICT_TRANSFORMREFERENCES && scheme === base.scheme) {
+        scheme = undefined;
+    }
+    if (scheme == null) {
+        scheme = base.scheme;
+        if (authority == null) {
+            ({ authority, userInfo, host, port } = base);
+            if (path === '') {
+                path = base.path;
+                query = query != null ? query : base.query;
+            } else {
+                path = path.charAt(0) === '/' ? path : removeDotSegments(_merge(base, path));
+            }
+        }
+    }
+    path && (path = removeDotSegments(path));
+    return { scheme, authority, userInfo, host, port, path, query, fragment };
+}
+
+/**
+ 5.2.1.  Pre-parse the Base URI
+ **/
+function _preParseBaseUri({ base }) {
+    if (base === null) {
+        throw new Error('Violation 5.2.1, scheme component required');
+    }
+}
+
+function resolve(base, ref) {
+    _preParseBaseUri(base);
+    return _transformReference(base, ref);
+}
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
     recomposeComponents,
     encodeQuery,
+    resolve,
     removeDotSegments
 };
