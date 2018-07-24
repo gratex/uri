@@ -142,8 +142,7 @@ function _transformReference(base, { scheme, authority, userInfo, host, port, pa
     if (scheme == null) {
         scheme = base.scheme;
         if (authority == null) {
-            (
-                { authority, userInfo, host, port } = base);
+            ({ authority, userInfo, host, port } = base);
             if (path === '') {
                 path = base.path;
                 query = query != null ? query : base.query;

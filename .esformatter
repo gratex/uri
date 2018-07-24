@@ -54,7 +54,7 @@
     "lineBreak": {
         "value": "\n",
         "before": {
-            "AssignmentExpression": ">=1",
+            "AssignmentExpression": "-1",
             "AssignmentOperator": 0,
             "ArrayPatternOpening": 0,
             "ArrayPatternClosing": 0,
