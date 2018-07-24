@@ -78,6 +78,13 @@ const resolveData = [
     [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ]
 ];
 
+const segmentsData = [
+		'',
+		'/',
+		'/a/b',
+		'/a/b/'
+];
+
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
@@ -111,8 +118,40 @@ test('removeDotSegments test', (() => {
     }
     removeDotSegmentsData.forEach((item) => testRemoveDotSegments(item));
 }));
-
-
-// test('recompose ', () => {
-//     expect(true);
-// });
+describe('decodeSegments test', (() => {
+    it('empty array expected', () => {
+        const a0 = uri.decodeSegments('');
+        expect(a0.length === 0).toBeTruthy();
+    });
+    it('1 void segment expected', () => {
+        const a1 = uri.decodeSegments('/');
+        expect(a1.length === 1 && a1[0] === '').toBeTruthy();
+    });
+    it('2 segmentsData a,b expected', () => {
+        const a2 = uri.decodeSegments('/a/b');
+        expect(a2.length === 2 && a2[0] === 'a' && a2[1] === 'b').toBeTruthy();
+    });
+    it('3 segmentsData a,b,void expected', () => {
+        const a3 = uri.decodeSegments('/a/b/');
+        expect(a3.length === 3 && a3[0] === 'a' && a3[1] === 'b' && a3[2] === '').toBeTruthy();
+    });
+}));
+test('encodeSegments tests', (() => {
+    let data = [];
+    let stringPath = uri.encodeSegments(data);
+    expect(stringPath).toBe('');
+    data = [ 'a', 'b' ];
+    stringPath = uri.encodeSegments(data);
+    expect(stringPath).toBe('/a/b');
+    data = [ 'a', 'b', '' ];
+    stringPath = uri.encodeSegments(data);
+    expect(stringPath).toBe('/a/b/');
+}));
+test('segments test', (() => {
+    function testSegments(original) {
+        const decoded = uri.decodeSegments(original);
+        const res = uri.encodeSegments(decoded);
+        expect(res).toEqual(original);
+    }
+    segmentsData.forEach((item) => testSegments(item));
+}));

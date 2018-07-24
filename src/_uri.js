@@ -22,6 +22,7 @@ const RFC3986_PCT_ENCODED = '';
 const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
 const RFC3986_PCHAR = `${RFC3986_REG_NAME}':@'`;
 const RFC3986_QUERY = `${RFC3986_PCHAR}'?/'`;
+const RFC3986_SEGMENT = RFC3986_PCHAR;
 
 // TODO: get rid of RFC2396 constants
 
@@ -206,11 +207,52 @@ function resolve(base, ref) {
     return _transformReference(base, ref);
 }
 
+function decodeSegments(encodedPath) {
+    // summary:
+    //		Spliting path by "/".
+    // 		Main reason is to eliminate unambiquity of
+    // 		"/a%2f%b/c" and "/a/b/c".
+    // encodedPath: String
+    //		Encoded path
+    // returns:	String[]
+    //		Path split to DECODED segments, as array
+    if (encodedPath === '') {
+        return [];
+    }
+    const segments = encodedPath.split('/');
+    if (segments.shift() !== '') {
+        Error('path-abempty expected');
+    }
+    return segments.map((segment) => decodeURIComponent(segment));
+}
+
+function encodeSegments(segments) {
+    // summary:
+    //		Joining path segments by /
+    // 		Main reason is to eliminate unambiquity of
+    // 		"/a%2f%b/c" and "/a/b/c"
+    // segments: String[]
+    //		array of segments not encoded
+    // returns:	String
+    //		path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded
+    //		if [] specified "" is returned
+    if (!(segments instanceof Array)) {
+        throw new Error('IllegalArgumentException, array of segments expected');
+    }
+    if (segments.length === 0) {
+        return '';
+    }
+
+    return `/${segments.map((segment) => percentEncode(segment, RFC3986_SEGMENT)).join('/')}`;
+}
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
     recomposeComponents,
     encodeQuery,
     resolve,
-    removeDotSegments
+    removeDotSegments,
+    decodeSegments,
+    encodeSegments
 };
