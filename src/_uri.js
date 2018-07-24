@@ -8,6 +8,7 @@ const splitUriRegex = new RegExp( // IRI lib regexp
     '(\\?([^#]*))?' + // query
     '(#(.*))?' + // frag
     '$'); //
+
 // TODO: get rid of RFC2396 constants
 const RFC2396_DIGIT = '0-9';
 const RFC2396_LOWALPHA = 'a-z';
@@ -21,15 +22,13 @@ const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_S
 const RFC3986_PCHAR = `${RFC3986_REG_NAME}'\u003a\u0040'`;
 const RFC3986_QUERY = `${RFC3986_PCHAR}'\u003f\u002f'`;
 
+    // TODO: get rid of RFC2396 constants
+
 function decomposeComponents(uriStr) {
-    const [, , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment] = uriStr.match(splitUriRegex);
-    const u = {
-        scheme,
-        authority,
-        path,
-        query,
-        fragment
-    };
+    /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
+    const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
+    const u = { scheme, authority, path, query, fragment };
+
     if (u.authority != null) {
         Object.assign(u, {
             userInfo,
@@ -116,9 +115,69 @@ function encodeQuery(str) {
     return percentEncode(str, RFC3986_QUERY);
 }
 
+function removeDotSegments(path) {
+    let inputBufferStart = 0;
+    const inputBufferEnd = path.length;
+    let output = '';
+    let xi = '';
+    while (inputBufferStart < inputBufferEnd) {
+        let _in = path.substring(inputBufferStart);
+        if (_in.indexOf('./') === 0) {
+            inputBufferStart += 2;
+            continue;
+        }
+        if (_in.indexOf('../') === 0) {
+            inputBufferStart += 3;
+            continue;
+        }
+        if (_in.indexOf('/./') === 0) {
+            inputBufferStart += 2;
+            continue;
+        }
+        if (_in === '/.') {
+            _in = '/';
+            inputBufferStart += 2;
+        // force end of loop
+        }
+        if (_in.indexOf('/../') === 0) {
+            inputBufferStart += 3;
+            xi = output.lastIndexOf('/');
+            if (xi !== -1 && xi !== output.length) {
+                output = output.substring(0, xi);
+            }
+            continue;
+        }
+        if (_in === '/..') {
+            _in = '/';
+            inputBufferStart += 3;
+            xi = output.lastIndexOf('/');
+            if (xi !== -1 && xi !== output.length) {
+                output = output.substring(0, xi);
+            }
+        }
+        if (_in === '.') {
+            inputBufferStart += 1;
+            continue;
+        }
+        if (_in === '..') {
+            inputBufferStart += 2;
+            continue;
+        }
+        let nextSlash = _in.indexOf('/', 1);
+        if (nextSlash === -1) {
+            nextSlash = _in.length;
+        }
+        inputBufferStart += nextSlash;
+        output += (_in.substring(0, nextSlash));
+    }
+    // 5.2.4 3
+    return output;
+}
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
     recomposeComponents,
-    encodeQuery
+    encodeQuery,
+    removeDotSegments
 };
