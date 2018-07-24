@@ -173,7 +173,6 @@ const removeDotSegmentsData = [
 // }
 // test('match string and Regex', resolve);
 test('component test', (() => {
-
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
@@ -188,7 +187,6 @@ test('encode query test', (() => {
         expect(res).toEqual(expected);
     }
     encodeQueryData.forEach((item) => testEncodeQuery(item));
-
 }));
 
 test('removeDotSegments test', (() => {
@@ -197,7 +195,6 @@ test('removeDotSegments test', (() => {
         expect(res).toEqual(expected);
     }
     removeDotSegmentsData.forEach((item) => testRemoveDotSegments(item));
-
 }));
 
 

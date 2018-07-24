@@ -7,8 +7,8 @@ const splitUriRegex = new RegExp( // IRI lib regexp
     '([^#?]*)?' + // path
     '(\\?([^#]*))?' + // query
     '(#(.*))?' + // frag
-    '$'); //
-
+    '$'
+); //
 
 // TODO: get rid of RFC2396 constants
 const RFC2396_DIGIT = '0-9';
@@ -29,7 +29,6 @@ function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
     const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
     const u = { scheme, authority, path, query, fragment };
-
     if (u.authority != null) {
         Object.assign(u, { userInfo, port, host });
         // TODO: host null vs "" if authority defined but host not ?
