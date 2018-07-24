@@ -11,6 +11,12 @@ const componentsData = [ // s, a, p, q, f
     'http://l:p@host:8080/s1/s2?q#f',
     'http://host'
 ];
+
+const encodeQueryData = [
+    [ 'abcd', 'abcd' ],
+    [ ' ', '%20' ]
+];
+
 const removeDotSegmentsData = [
     [ '/a/b/c/./../../g', '/a/g' ],
     [ '/.', '/' ],
@@ -68,7 +74,6 @@ const resolveData = [
     [ 'g?y/../x', 'http://a/b/c/d;p?q', 'http://a/b/c/g?y/../x' ],
     [ 'g#s/./x', 'http://a/b/c/d;p?q', 'http://a/b/c/g#s/./x' ],
     [ 'g#s/../x', 'http://a/b/c/d;p?q', 'http://a/b/c/g#s/../x' ],
-
     // if strict
     [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ]
 ];
@@ -81,7 +86,8 @@ test('resolve test', (() => {
     }
     resolveData.forEach((item) => testResolve(item));
 }));
-test('component test', (() => { // TODO: is component really the best name??
+
+test('component test', (() => {
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
@@ -89,6 +95,15 @@ test('component test', (() => { // TODO: is component really the best name??
     }
     componentsData.forEach((item) => testComponent(item));
 }));
+
+test('encode query test', (() => {
+    function testEncodeQuery([ original, expected ]) {
+        const res = uri.encodeQuery(original);
+        expect(res).toEqual(expected);
+    }
+    encodeQueryData.forEach((item) => testEncodeQuery(item));
+}));
+
 test('removeDotSegments test', (() => {
     function testRemoveDotSegments([ original, expected ]) {
         const res = uri.removeDotSegments(original);
