@@ -139,14 +139,11 @@ function _transformReference(base, { scheme, authority, userInfo, host, port, pa
     if (!STRICT_TRANSFORMREFERENCES && scheme === base.scheme) {
         scheme = undefined;
     }
-
     if (scheme == null) {
         scheme = base.scheme;
         if (authority == null) {
-            authority = base.authority;
-            userInfo = base.userInfo;
-            host = base.host;
-            port = base.port;
+            (
+                { authority, userInfo, host, port } = base);
             if (path === '') {
                 path = base.path;
                 query = query != null ? query : base.query;
