@@ -8,10 +8,11 @@ const splitUriRegex = new RegExp( // IRI lib regexp
     '(\\?([^#]*))?' + // query
     '(#(.*))?' + // frag
     '$'); //
-// TODO: get rid of RFC2396 constants
+    // TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
-    const [, , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment] = uriStr.match(splitUriRegex);
+    /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
+    const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
     const u = { scheme, authority, path, query, fragment };
     if (u.authority != null) {
         Object.assign(u, { userInfo, port, host });
@@ -82,7 +83,7 @@ function removeDotSegments(path) {
         if (_in === '/.') {
             _in = '/';
             inputBufferStart += 2;
-            // force end of loop
+        // force end of loop
         }
         if (_in.indexOf('/../') === 0) {
             inputBufferStart += 3;
