@@ -1,3 +1,18 @@
+const RFC2396_DIGIT = '0-9';
+const RFC2396_LOWALPHA = 'a-z';
+const RFC2396_UPALPHA = 'A-Z';
+const RFC2396_ALPHA = RFC2396_LOWALPHA + RFC2396_UPALPHA;
+const RFC2396_ALPHANUM = RFC2396_DIGIT + RFC2396_ALPHA;
+const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}-._~`;
+const RFC3986_SUBDELIMS = '\u0021\u0024\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u003b\u003d';
+const RFC3986_PCT_ENCODED = '';
+const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
+const RFC3986_PCHAR = `${RFC3986_REG_NAME}:@`;
+const RFC3986_QUERY = `${RFC3986_PCHAR}?/`;
+const RFC3986_SEGMENT = RFC3986_PCHAR;
+const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
+const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
+
 const uri = require('../src/_uri.js');
 const componentsData = [ // s, a, p, q, f
     'http:',
@@ -116,6 +131,59 @@ const percentEncodeData = [
     [ 'abc', 'mama', '%6Da%6Da' ]
 ];
 
+const checkSegmentsEncodingData = [
+    [ 'http:', RFC3986_PATH_SEGMENTS ],
+    [ 'http://', RFC3986_PATH_SEGMENTS ],
+    [ 'http://host', RFC3986_PATH_SEGMENTS ],
+    [ 'http://@host', RFC3986_PATH_SEGMENTS ],
+    [ 'http://l@', RFC3986_PATH_SEGMENTS ],
+    [ 'http://l@:9090', RFC3986_PATH_SEGMENTS ],
+    [ 'http://@', RFC3986_PATH_SEGMENTS ],
+    [ 'http:///p', RFC3986_PATH_SEGMENTS ],
+    [ 'http://l:p@host:8080/s1/s2?q#f', RFC3986_PATH_SEGMENTS ],
+    [ 'http://host', RFC3986_PATH_SEGMENTS ]
+];
+
+const checkSegmentEncodingData = [
+    [ 'http:', RFC3986_SEGMENT ],
+    [ 'http://', RFC3986_SEGMENT ],
+    [ 'http://host', RFC3986_SEGMENT ],
+    [ 'http://@host', RFC3986_SEGMENT ],
+    [ 'http://l@', RFC3986_SEGMENT ],
+    [ 'http://l@:9090', RFC3986_SEGMENT ],
+    [ 'http://@', RFC3986_SEGMENT ],
+    [ 'http:///p', RFC3986_SEGMENT ],
+    [ 'http://l:p@host:8080/s1/s2?q#f', RFC3986_SEGMENT ],
+    [ 'http://host', RFC3986_SEGMENT ]
+];
+
+const checkQueryEncodingData = [
+    [ 'http:', RFC3986_QUERY ],
+    [ 'http://', RFC3986_QUERY ],
+    [ 'http://host', RFC3986_QUERY ],
+    [ 'http://@host', RFC3986_QUERY ],
+    [ 'http://l@', RFC3986_QUERY ],
+    [ 'http://l@:9090', RFC3986_QUERY ],
+    [ 'http://@', RFC3986_QUERY ],
+    [ 'http:///p', RFC3986_QUERY ],
+    [ 'http://l:p@host:8080/s1/s2?q#f', RFC3986_QUERY ],
+    [ 'http://host', RFC3986_QUERY ]
+];
+
+const checkFragmentEncodingData = [
+    [ 'http:', RFC3986_FRAGMENT ],
+    [ 'http://', RFC3986_FRAGMENT ],
+    [ 'http://host', RFC3986_FRAGMENT ],
+    [ 'http://@host', RFC3986_FRAGMENT ],
+    [ 'http://l@', RFC3986_FRAGMENT ],
+    [ 'http://l@:9090', RFC3986_FRAGMENT ],
+    [ 'http://@', RFC3986_FRAGMENT ],
+    [ 'http:///p', RFC3986_FRAGMENT ],
+    [ 'http://l:p@host:8080/s1/s2?q#f', RFC3986_FRAGMENT ],
+    [ 'http://host', RFC3986_FRAGMENT ]
+
+];
+
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
@@ -181,6 +249,7 @@ test('removeDotSegments test', (() => {
     }
     removeDotSegmentsData.forEach((item) => testRemoveDotSegments(item));
 }));
+
 describe('decodeSegments test', (() => {
     it('empty array expected', () => {
         const a0 = uri.decodeSegments('');
@@ -202,6 +271,7 @@ describe('decodeSegments test', (() => {
         expect(() => uri.decodeSegments(' /a')).toThrow();
     });
 }));
+
 test('encodeSegments tests', (() => {
     let data = [];
     let stringPath = uri.encodeSegments(data);
@@ -215,6 +285,7 @@ test('encodeSegments tests', (() => {
     data = 4;
     expect(() => uri.encodeSegments(data)).toThrow();
 }));
+
 test('segments test', (() => {
     function testSegments(original) {
         const decoded = uri.decodeSegments(original);
@@ -223,6 +294,7 @@ test('segments test', (() => {
     }
     segmentsData.forEach((item) => testSegments(item));
 }));
+
 test('isSubordinate test', (() => {
     function testIsSubordinate([ parent, sub, orSame, expected ]) {
         const uriParent = uri.decomposeComponents(parent);
@@ -231,4 +303,14 @@ test('isSubordinate test', (() => {
         expect(res).toEqual(expected);
     }
     isSubordinateData.forEach((item) => testIsSubordinate(item));
+}));
+test('checkEncoding test', (() => {
+    function testCheckEncoding([ original, legalRange ]) {
+        expect(original).toMatch(new RegExp(`[${legalRange}]`));
+        expect(original).toMatch(/(?:%[0-9A-Fa-f]{2}){1,}|./g);
+    }
+    checkSegmentsEncodingData.forEach((item) => testCheckEncoding(item));
+    checkSegmentEncodingData.forEach((item) => testCheckEncoding(item));
+    checkQueryEncodingData.forEach((item) => testCheckEncoding(item));
+    checkFragmentEncodingData.forEach((item) => testCheckEncoding(item));
 }));

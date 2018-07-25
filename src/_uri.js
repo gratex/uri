@@ -16,14 +16,16 @@ const RFC2396_LOWALPHA = 'a-z';
 const RFC2396_UPALPHA = 'A-Z';
 const RFC2396_ALPHA = RFC2396_LOWALPHA + RFC2396_UPALPHA;
 const RFC2396_ALPHANUM = RFC2396_DIGIT + RFC2396_ALPHA;
-const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}'-._~'`;
+const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}-._~`;
 const RFC3986_SUBDELIMS = '\u0021\u0024\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u003b\u003d';
 const RFC3986_PCT_ENCODED = '';
 const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
-const RFC3986_PCHAR = `${RFC3986_REG_NAME}':@'`;
-const RFC3986_QUERY = `${RFC3986_PCHAR}'?/'`;
+const RFC3986_PCHAR = `${RFC3986_REG_NAME}:@`;
+const RFC3986_QUERY = `${RFC3986_PCHAR}?/`;
 const RFC3986_SEGMENT = RFC3986_PCHAR;
-
+const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
+const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g; //
+const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 // TODO: get rid of RFC2396 constants
 
 function decomposeComponents(uriStr) {
@@ -91,9 +93,6 @@ function percentEncode(str, legalRange) {
     }
     retVal.forEach(encode);
     return retVal.join('');
-}
-function encodeQuery(str) {
-    return percentEncode(str, RFC3986_QUERY);
 }
 function removeDotSegments(path) {
     let inputBufferStart = 0;
@@ -241,6 +240,71 @@ function isSubordinate(uriParent, uriSub, orSame) {
     const i = uriSub.path.indexOf(uriParent.path);
     return i === 0 && (orSame || uriSub.path.length !== uriParent.path.length);
 }
+function encodeSegment(segment) {
+    return percentEncode(segment, RFC3986_SEGMENT);
+}
+
+function encodeQuery(str) {
+    return percentEncode(str, RFC3986_QUERY);
+}
+
+function encodeFragment(str) {
+    return percentEncode(str, RFC3986_FRAGMENT);
+}
+
+function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
+    // summary:
+    //		Validates if string contains legalRange + valid pchars PCHAR.
+    //		PCHARS represent valid UTF-8 sequence.
+    // returns:	Error?
+    //		Null if ok, Error if failed
+
+    // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
+    // TODO: flags: PERCENT_ENCODING_SHOULD_BE_UPPERCASE, SUPERFLUOUS_NON_ASCII_PERCENT_ENCODING
+    if (!raw) {
+        return null;
+    }
+    const reLegal = new RegExp(`[${legalRange}]`);
+    const tokens = raw.match(PCHAR_TOKENIZER);
+    for (let i = 0; i < tokens.length; i++) {
+        const t = tokens[i];
+        if (t.length > 1) {
+            try {
+                decodeURIComponent(t);
+            } catch (ex) {
+                const e = new Error(`Illegal PCHAR sequence:${t}`);
+                if (doThrow) {
+                    throw e;
+                }
+                return e;
+            }
+        } else if (!t.match(reLegal)) {
+            const e = new Error(`Illegal PCHAR sequence:${t}`);
+            if (doThrow) {
+                throw e;
+            }
+            return e;
+        }
+    }
+    return null;
+}
+
+function checkSegmentsEncoding(str, doThrow) {
+    return checkEncoding(str, RFC3986_PATH_SEGMENTS, doThrow);
+}
+
+function checkSegmentEncoding(str, doThrow) {
+    return checkEncoding(str, RFC3986_SEGMENT, doThrow);
+}
+
+function checkQueryEncoding(str, doThrow) {
+    return checkEncoding(str, RFC3986_QUERY, doThrow);
+}
+
+function checkFragmentEncoding(str, doThrow) {
+    return checkEncoding(str, RFC3986_FRAGMENT, doThrow);
+}
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
@@ -251,5 +315,13 @@ module.exports = {
     decodeSegments,
     encodeSegments,
     isSubordinate,
-    percentEncode
+    percentEncode,
+    encodeSegment,
+    encodeFragment,
+    checkEncoding,
+    checkSegmentsEncoding,
+    checkSegmentEncoding,
+    checkQueryEncoding,
+    checkFragmentEncoding
+
 };
