@@ -256,7 +256,7 @@ function encodeFragment(str) {
     return percentEncode(str, RFC3986_FRAGMENT);
 }
 
-function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
+function checkEncoding(raw, legalRange, doThrow /* , flags*/ ) {
     // summary:
     //		Validates if string contains legalRange + valid pchars PCHAR.
     //		PCHARS represent valid UTF-8 sequence.
@@ -309,6 +309,44 @@ function checkFragmentEncoding(str, doThrow) {
     return checkEncoding(str, RFC3986_FRAGMENT, doThrow);
 }
 
+function parseQuery(query, bDecode) {
+    // summary:
+    //		Striktna varianta rozoznavajuca empty a undefined query.
+    // query: String
+    //		Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
+    //		ocakavane bez delimitera (?,#) teda z naseho API
+    // bDecode: Booelan
+    //		Default false, ci dekodovat mena a values
+    // returns:	Object
+    if (query == null) {
+        return null;
+    }
+    if (query === "") {
+        return {};
+    }
+    const parts = query.split("&");
+    const ret = {};
+    for (let i = 0; i < parts.length; i++) {
+        const ps = parts[i].split("=");
+        const name = bDecode ? decodeURIComponent(ps[0]) : ps[0];
+        const val = bDecode ? decodeURIComponent(ps[1]) : ps[1];
+     
+        if (ret[name] != null) {
+            if (ret[name] instanceof Array) {
+                ret[name].push(val);
+            } else {
+                ret[name] = [
+                    ret[name]
+                ].concat(val);
+            }
+        } else {
+            ret[name] = val;
+        }
+    }
+    return ret;
+}
+
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
@@ -324,5 +362,6 @@ module.exports = {
     checkSegmentsEncoding,
     checkSegmentEncoding,
     checkQueryEncoding,
-    checkFragmentEncoding
+    checkFragmentEncoding,
+    parseQuery
 };

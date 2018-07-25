@@ -152,6 +152,8 @@ const checkFragmentEncodingData = [
     [ 'http://host', RFC3986_FRAGMENT ]
 ];
 
+const parseQueryData = [];
+
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
@@ -235,4 +237,11 @@ test('checkEncoding test', (() => {
     checkSegmentEncodingData.forEach((item) => testCheckEncoding(item));
     checkQueryEncodingData.forEach((item) => testCheckEncoding(item));
     checkFragmentEncodingData.forEach((item) => testCheckEncoding(item));
+}));
+
+test('parseQuery test'(() => {
+    function testParseQuery() {
+
+    }
+    parseQueryData.forEach((item) => testParseQuery(item));
 }));
