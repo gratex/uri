@@ -10,7 +10,8 @@ const componentsData = [ // s, a, p, q, f
     'http://@',
     'http:///p',
     'http://l:p@host:8080/s1/s2?q#f',
-    'http://host'
+    'http://host',
+    '//host'
 ];
 
 const encodeQueryData = [
@@ -44,6 +45,7 @@ const removeDotSegmentsData = [
     [ '..', '' ],
     [ '.', '' ],
     [ '../', '' ],
+    [ '/..', '/' ],
     [ './', '' ] // modified from 6.2.2.
 ];
 
@@ -97,7 +99,8 @@ const resolveData = [
     [ 'g#s/../x', 'http://a/b/c/d;p?q', 'http://a/b/c/g#s/../x' ],
     // if strict
     [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ],
-    [ './../g', 'http://john.doe@www.example.com:123', 'http://john.doe@www.example.com:123/g' ]
+    [ './../g', 'http://john.doe@www.example.com:123', 'http://john.doe@www.example.com:123/g' ],
+    [ './../g', 'http:x', 'http:g' ]
 ];
 
 const segmentsData = [
@@ -141,11 +144,28 @@ test('component test', (() => {
     componentsData.forEach((item) => testComponent(item));
 }));
 test('checkAuthorityInvariant should throw in recompose on invalid input', (() => {
-    const decomposed = uri.decomposeComponents('http://a@b:800');
+    let decomposed = uri.decomposeComponents('http://a@b:800');
     decomposed.port = '87';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
-    decomposed.host = null;
+
+    decomposed = uri.decomposeComponents('http://a@b:800');
+    decomposed.host = 'c';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
+
+    decomposed = uri.decomposeComponents('http://a@b:800');
+    decomposed.userInfo = 'c';
+    expect(() => uri.recomposeComponents(decomposed)).toThrow();
+
+    decomposed = uri.decomposeComponents('http://a@b:800');
+    decomposed.authority = 'b@b:800';
+    expect(() => uri.recomposeComponents(decomposed)).toThrow();
+}));
+test('recomposeAuthorityComponents test', (() => {
+    expect(uri.recomposeAuthorityComponents('foo', 'bar', '123')).toBe('foo@bar:123');
+    expect(uri.recomposeAuthorityComponents(null, 'bar', '123')).toBe('bar:123');
+    expect(uri.recomposeAuthorityComponents('foo', 'bar')).toBe('foo@bar');
+    expect(uri.recomposeAuthorityComponents(null, 'bar')).toBe('bar');
+    expect(() => uri.recomposeAuthorityComponents('foo', null, '123')).toThrow();
 }));
 test('encode query test', (() => {
     function testEncodeQuery([ original, expected ]) {

@@ -56,6 +56,13 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
         throw new Error('IllegalStateException,AuthorityInvariant broken');
     }
 }
+
+/**
+@see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
+Remarks:
+defined(x) is coded with !=null (means undefined and null are handled the same way)
+ignores "authority sub components"
+**/
 function recomposeComponents({ scheme, authority, userInfo, host, port, path, query, fragment }) {
     _checkAuthorityInvariant(authority, userInfo, host, port);
 
@@ -157,6 +164,10 @@ function _merge({ authority, path }, refPath) { // object,string
     const xi = path.lastIndexOf('/');
     return (xi === -1) ? refPath : path.substring(0, xi + 1) + refPath;
 }
+
+/**
+5.2.2.  Transform References
+**/
 function _transformReference(base, { scheme, authority, userInfo, host, port, path, query, fragment }) {
     if (scheme == null) {
         scheme = base.scheme;
