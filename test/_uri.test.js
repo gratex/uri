@@ -152,7 +152,13 @@ const checkFragmentEncodingData = [
     [ 'http://host', RFC3986_FRAGMENT ]
 ];
 
-const parseQueryData = [];
+const parseQueryData = [
+    [ '', true ],
+    [ '' ],
+    [ null, true ],
+    [],
+    [ 'x=10&y=5', true ]
+];
 
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
@@ -239,9 +245,25 @@ test('checkEncoding test', (() => {
     checkFragmentEncodingData.forEach((item) => testCheckEncoding(item));
 }));
 
-test('parseQuery test'(() => {
-    function testParseQuery() {
-
-    }
-    parseQueryData.forEach((item) => testParseQuery(item));
+describe('parseQuery test', (() => {
+    it('empty string expected using true ', () => {
+        const a0 = uri.parseQuery('', true);
+        expect(a0).toEqual({});
+    });
+    it('empty string expected using false', () => {
+        const a1 = uri.parseQuery('', false);
+        expect(a1).toEqual({});
+    });
+    it('null string expected using true', () => {
+        const a2 = uri.parseQuery(null, true);
+        expect(a2).toEqual(null);
+    });
+    it('null string expected using false', () => {
+        const a3 = uri.parseQuery(null, false);
+        expect(a3).toEqual(null);
+    });
+    it('string query expected', () => {
+        const a4 = uri.parseQuery('x=10&y=5', true);
+        expect(a4).toEqual({ x: '10', y: '5' });
+    });
 }));

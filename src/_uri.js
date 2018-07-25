@@ -40,13 +40,6 @@ function decomposeComponents(uriStr) {
     u.path == null && (u.path = '');
     return u;
 }
-
-/**
- @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
- Remarks:
- defined(x) is coded with !=null (means undefined and null are handled the same way)
- ignores 'authority sub components'
- **/
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
         throw new Error(`Illegal host:${host}`);
@@ -66,6 +59,12 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
     }
 }
 
+/**
+@see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
+Remarks:
+defined(x) is coded with !=null (means undefined and null are handled the same way)
+ignores "authority sub components"
+**/
 function recomposeComponents({ scheme, authority, userInfo, host, port, path, query, fragment }) {
     _checkAuthorityInvariant(authority, userInfo, host, port);
 
@@ -78,7 +77,6 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 
     return result;
 }
-
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
@@ -96,7 +94,6 @@ function percentEncode(str, legalRange) {
     retVal.forEach(encode);
     return retVal.join('');
 }
-
 function removeDotSegments(path) {
     let inputBufferStart = 0;
     const inputBufferEnd = path.length;
@@ -168,13 +165,9 @@ function _merge({ authority, path }, refPath) { // object,string
 }
 
 /**
-	 5.2.2.  Transform References
-	 **/
-const STRICT_TRANSFORMREFERENCES = true;
+5.2.2.  Transform References
+**/
 function _transformReference(base, { scheme, authority, userInfo, host, port, path, query, fragment }) {
-    if (!STRICT_TRANSFORMREFERENCES && scheme === base.scheme) {
-        scheme = undefined;
-    }
     if (scheme == null) {
         scheme = base.scheme;
         if (authority == null) {
@@ -199,12 +192,10 @@ function _preParseBaseUri({ scheme }) {
         throw new Error('Violation 5.2.1, scheme component required');
     }
 }
-
 function resolve(base, ref) {
     _preParseBaseUri(base);
     return _transformReference(base, ref);
 }
-
 function decodeSegments(encodedPath) {
     // summary:
     //		Spliting path by "/".
@@ -219,11 +210,10 @@ function decodeSegments(encodedPath) {
     }
     const segments = encodedPath.split('/');
     if (segments.shift() !== '') {
-        Error('path-abempty expected');
+        throw new Error('path-abempty expected');
     }
     return segments.map((segment) => decodeURIComponent(segment));
 }
-
 function encodeSegments(segments) {
     // summary:
     //		Joining path segments by /
@@ -240,10 +230,16 @@ function encodeSegments(segments) {
     if (segments.length === 0) {
         return '';
     }
-
     return `/${segments.map((segment) => percentEncode(segment, RFC3986_SEGMENT)).join('/')}`;
 }
-
+function isSubordinate(uriParent, uriSub, orSame) {
+    // if subordinate is absolute and parent is not or parent has different authority
+    if (uriSub.authority != null && uriSub.authority !== uriParent.authority) {
+        return false;
+    }
+    const i = uriSub.path.indexOf(uriParent.path);
+    return i === 0 && (orSame || uriSub.path.length !== uriParent.path.length);
+}
 function encodeSegment(segment) {
     return percentEncode(segment, RFC3986_SEGMENT);
 }
@@ -356,6 +352,8 @@ module.exports = {
     removeDotSegments,
     decodeSegments,
     encodeSegments,
+    isSubordinate,
+    percentEncode,
     encodeSegment,
     encodeFragment,
     checkEncoding,
