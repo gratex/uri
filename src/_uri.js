@@ -321,13 +321,13 @@ function parseQuery(query, bDecode) {
     if (query == null) {
         return null;
     }
-    if (query === "") {
+    if (query === '') {
         return {};
     }
-    const parts = query.split("&");
+    const parts = query.split('&');
     const ret = {};
     for (let i = 0; i < parts.length; i++) {
-        const ps = parts[i].split("=");
+        const ps = parts[i].split('=');
         const name = bDecode ? decodeURIComponent(ps[0]) : ps[0];
         const val = bDecode ? decodeURIComponent(ps[1]) : ps[1];
      
