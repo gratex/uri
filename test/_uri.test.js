@@ -2,6 +2,7 @@ const uri = require('../src/_uri.js');
 const componentsData = [ // s, a, p, q, f
     'http:',
     'http://',
+    'http:/',
     'http://host',
     'http://@host',
     'http://l@',
@@ -17,13 +18,33 @@ const encodeQueryData = [
     [ ' ', '%20' ]
 ];
 
+const isSubordinateData = [
+
+    [ '/a/b/c', '/a/b/c', true, true ],
+    [ '/a/b/', '/a/b/c', true, true ],
+    [ '/a/b', '/a/b/c', true, true ],
+    [ '/a/b/c', '/a/b/d', true, false ],
+    [ '/a/b/c', '/a/b/', true, false ],
+    [ '/b/', '/a/c/', true, false ],
+    [ '/', '/a/b/', true, true ],
+    [ '/', '/a/b/', false, true ],
+    [ '', '/a/b/', true, true ],
+    [ ' ', '/a/b/c/', true, false ],
+    [ '//john.doe@www.example.com:123/forum/questions/', '//john.doe@www.example.com:123/forum/questions/', true, true ],
+    [ '//john.doe@www.example.com:123/forum/questions/', '//michal.zajic@www.example.com:123/forum/questions/', true, false ]
+];
+
 const removeDotSegmentsData = [
     [ '/a/b/c/./../../g', '/a/g' ],
     [ '/.', '/' ],
     [ '/x/..', '/' ],
     [ '/x/../', '/' ],
     [ '/a/../../.', '/' ],
-    [ '/./x/../b/c/d', '/b/c/d' ] // modified from 6.2.2.
+    [ '/./x/../b/c/d', '/b/c/d' ],
+    [ '..', '' ],
+    [ '.', '' ],
+    [ '../', '' ],
+    [ './', '' ] // modified from 6.2.2.
 ];
 
 const resolveData = [
@@ -75,7 +96,8 @@ const resolveData = [
     [ 'g#s/./x', 'http://a/b/c/d;p?q', 'http://a/b/c/g#s/./x' ],
     [ 'g#s/../x', 'http://a/b/c/d;p?q', 'http://a/b/c/g#s/../x' ],
     // if strict
-    [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ]
+    [ 'http:g', 'http://a/b/c/d;p?q', 'http:g' ],
+    [ './../g', 'http://john.doe@www.example.com:123', 'http://john.doe@www.example.com:123/g' ]
 ];
 
 const segmentsData = [
@@ -93,7 +115,10 @@ test('resolve test', (() => {
     }
     resolveData.forEach((item) => testResolve(item));
 }));
-
+test('_preParseBaseUri test', (() => {
+    const decomposed = uri.decomposeComponents('//a/b/c/d;p?q');
+    expect(() => uri.resolve(decomposed, null)).toThrow();
+}));
 test('component test', (() => {
     function testComponent(original) {
         const decomposed = uri.decomposeComponents(original);
@@ -102,7 +127,13 @@ test('component test', (() => {
     }
     componentsData.forEach((item) => testComponent(item));
 }));
-
+test('checkAuthorityInvariant should throw in recompose on invalid input', (() => {
+    const decomposed = uri.decomposeComponents('http://a@b:800');
+    decomposed.port = '87';
+    expect(() => uri.recomposeComponents(decomposed)).toThrow();
+    decomposed.host = null;
+    expect(() => uri.recomposeComponents(decomposed)).toThrow();
+}));
 test('encode query test', (() => {
     function testEncodeQuery([ original, expected ]) {
         const res = uri.encodeQuery(original);
@@ -110,7 +141,6 @@ test('encode query test', (() => {
     }
     encodeQueryData.forEach((item) => testEncodeQuery(item));
 }));
-
 test('removeDotSegments test', (() => {
     function testRemoveDotSegments([ original, expected ]) {
         const res = uri.removeDotSegments(original);
@@ -135,6 +165,9 @@ describe('decodeSegments test', (() => {
         const a3 = uri.decodeSegments('/a/b/');
         expect(a3.length === 3 && a3[0] === 'a' && a3[1] === 'b' && a3[2] === '').toBeTruthy();
     });
+    it('4 path-abempty expected', () => {
+        expect(() => uri.decodeSegments(' /a')).toThrow();
+    });
 }));
 test('encodeSegments tests', (() => {
     let data = [];
@@ -146,6 +179,8 @@ test('encodeSegments tests', (() => {
     data = [ 'a', 'b', '' ];
     stringPath = uri.encodeSegments(data);
     expect(stringPath).toBe('/a/b/');
+    data = 4;
+    expect(() => uri.encodeSegments(data)).toThrow();
 }));
 test('segments test', (() => {
     function testSegments(original) {
@@ -154,4 +189,13 @@ test('segments test', (() => {
         expect(res).toEqual(original);
     }
     segmentsData.forEach((item) => testSegments(item));
+}));
+test('isSubordinate test', (() => {
+    function testIsSubordinate([ parent, sub, orSame, expected ]) {
+        const uriParent = uri.decomposeComponents(parent);
+        const uriSub = uri.decomposeComponents(sub);
+        const res = uri.isSubordinate(uriParent, uriSub, orSame);
+        expect(res).toEqual(expected);
+    }
+    isSubordinateData.forEach((item) => testIsSubordinate(item));
 }));
