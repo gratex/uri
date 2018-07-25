@@ -13,7 +13,7 @@ const RFC3986_SEGMENT = RFC3986_PCHAR;
 const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
 const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 
-const uri = require('../src/_uri.js');
+const uri = require('../src/_uri');
 const componentsData = [ // s, a, p, q, f
     'http:',
     'http://',
