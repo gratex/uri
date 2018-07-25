@@ -107,6 +107,12 @@ const segmentsData = [
     '/a/b/'
 ];
 
+const percentEncodeData = [
+    [ '/+', '+/?', '+/%3F' ],
+    [ '', '+/?', '%2B%2F%3F' ],
+    [ 'abc', 'mama', '%6Da%6Da' ]
+];
+
 test('resolve test', (() => {
     function testResolve([ ref, base, expected ]) {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
@@ -118,6 +124,13 @@ test('resolve test', (() => {
 test('_preParseBaseUri test', (() => {
     const decomposed = uri.decomposeComponents('//a/b/c/d;p?q');
     expect(() => uri.resolve(decomposed, null)).toThrow();
+}));
+test('percentEncode test', (() => {
+    function testPercentEncode([ legalRange, input, expected ]) {
+        const res = uri.percentEncode(input, legalRange);
+        expect(res).toEqual(expected);
+    }
+    percentEncodeData.forEach((item) => testPercentEncode(item));
 }));
 test('component test', (() => {
     function testComponent(original) {

@@ -239,5 +239,6 @@ module.exports = {
     removeDotSegments,
     decodeSegments,
     encodeSegments,
-    isSubordinate
+    isSubordinate,
+    percentEncode
 };
