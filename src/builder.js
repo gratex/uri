@@ -1,6 +1,8 @@
-function uriBuilder() {
+function uriBuilder(characters, ...insertedValues) {
     // tag for template literal
     // TODO: implement
+    return characters.reduce((lastChar, currentChar, currentId) =>
+        `${lastChar}${encodeURIComponent(insertedValues[currentId - 1])}${currentChar}`);
 }
 
 function raw() {
