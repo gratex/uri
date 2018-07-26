@@ -141,7 +141,7 @@
             "ArrayPatternClosing": 0,
             "ArrayPatternComma": 0,
             "ArrowFunctionExpressionArrow": 0,
-            "ArrowFunctionExpressionOpeningBrace": ">=1",
+            "ArrowFunctionExpressionOpeningBrace": "1",
             "ArrowFunctionExpressionClosingBrace": -1,
             "BlockStatement": 0,
             "BreakKeyword": -1,

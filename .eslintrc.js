@@ -191,7 +191,7 @@ module.exports = exports = {
         "no-inline-comments": OFF,
         "no-lonely-if": WARN,
         "no-mixed-spaces-and-tabs": WARN,
-        "no-multiple-empty-lines": WARN,
+        "no-multiple-empty-lines": [WARN, { "max": 1 }],
         "no-negated-condition": OFF,
         "no-nested-ternary": WARN,
         "no-new-object": WARN,
