@@ -186,8 +186,8 @@ function _transformReference(base, { scheme, authority, userInfo, host, port, pa
 /**
  5.2.1.  Pre-parse the Base URI
  **/
-function _preParseBaseUri(base) {
-    if (base.scheme == null) {
+function _preParseBaseUri({scheme}) {
+    if (scheme == null) {
         throw new Error('Violation 5.2.1, scheme component required');
     }
 }
