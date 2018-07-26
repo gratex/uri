@@ -1,0 +1,80 @@
+const utilTestData = {
+    'equals': [
+        [
+            'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose',
+            'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose'
+        ],
+        true,
+        [
+            '/a/b?type=animal&name=narwhal',
+            '/a/b?name=narwhal&type=animal'
+        ],
+        true,
+        [
+            '/a/b?eq(type,animal)&lt(count,3)',
+            '/a/b?lt(count,3)&eq(type,animal)'
+        ],
+        true,
+        [
+            '/a/b?a=1&b=2&a=3',
+            '/a/b?b=2&a=3&a=1'
+        ],
+        true,
+        [
+            '/a/b?a=1&b=2&a=3',
+            '/a/b?b=2&a=1&a=4'
+        ],
+        false,
+        [
+            '/a?',
+            '/a'
+        ],
+        false, // no query vs. empty query
+        [
+            'foo://a/b',
+            'bar://a/b'
+        ],
+        false,
+        [
+            '/a/b/',
+            '/a/b'
+        ],
+        false,
+        [
+            'foo://username:password1@my.example.com:8042/a',
+            'foo://username:password2@my.example.com:8042/a'
+        ],
+        false,
+        [
+            '/a#',
+            '/a'
+        ],
+        false, // no fragment vs. empty fragment
+        [
+            '/a#nose',
+            '/a'
+        ],
+        false,
+        [
+            '/a#',
+            '/a',
+            // ignoreFragment
+            true
+        ],
+        true,
+        [
+            '/a#nose',
+            '/a',
+            // ignoreFragment
+            true
+        ],
+        true,
+        [
+            '/a#nose',
+            '/a#leg',
+            // ignoreFragment
+            true
+        ],
+        true
+    ]
+};
