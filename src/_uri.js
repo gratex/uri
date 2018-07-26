@@ -80,7 +80,6 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
-
     function encode(cp, i, buff) {
         if (reLegal && cp.match(reLegal)) {
             return;
@@ -187,8 +186,8 @@ function _transformReference(base, { scheme, authority, userInfo, host, port, pa
 /**
  5.2.1.  Pre-parse the Base URI
  **/
-function _preParseBaseUri({ scheme }) {
-    if (scheme == null) {
+function _preParseBaseUri(base) {
+    if (base.scheme == null) {
         throw new Error('Violation 5.2.1, scheme component required');
     }
 }
@@ -252,7 +251,7 @@ function encodeFragment(str) {
     return percentEncode(str, RFC3986_FRAGMENT);
 }
 
-function checkEncoding(raw, legalRange, doThrow /* , flags*/ ) {
+function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
     // summary:
     //		Validates if string contains legalRange + valid pchars PCHAR.
     //		PCHARS represent valid UTF-8 sequence.
@@ -323,17 +322,16 @@ function parseQuery(query, bDecode) {
     const parts = query.split('&');
     const ret = {};
     for (let i = 0; i < parts.length; i++) {
-        const ps = parts[i].split('=');
-        const name = bDecode ? decodeURIComponent(ps[0]) : ps[0];
-        const val = bDecode ? decodeURIComponent(ps[1]) : ps[1];
-     
+        let [ name, val ] = parts[i].split('=');
+        if (bDecode) {
+            name = decodeURIComponent(name);
+            val = decodeURIComponent(val);
+        }
         if (ret[name] != null) {
             if (ret[name] instanceof Array) {
                 ret[name].push(val);
             } else {
-                ret[name] = [
-                    ret[name]
-                ].concat(val);
+                ret[name] = [ ret[name], val ];
             }
         } else {
             ret[name] = val;
