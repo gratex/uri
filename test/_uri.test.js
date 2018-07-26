@@ -394,5 +394,3 @@ test('checkFragmentEncoding test', (() => {
     }
     checkFragmentEncodingData.forEach((item) => testFragmentEncoding(item));
 }));
-
-
