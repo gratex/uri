@@ -311,31 +311,16 @@ function parseQuery(query, bDecode) {
     // bDecode: Booelan
     //		Default false, ci dekodovat mena a values
     // returns:	Object
-    if (query == null) {
-        return null;
-    }
-    if (query === '') {
-        return {};
-    }
-    const parts = query.split('&');
-    const ret = {};
-    for (let i = 0; i < parts.length; i++) {
-        let [ name, val ] = parts[i].split('=');
-        if (bDecode) {
-            name = decodeURIComponent(name);
-            val = decodeURIComponent(val);
-        }
-        if (ret[name] != null) {
-            if (ret[name] instanceof Array) {
-                ret[name].push(val);
-            } else {
-                ret[name] = [ ret[name], val ];
-            }
-        } else {
-            ret[name] = val;
-        }
-    }
-    return ret;
+    if (query == null) { return null; }
+    if (query === '') { return {}; }
+
+    return query.split('&').reduce((obj, part) => {
+        const [ name, val ] = part.split('=').map(bDecode ? decodeURIComponent : (p) => p);
+        return {
+            ...obj,
+            [name]: obj[name] == null ? val : [].concat(obj[name], val)
+        };
+    }, {});
 }
 
 module.exports = {
