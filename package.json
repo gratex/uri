@@ -15,6 +15,7 @@
   "scripts": {
     "test": "jest",
     "test-coverage": "jest --coverage",
+    "lint": "eslint ./src ./test",
     "lint-hook": "bash ./scripts/lint-hook.sh",
     "formatter-hook": "bash ./scripts/formatter-hook.sh"
   },
