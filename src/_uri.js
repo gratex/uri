@@ -80,7 +80,6 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
-
     function encode(cp, i, buff) {
         if (reLegal && cp.match(reLegal)) { return; }
         let enc = encodeURIComponent(cp);
@@ -185,7 +184,7 @@ function _transformReference(base, { scheme, authority, userInfo, host, port, pa
 /**
  5.2.1.  Pre-parse the Base URI
  **/
-function _preParseBaseUri({ scheme }) {
+function _preParseBaseUri({scheme}) {
     if (scheme == null) {
         throw new Error('Violation 5.2.1, scheme component required');
     }
@@ -303,6 +302,43 @@ function checkFragmentEncoding(str, doThrow) {
     return checkEncoding(str, RFC3986_FRAGMENT, doThrow);
 }
 
+function parseQuery(query, bDecode) {
+    // summary:
+    //		Striktna varianta rozoznavajuca empty a undefined query.
+    // query: String
+    //		Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
+    //		ocakavane bez delimitera (?,#) teda z naseho API
+    // bDecode: Booelan
+    //		Default false, ci dekodovat mena a values
+    // returns:	Object
+    if (query == null) {
+        return null;
+    }
+    if (query === '') {
+        return {};
+    }
+    const parts = query.split('&');
+    const ret = {};
+    for (let i = 0; i < parts.length; i++) {
+        let [ name, val ] = parts[i].split('=');
+        if (bDecode) {
+            name = decodeURIComponent(name);
+            val = decodeURIComponent(val);
+        }
+        if (ret[name] != null) {
+            if (ret[name] instanceof Array) {
+                ret[name].push(val);
+            } else {
+                ret[name] = [ ret[name], val ];
+            }
+        } else {
+            ret[name] = val;
+        }
+    }
+    return ret;
+}
+
+
 module.exports = {
     decomposeComponents,
     recomposeAuthorityComponents,
@@ -320,6 +356,6 @@ module.exports = {
     checkSegmentsEncoding,
     checkSegmentEncoding,
     checkQueryEncoding,
-    checkFragmentEncoding
-
+    checkFragmentEncoding,
+    parseQuery
 };
