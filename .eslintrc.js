@@ -9,7 +9,14 @@ module.exports = exports = {
         "jest": true
     },
 
-    "extends": ["eslint:recommended"],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+
+    "extends": [ "eslint:recommended" ],
 
     "rules": {
         // Possible Errors (overrides from recommended set)
@@ -28,18 +35,18 @@ module.exports = exports = {
         // Best Practices
 
         // Allowed a getter without setter, but all setters require getters
-        "accessor-pairs": [ERROR, {
+        "accessor-pairs": [ ERROR, {
             "getWithoutSet": false,
             "setWithoutGet": true
-        }],
+        } ],
         "block-scoped-var": WARN,
         "consistent-return": ERROR,
         "curly": ERROR,
         "default-case": WARN,
         // the dot goes with the property when doing multiline
-        "dot-location": [WARN, "property"],
+        "dot-location": [ WARN, "property" ],
         "dot-notation": WARN,
-        "eqeqeq": [ERROR, "smart"],
+        "eqeqeq": [ ERROR, "smart" ],
         "guard-for-in": WARN,
         "no-alert": ERROR,
         "no-caller": ERROR,
@@ -54,11 +61,11 @@ module.exports = exports = {
         "no-extend-native": ERROR,
         "no-extra-bind": WARN,
         "no-floating-decimal": WARN,
-        "no-implicit-coercion": [WARN, {
+        "no-implicit-coercion": [ WARN, {
             "boolean": true,
             "number": true,
             "string": true
-        }],
+        } ],
         "no-implied-eval": ERROR,
         "no-invalid-this": ERROR,
         "no-iterator": ERROR,
@@ -81,9 +88,9 @@ module.exports = exports = {
         "no-script-url": ERROR,
         "no-self-compare": ERROR,
         "no-throw-literal": ERROR,
-        "no-unused-expressions": [ERROR, {
-            allowShortCircuit:true
-        }],
+        "no-unused-expressions": [ ERROR, {
+            allowShortCircuit: true
+        } ],
         "no-useless-call": ERROR,
         "no-useless-concat": ERROR,
         "no-void": WARN,
@@ -96,14 +103,14 @@ module.exports = exports = {
         "radix": WARN,
         "vars-on-top": ERROR,
         // Enforces the style of wrapped functions
-        "wrap-iife": [ERROR, "outside"],
+        "wrap-iife": [ ERROR, "outside" ],
         "yoda": ERROR,
 
         // Strict Mode - for ES6, never use strict.
-        "strict": [ERROR, "never"],
+        "strict": [ ERROR, "never" ],
 
         // Variables
-        "init-declarations": [ERROR, "always"],
+        "init-declarations": [ ERROR, "always" ],
         "no-catch-shadow": WARN,
         "no-delete-var": ERROR,
         "no-label-var": ERROR,
@@ -119,7 +126,7 @@ module.exports = exports = {
         "no-use-before-define": ERROR,
 
         // Node.js and CommonJS
-        "callback-return": [WARN, ["callback", "next"]],
+        "callback-return": [ WARN, [ "callback", "next" ] ],
         "global-require": ERROR,
         "handle-callback-err": WARN,
         "no-mixed-requires": WARN,
@@ -131,58 +138,58 @@ module.exports = exports = {
         "no-sync": WARN,
 
         // ECMAScript 6 support
-        "arrow-body-style": [ERROR, "as-needed"],
-        "arrow-parens": [ERROR, "always"],
-        "arrow-spacing": [ERROR, {
+        "arrow-body-style": [ ERROR, "as-needed" ],
+        "arrow-parens": [ ERROR, "always" ],
+        "arrow-spacing": [ ERROR, {
             "before": true,
             "after": true
-        }],
+        } ],
         "constructor-super": ERROR,
-        "generator-star-spacing": [ERROR, "before"],
+        "generator-star-spacing": [ ERROR, "before" ],
         "no-arrow-condition": OFF,
         "no-class-assign": ERROR,
         "no-const-assign": ERROR,
         "no-dupe-class-members": ERROR,
         "no-this-before-super": ERROR,
         "no-var": WARN,
-        "object-shorthand": [WARN, "always"],
+        "object-shorthand": [ WARN, "always" ],
         "prefer-arrow-callback": WARN,
         "prefer-spread": WARN,
         "prefer-template": WARN,
         "require-yield": ERROR,
 
         // Stylistic - everything here is a warning because of style.
-        "array-bracket-spacing": [WARN, "always"],
-        "block-spacing": [WARN, "always"],
-        "brace-style": [WARN, "1tbs", {
+        "array-bracket-spacing": [ WARN, "always" ],
+        "block-spacing": [ WARN, "always" ],
+        "brace-style": [ WARN, "1tbs", {
             "allowSingleLine": true
-        }],
+        } ],
         "camelcase": WARN,
-        "comma-spacing": [WARN, {
+        "comma-spacing": [ WARN, {
             "before": false,
             "after": true
-        }],
-        "comma-style": [WARN, "last"],
-        "comma-dangle": [WARN, "never"],
-        "computed-property-spacing": [WARN, "never"],
-        "consistent-this": [WARN, "self"],
+        } ],
+        "comma-style": [ WARN, "last" ],
+        "comma-dangle": [ WARN, "never" ],
+        "computed-property-spacing": [ WARN, "never" ],
+        "consistent-this": [ WARN, "self" ],
         "eol-last": WARN,
         "func-names": WARN,
-        "func-style": [WARN, "declaration"],
-        "id-length": [WARN, {
+        "func-style": [ WARN, "declaration" ],
+        "id-length": [ WARN, {
             "min": 1,
             "max": 32
-        }],
-        "indent": [WARN, 4],
-        "jsx-quotes": [WARN, "prefer-double"],
-        "linebreak-style": [WARN, "unix"],
-        "lines-around-comment": [WARN, {
+        } ],
+        "indent": [ WARN, 4 ],
+        "jsx-quotes": [ WARN, "prefer-double" ],
+        "linebreak-style": [ WARN, "unix" ],
+        "lines-around-comment": [ WARN, {
             "beforeBlockComment": true
-        }],
-        "max-depth": [WARN, 8],
-        "max-len": [WARN, 132],
-        "max-nested-callbacks": [WARN, 8],
-        "max-params": [WARN, 8],
+        } ],
+        "max-depth": [ WARN, 8 ],
+        "max-len": [ WARN, 132 ],
+        "max-nested-callbacks": [ WARN, 8 ],
+        "max-params": [ WARN, 8 ],
         "new-cap": WARN,
         "new-parens": WARN,
         "no-array-constructor": WARN,
@@ -191,7 +198,7 @@ module.exports = exports = {
         "no-inline-comments": OFF,
         "no-lonely-if": WARN,
         "no-mixed-spaces-and-tabs": WARN,
-        "no-multiple-empty-lines": [WARN, { "max": 1 }],
+        "no-multiple-empty-lines": [ WARN, { "max": 1 } ],
         "no-negated-condition": OFF,
         "no-nested-ternary": WARN,
         "no-new-object": WARN,
@@ -201,13 +208,13 @@ module.exports = exports = {
         "no-trailing-spaces": WARN,
         "no-underscore-dangle": OFF,
         "no-unneeded-ternary": WARN,
-        "object-curly-spacing": [WARN, "always"],
-        "one-var": [WARN, "never"],
-        "operator-assignment": [OFF, "never"],
-        "operator-linebreak": [WARN, "after"],
-        "padded-blocks": [WARN, "never"],
-        "quote-props": [WARN, "consistent-as-needed"],
-        "quotes": [WARN, "single"],
+        "object-curly-spacing": [ WARN, "always" ],
+        "one-var": [ WARN, "never" ],
+        "operator-assignment": [ OFF, "never" ],
+        "operator-linebreak": [ WARN, "after" ],
+        "padded-blocks": [ WARN, "never" ],
+        "quote-props": [ WARN, "consistent-as-needed" ],
+        "quotes": [ WARN, "single" ],
         // "require-jsdoc": [WARN, {
         //   "require": {
         //     "FunctionDeclaration": true,
@@ -215,23 +222,23 @@ module.exports = exports = {
         //     "ClassDeclaration": false
         //   }
         // }],
-        "semi-spacing": [WARN, {
+        "semi-spacing": [ WARN, {
             "before": false,
             "after": true
-        }],
-        "semi": [ERROR, "always"],
+        } ],
+        "semi": [ ERROR, "always" ],
         "sort-vars": OFF,
-        "space-after-keywords": [OFF, "always"],
-        "space-before-blocks": [WARN, "always"],
-        "space-before-function-paren": [WARN, "never"],
-        "space-before-keywords": [OFF, "always"],
-        "space-in-parens": [WARN, "never"],
-        "space-infix-ops": [WARN, {
+        "space-after-keywords": [ OFF, "always" ],
+        "space-before-blocks": [ WARN, "always" ],
+        "space-before-function-paren": [ WARN, "never" ],
+        "space-before-keywords": [ OFF, "always" ],
+        "space-in-parens": [ WARN, "never" ],
+        "space-infix-ops": [ WARN, {
             "int32Hint": true
-        }],
+        } ],
         "space-return-throw-case": OFF,
         "space-unary-ops": ERROR,
-        "spaced-comment": [WARN, "always"],
+        "spaced-comment": [ WARN, "always" ],
         "wrap-regex": WARN,
         "prefer-const": ERROR
     }
