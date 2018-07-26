@@ -1,9 +1,25 @@
-function uriBuilder(characters, ...insertedValues) {
+const uri = require('../src/_uri');
+
+function uriBuilder(other, ...toResolve) {
     // tag for template literal
     // TODO: implement
-    return characters.reduce((lastChar, currentChar, currentId) =>
-        `${lastChar}${encodeURIComponent(insertedValues[currentId - 1])}${currentChar}`);
+    /* eslint prefer-const: "OFF" */
+    const mimicedPath = other.reduce((last, actualOpt) =>
+        `${last}${toResolve}${actualOpt}`
+    ).replace(toResolve, '${inj}');
+    let { path, query } = uri.decomposeComponents(mimicedPath);
+    console.log(query);
+    if (path !== '') {
+        path && (path = path.replace('${inj}', toResolve));
+        return path;
+    }
+    if (query !== '') {
+        query && (query = query.replace('${inj}', `?${toResolve}`));
+        return query;
+    }
+    return 'Something went wrong';
 }
+
 
 function raw() {
     // return something that will tell uriBuilder not to encode
