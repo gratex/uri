@@ -3,7 +3,10 @@
     "esformatter": {
         "allowShebang": true
     },
-    "plugins": [],
+    "plugins": [
+        "esformatter-eol-last",
+        "esformatter-limit-linebreaks"
+    ],
     "quotes": {
         "type": "single",
         "avoidEscape": false
