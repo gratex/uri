@@ -155,7 +155,7 @@ module.exports = exports = {
         "array-bracket-spacing": [WARN, "always"],
         "block-spacing": [WARN, "always"],
         "brace-style": [WARN, "1tbs", {
-            "allowSingleLine": false
+            "allowSingleLine": true
         }],
         "camelcase": WARN,
         "comma-spacing": [WARN, {

@@ -82,9 +82,7 @@ function percentEncode(str, legalRange) {
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
 
     function encode(cp, i, buff) {
-        if (reLegal && cp.match(reLegal)) {
-            return;
-        }
+        if (reLegal && cp.match(reLegal)) { return; }
         let enc = encodeURIComponent(cp);
         if (enc.length === 1) {
             enc = `%${cp.charCodeAt(0).toString(16).toUpperCase()}`;
