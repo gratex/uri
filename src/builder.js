@@ -15,8 +15,11 @@ function uriBuilder(other, ...toResolve) {
         }
         // matches /.haha/ assuming path starts with dot then anything
         if (path.match('[/][.]+.[/]').shift() != null) {
+            // extracting part of path where slashes will be replaced
             let dottedPart = path.match('[/][.]+[/]');
+            // plus one because requirement was to not encode first slash
             let after = path.substring(path.indexOf(dottedPart) + 1, path.length);
+            // in order to assembly full path again
             let before = path.substring(0, path.indexOf(dottedPart) + 1);
             path = before.concat(after.replace(new RegExp('[/]', 'g'), uri.encodeSegment('/')));
         }
