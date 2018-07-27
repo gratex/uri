@@ -1,40 +1,21 @@
 const uri = require('../src/_uri');
+const PLACEHOLDER = '$$$'; // should be safe string, not occuring in url templates, and not breaking decomposition
+const REPLACE = new RegExp(PLACEHOLDER, 'g');
 
-function uriBuilder(other, ...toResolve) {
-    /* eslint prefer-const: "OFF" */
+function uriBuilder(strings, ...values) {
     // uriBuilder`/a/${x}/b/?u=${y}p=10#/a/b/${m}`
-    const assembledInputPath = other.reduce((last, actual) =>
-        `${last}$$$${actual}`
-    );
-    // '/a/$$$/b/?u=$$$p=10#/a/b/$$$'
-    let { path, query, fragment } = uri.decomposeComponents(assembledInputPath);
-    // {path:'/a/$$$/b/', query:'u=$$$p=10', fragment: '/a/b/$$$'}
-    if (path != null) {
-        if (path !== '..') {
-            path = path.replace('$$$', () => toResolve.shift());
-        }
-        // matches /.haha/ assuming path starts with dot then anything
-        if (path.match('[/][.]+.[/]').shift() != null) {
-            // extracting part of path where slashes will be replaced
-            let dottedPart = path.match('[/][.]+[/]');
-            // plus one because requirement was to not encode first slash
-            let after = path.substring(path.indexOf(dottedPart) + 1, path.length);
-            // in order to assembly full path again
-            let before = path.substring(0, path.indexOf(dottedPart) + 1);
-            path = before.concat(after.replace(new RegExp('[/]', 'g'), uri.encodeSegment('/')));
-        }
-    }
-    if (query != null) {
-        query = query.replace('$$$', () => toResolve.shift());
-    }
-    if (fragment != null) {
-        fragment = fragment.replace('$$$', () => toResolve.shift());
-    }
-    if (fragment != null) {
-        fragment = fragment.replace('$$$', () => toResolve.shift());
-    }
-    const assembledOutputPath = uri.recomposeComponents({ path, query, fragment });
-    return assembledOutputPath;
+
+    const uriTemplate = strings.reduce((last, actual) => `${last}${PLACEHOLDER}${actual}`);
+    // -> '/a/$$$/b/?u=$$$p=10#/a/b/$$$'
+
+    // eslint-disable-next-line prefer-const
+    let { path, query, fragment, ...otherComponents } = uri.decomposeComponents(uriTemplate);
+
+    path = path && path.replace(REPLACE, () => uri.encodeSegment(values.shift()));
+    query = query && query.replace(REPLACE, () => uri.encodeQuery(values.shift()));
+    fragment = fragment && fragment.replace(REPLACE, () => uri.encodeFragment(values.shift()));
+
+    return uri.recomposeComponents({ ...otherComponents, path, query, fragment });
 }
 
 function raw() {
