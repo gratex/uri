@@ -197,7 +197,7 @@ module.exports = exports = {
         "no-mixed-spaces-and-tabs": WARN,
         "no-multiple-empty-lines": [ WARN, { "max": 1 } ],
         "no-negated-condition": OFF,
-        "no-nested-ternary": WARN,
+        "no-nested-ternary": OFF,
         "no-new-object": WARN,
         "no-plusplus": OFF,
         "no-spaced-func": WARN,
