@@ -2,33 +2,36 @@ const uri = require('../src/_uri');
 
 function uriBuilder(other, ...toResolve) {
     /* eslint prefer-const: "OFF" */
-    const assembledInputPath = other.reduce((last, actualOpt, index) =>
-        `${last}${toResolve[index - 1]}${actualOpt}`
-    ).replace(toResolve, '${inj}');
+    // uriBuilder`/a/${x}/b/?u=${y}p=10#/a/b/${m}`
+    const assembledInputPath = other.reduce((last, actual) =>
+        `${last}$$$${actual}`
+    );
+    // '/a/$$$/b/?u=$$$p=10#/a/b/$$$'
     let { path, query, fragment } = uri.decomposeComponents(assembledInputPath);
-    if (path !== '') {
-        path && (path = path.replace('${inj}', toResolve));
-        if (path.indexOf('../') !== -1) {
-            let after = path.substring(path.indexOf('../'), path.length).replace('/', encodeURIComponent('/'));
-            after = after
-                .substring(path.indexOf(encodeURIComponent('/').slice(-1)), path.length)
-                .replace('/', encodeURIComponent('/'));
-            while(path.indexOf(encodeURIComponent('/').slice(-1)) !== -1) {
-                after = after
-                    .substring(path.indexOf(encodeURIComponent('/').slice(-1)), path.length)
-                    .replace('/', encodeURIComponent('/'));
-            }
-            let before = path.substring(0, path.indexOf('../'));
-            path = before.concat(after);
+    // {path:'/a/$$$/b/', query:'u=$$$p=10', fragment: '/a/b/$$$'}
+    if (path != null) {
+        if (path !== '..') {
+            path = path.replace('$$$', () => toResolve.shift());
+        }
+        // matches /.haha/ assuming path starts with dot then anything
+        if (path.match('[/][.]+.[/]').shift() != null) {
+            let dottedPart = path.match('[/][.]+[/]');
+            let after = path.substring(path.indexOf(dottedPart) + 1, path.length);
+            let before = path.substring(0, path.indexOf(dottedPart) + 1);
+            path = before.concat(after.replace(new RegExp('[/]', 'g'), uri.encodeSegment('/')));
         }
     }
-    if (query !== '') {
-        query && (query = query.replace('${inj}', `${toResolve}`));
+    if (query != null) {
+        query = query.replace('$$$', () => toResolve.shift());
     }
-    if (fragment !== '') {
-        fragment && (fragment = fragment.replace('${inj}', `${toResolve}`));
+    if (fragment != null) {
+        fragment = fragment.replace('$$$', () => toResolve.shift());
     }
-    return uri.recomposeComponents({ path, query, fragment });
+    if (fragment != null) {
+        fragment = fragment.replace('$$$', () => toResolve.shift());
+    }
+    const assembledOutputPath = uri.recomposeComponents({ path, query, fragment });
+    return assembledOutputPath;
 }
 
 function raw() {
