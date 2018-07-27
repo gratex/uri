@@ -266,23 +266,23 @@ test('removeDotSegments test', (() => {
 }));
 
 describe('decodeSegments test', (() => {
-    it('empty array expected', () => {
+    test('empty array expected', () => {
         const a0 = uri.decodeSegments('');
         expect(a0.length === 0).toBeTruthy();
     });
-    it('1 void segment expected', () => {
+    test('1 void segment expected', () => {
         const a1 = uri.decodeSegments('/');
         expect(a1.length === 1 && a1[0] === '').toBeTruthy();
     });
-    it('2 segmentsData a,b expected', () => {
+    test('2 segmentsData a,b expected', () => {
         const a2 = uri.decodeSegments('/a/b');
         expect(a2.length === 2 && a2[0] === 'a' && a2[1] === 'b').toBeTruthy();
     });
-    it('3 segmentsData a,b,void expected', () => {
+    test('3 segmentsData a,b,void expected', () => {
         const a3 = uri.decodeSegments('/a/b/');
         expect(a3.length === 3 && a3[0] === 'a' && a3[1] === 'b' && a3[2] === '').toBeTruthy();
     });
-    it('4 path-abempty expected', () => {
+    test('4 path-abempty expected', () => {
         expect(() => uri.decodeSegments(' /a')).toThrow();
     });
 }));
@@ -321,27 +321,27 @@ test('isSubordinate test', (() => {
 }));
 
 describe('parseQuery test', (() => {
-    it('empty string expected using true ', () => {
+    test('empty string expected using true ', () => {
         const a0 = uri.parseQuery('', true);
         expect(a0).toEqual({});
     });
-    it('empty string expected using false', () => {
+    test('empty string expected using false', () => {
         const a1 = uri.parseQuery('', false);
         expect(a1).toEqual({});
     });
-    it('null string expected using true', () => {
+    test('null string expected using true', () => {
         const a2 = uri.parseQuery(null, true);
         expect(a2).toEqual(null);
     });
-    it('null string expected using false', () => {
+    test('null string expected using false', () => {
         const a3 = uri.parseQuery(null);
         expect(a3).toEqual(null);
     });
-    it('string query expected', () => {
+    test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8', true);
         expect(a4).toEqual({ x: [ '10', '6', '8' ], y: '5' });
     });
-    it('string query expected', () => {
+    test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8');
         expect(a4).toEqual({ x: [ '10', '6', '8' ], y: '5' });
     });
