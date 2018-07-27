@@ -1,30 +1,37 @@
 const uri = require('../src/_uri');
 
 function uriBuilder(other, ...toResolve) {
-    // tag for template literal
-    // TODO: implement
     /* eslint prefer-const: "OFF" */
-    const mimicedPath = other.reduce((last, actualOpt) =>
-        `${last}${toResolve}${actualOpt}`
+    const assembledInputPath = other.reduce((last, actualOpt, index) =>
+        `${last}${toResolve[index - 1]}${actualOpt}`
     ).replace(toResolve, '${inj}');
-    let { path, query } = uri.decomposeComponents(mimicedPath);
-    console.log(query);
+    let { path, query, fragment } = uri.decomposeComponents(assembledInputPath);
     if (path !== '') {
         path && (path = path.replace('${inj}', toResolve));
-        return path;
+        if (path.indexOf('../') !== -1) {
+            let after = path.substring(path.indexOf('../'), path.length).replace('/', encodeURIComponent('/'));
+            after = after
+                .substring(path.indexOf(encodeURIComponent('/').slice(-1)), path.length)
+                .replace('/', encodeURIComponent('/'));
+            while(path.indexOf(encodeURIComponent('/').slice(-1)) !== -1) {
+                after = after
+                    .substring(path.indexOf(encodeURIComponent('/').slice(-1)), path.length)
+                    .replace('/', encodeURIComponent('/'));
+            }
+            let before = path.substring(0, path.indexOf('../'));
+            path = before.concat(after);
+        }
     }
     if (query !== '') {
-        query && (query = query.replace('${inj}', `?${toResolve}`));
-        return query;
+        query && (query = query.replace('${inj}', `${toResolve}`));
     }
-    return 'Something went wrong';
+    if (fragment !== '') {
+        fragment && (fragment = fragment.replace('${inj}', `${toResolve}`));
+    }
+    return uri.recomposeComponents({ path, query, fragment });
 }
 
-
 function raw() {
-    // return something that will tell uriBuilder not to encode
-    // (hint: see EncodedString in gjax impl.)
-    // TODO: implement
 }
 
 module.exports = {
