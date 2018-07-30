@@ -316,9 +316,10 @@ function parseQuery(query, bDecode) {
 
     return query.split('&').reduce((obj, part) => {
         const [ name, val ] = part.split('=').map(bDecode ? decodeURIComponent : (p) => p);
+        const currVal = obj[name];
         return {
             ...obj,
-            [name]: obj[name] == null ? val : [].concat(obj[name], val)
+            [name]: currVal == null ? val : (Array.isArray(currVal) ? (currVal.push(val), currVal) : [ currVal, val ])
         };
     }, {});
 }
