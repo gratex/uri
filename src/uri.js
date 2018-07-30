@@ -1,46 +1,31 @@
-// const uri = require('./_uri.js');
-const querystring = require('querystring');
-const isEqual = require('lodash.isequal');
+const uri = require('./_uri.js');
+const isEqualWith = require('lodash.isequalwith');
 
-function simpleCompare(a, b) {
-    if (a < b) {
-        return -1;
-    } else if (a > b) {
-        return 1;
+function equalsQueryStr(query1, query2) {
+
+    function simpleCompare(a, b) {
+        return (a < b ? -1 : (a > b ? 1 : 0));
     }
-    return 0;
-}
 
-function equals(a, b) {
-    if (Array.isArray(a) && Array.isArray(b)) {
-        return isEqual(a.sort(simpleCompare), b.sort(simpleCompare));
+    function customizer(a, b) {
+        if (Array.isArray(a) && Array.isArray(b)) {
+            // order is not important, so just sort them before comparing
+            a.sort(simpleCompare);
+            b.sort(simpleCompare);
+        }
+        return undefined; // isEqualWith will do the job if we return undef
     }
-    return a === b;
-}
 
-function _equalsQueryStr(query1, query2) {
     if (!query1 || !query2) {
         return query1 === query2;
     }
-    const q1 = querystring.parse(query1);
-    const q2 = querystring.parse(query2);
-    for (const i in q1) {
-        if (!equals(q1[i], q2[i])) {
-            return false;
-        }
-    }
+    const q1 = uri.parseQuery(query1);
+    const q2 = uri.parseQuery(query2);
 
-    for (const i in q2) {
-        if (!equals(q2[i], q1[i])) {
-            return false;
-        }
-    }
-    return true;
+    return isEqualWith(q1, q2, customizer);
 }
 
 module.exports = {
-    _equalsQueryStr,
-    equals,
-    simpleCompare
+    equalsQueryStr
 };
 
