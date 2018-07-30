@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "hello world",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "lodash.isequalwith": "^4.4.0"
+  },
   "devDependencies": {
     "esformatter": "^0.10.0",
     "esformatter-eol-last": "^1.0.0",
