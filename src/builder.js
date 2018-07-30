@@ -4,8 +4,8 @@ const PLACEHOLDER = '$$$'; // should be safe string, not occuring in url templat
 const REPLACE = /\$\$\$/g;
 
 class EncodedString {
-    // represents String with encoded flag,
-    // new Class to be able to make instanceOf could be also new String() + ._enc, but this seems cleaner
+    // represents encoded String
+    // new Class to be able to make instanceOf
     // needed by encode function to know if encode or not
 
     constructor(value) {
@@ -20,7 +20,6 @@ function encode(value, encoder) {
 function uriBuilder(strings, ...values) {
     const uriTemplate = strings.reduce((last, actual) => `${last}${PLACEHOLDER}${actual}`);
 
-    // eslint-disable-next-line prefer-const
     let { path, query, fragment, ...otherComponents } = uri.decomposeComponents(uriTemplate);
 
     path = path && path.replace(REPLACE, () => encode(values.shift(), uri.encodeSegment));
