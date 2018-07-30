@@ -237,6 +237,6 @@ module.exports = exports = {
         "space-unary-ops": ERROR,
         "spaced-comment": [ WARN, "always" ],
         "wrap-regex": WARN,
-        "prefer-const": ERROR
+        "prefer-const": [ ERROR, { "destructuring": "all" } ]
     }
 };
