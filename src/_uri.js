@@ -302,6 +302,10 @@ function checkFragmentEncoding(str, doThrow) {
     return checkEncoding(str, RFC3986_FRAGMENT, doThrow);
 }
 
+/**
+* @summary Striktna varianta rozoznavajuca empty a undefined query.
+* @return Object
+*/
 function parseQuery(query, bDecode) {
     // summary:
     //		Striktna varianta rozoznavajuca empty a undefined query.

@@ -43,6 +43,11 @@ function resolve(base, ref) {
     }
     return s;
 }
+
+/**
+* @summary Use to set multiple URI parts at once.
+* @return Modified copy of `that`.
+*/
 function mixin(that, { authority, userInfo, host, port, scheme, path, query, fragment }) {
     // summary:
     //		Use to set multiple URI parts at once.

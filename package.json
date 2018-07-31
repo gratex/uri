@@ -4,10 +4,10 @@
   "description": "hello world",
   "main": "src/index.js",
   "dependencies": {
-    "dts-gen": "^0.5.7",
     "lodash.isequalwith": "^4.4.0"
   },
   "devDependencies": {
+    "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
     "esformatter-eol-last": "^1.0.0",
     "esformatter-limit-linebreaks": "0.0.3",
@@ -32,5 +32,5 @@
   },
   "author": "",
   "license": "ISC",
-  "typings": "src/uri.d.ts"
+  "typings": "typings/index.d.ts"
 }
