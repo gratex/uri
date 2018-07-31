@@ -106,7 +106,7 @@ test('resolve test', (() => {
 
     resolveData.forEach((item) => resolveTest(item));
 }));
-describe('mixin test', (() => {
+test('mixin test', (() => {
     function mixinTest([ that, obj, expected ]) {
         const res = Uri.mixin(that, obj);
         expect(res).toEqual(expected);
@@ -115,6 +115,6 @@ describe('mixin test', (() => {
 }));
 test.each(isSubPathData)('isSubPath test: "%s" "%s" %p',
     (base, subbase, expected) => {
-        const res = uri.isSubPath(base, subbase);
+        const res = Uri.isSubPath(base, subbase);
         expect(res).toEqual(expected);
     });
