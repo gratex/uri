@@ -90,31 +90,35 @@ const isSubPathData = [
     [ '/', '/c/b/d,', true ]
 ];
 
-test('equalsQueryStr test', (() => {
-    function equalsQueryStrTest([ original, expected, value ]) {
+test.each(equalsQueryStrData)(
+    'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
+    (original, expected, value) => {
         const res = Uri.equalsQueryStr(original, expected);
-        expect(res).toEqual(value);
+        expect(res).toBe(value);
     }
+);
 
-    equalsQueryStrData.forEach((item) => equalsQueryStrTest(item));
-}));
-test('resolve test', (() => {
-    function resolveTest([ ref, base, expected ]) {
-        const res = uri.recomposeComponents(Uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref)));
-        expect(res).toEqual(expected);
-    }
-
-    resolveData.forEach((item) => resolveTest(item));
-}));
-test('mixin test', (() => {
-    function mixinTest([ that, obj, expected ]) {
-        const res = Uri.mixin(that, obj);
-        expect(res).toEqual(expected);
-    }
-    mixinData.forEach((item) => mixinTest(item));
-}));
-test.each(isSubPathData)('isSubPath test: "%s" "%s" %p',
+test.each(isSubPathData)(
+    'isSubPath test: [\'%s\', \'%s\', %p]',
     (base, subbase, expected) => {
         const res = Uri.isSubPath(base, subbase);
-        expect(res).toEqual(expected);
-    });
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(resolveData)(
+    'resolve test: [\'%s\', \'%s\', \'%s\']',
+    (ref, base, expected) => {
+        const res = uri.recomposeComponents(Uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref)));
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(mixinData)(
+    'mixin test: [\'%s\', \'%o\', \'%s\']',
+    (that, obj, expected) => {
+        const res = Uri.mixin(that, obj);
+        expect(res).toBe(expected);
+    }
+);
+
