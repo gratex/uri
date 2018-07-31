@@ -19,14 +19,11 @@ const isSubPathData = [
     [ '/', '/c/b/d,', true ]
 ];
 
-test('equalsQueryStr test', (() => {
-    function equalsQueryStrTest([ original, expected, value ]) {
+test.each(equalsQueryStrData)('equalsQueryStrData test: "%s" "%s" %p',
+    (original, expected, value) => {
         const res = uri.equalsQueryStr(original, expected);
         expect(res).toEqual(value);
-    }
-
-    equalsQueryStrData.forEach((item) => equalsQueryStrTest(item));
-}));
+    });
 
 test.each(isSubPathData)('isSubPath test: "%s" "%s" %p',
     (base, subbase, expected) => {
