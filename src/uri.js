@@ -2,7 +2,6 @@ const uri = require('./_uri.js');
 const isEqualWith = require('lodash.isequalwith');
 
 function equalsQueryStr(query1, query2) {
-
     function simpleCompare(a, b) {
         return (a < b ? -1 : (a > b ? 1 : 0));
     }
@@ -25,7 +24,21 @@ function equalsQueryStr(query1, query2) {
     return isEqualWith(q1, q2, customizer);
 }
 
+function isSubPath(baseStr, refStr) {
+    const bs = uri.decodeSegments(baseStr);
+    const rs = uri.decodeSegments(refStr);
+
+    if (bs.length > rs.length) {
+        return false;
+    }
+    if (bs[bs.length - 1] === '') { // dont compare with void segment
+        bs.pop();
+    }
+    return bs.reverse().every((item, i) => item === rs[bs.length - 1 - i]);
+}
+
 module.exports = {
-    equalsQueryStr
+    equalsQueryStr,
+    isSubPath
 };
 
