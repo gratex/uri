@@ -1,5 +1,5 @@
-const uri = require('../src/uri');
-const _uri = require('../src/_uri');
+const Uri = require('../src/uri');
+const uri = require('../src/_uri');
 const equalsTestData = [
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal', true ],
     [ 'eq(type,animal)&lt(count,3)', 'lt(count,3)&eq(type,animal)', true ],
@@ -79,11 +79,11 @@ const mixinData = [
         { scheme: 'https', host: 'afoj.sk', port: '78', userInfo: 'j', path: '/t', query: { w: '5' }, fragment: { s: '7' } },
         'https://j@afoj.sk:78/t?w=5#s=7' ],
     [ null, { path: '/o' }, '/o' ],
-    [ _uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
+    [ uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
 ];
 test('_equalsQueryStr test', (() => {
     function equalsQueryStrTest([ original, expected, value ]) {
-        const res = uri.equalsQueryStr(original, expected);
+        const res = Uri.equalsQueryStr(original, expected);
         expect(res).toEqual(value);
     }
 
@@ -91,7 +91,7 @@ test('_equalsQueryStr test', (() => {
 }));
 test('resolve test', (() => {
     function resolveTest([ ref, base, expected ]) {
-        const res = _uri.recomposeComponents(uri.resolve(_uri.decomposeComponents(base), _uri.decomposeComponents(ref)));
+        const res = uri.recomposeComponents(Uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref)));
         expect(res).toEqual(expected);
     }
 
@@ -99,7 +99,7 @@ test('resolve test', (() => {
 }));
 describe('mixin test', (() => {
     function mixinTest([ that, obj, expected ]) {
-        const res = uri.mixin(that, obj);
+        const res = Uri.mixin(that, obj);
         expect(res).toEqual(expected);
     }
     mixinData.forEach((item) => mixinTest(item));
