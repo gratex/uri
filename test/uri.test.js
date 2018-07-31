@@ -28,10 +28,8 @@ test('equalsQueryStr test', (() => {
     equalsQueryStrData.forEach((item) => equalsQueryStrTest(item));
 }));
 
-test('isSubPath test', (() => {
-    function isSubPathTest([ base, subbase, expected ]) {
+test.each(isSubPathData)('isSubPath test: "%s" "%s" %p',
+    (base, subbase, expected) => {
         const res = uri.isSubPath(base, subbase);
         expect(res).toEqual(expected);
-    }
-    isSubPathData.forEach((item) => isSubPathTest(item));
-}));
+    });

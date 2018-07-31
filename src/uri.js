@@ -34,12 +34,7 @@ function isSubPath(baseStr, refStr) {
     if (bs[bs.length - 1] === '') { // dont compare with void segment
         bs.pop();
     }
-    for (let i = bs.length - 1; i >= 0; i--) {
-        if (bs[i] !== rs[i]) {
-            return false;
-        }
-    }
-    return true;
+    return bs.reverse().every((item, i) => item === rs[bs.length - 1 - i]);
 }
 
 module.exports = {
