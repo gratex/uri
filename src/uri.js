@@ -77,8 +77,22 @@ function mixin(that, { authority, userInfo, host, port, scheme, path, query, fra
     fragment && (u.fragment = fragment && typeof fragment != 'string' ? querystring.stringify(fragment) : fragment);
     return uri.recomposeComponents(u);
 }
+function isSubPath(baseStr, refStr) {
+    const bs = uri.decodeSegments(baseStr);
+    const rs = uri.decodeSegments(refStr);
+
+    if (bs.length > rs.length) {
+        return false;
+    }
+    if (bs[bs.length - 1] === '') { // dont compare with void segment
+        bs.pop();
+    }
+    return bs.reverse().every((item, i) => item === rs[bs.length - 1 - i]);
+}
+
 module.exports = {
     equalsQueryStr,
+    isSubPath,
     clone,
     param,
     resolve,

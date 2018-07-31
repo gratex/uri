@@ -1,6 +1,7 @@
 const Uri = require('../src/uri');
 const uri = require('../src/_uri');
-const equalsTestData = [
+
+const equalsQueryStrData = [
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal', true ],
     [ 'eq(type,animal)&lt(count,3)', 'lt(count,3)&eq(type,animal)', true ],
     [ 'a=1&b=2&a=3', 'b=2&a=1&a=3', true ],
@@ -11,7 +12,6 @@ const equalsTestData = [
     [ 'w=42&t=3', 'w=42&t=4', false ],
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal&typeij=y', false ]
 ];
-
 const resolveData = [
     // ref //base //expected value
     [ 'g:h', 'http://a/b/c/d;p?q', 'g:h' ],
@@ -81,13 +81,22 @@ const mixinData = [
     [ null, { path: '/o' }, '/o' ],
     [ uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
 ];
-test('_equalsQueryStr test', (() => {
+
+const isSubPathData = [
+    [ '/a/b', '/a/b', true ],
+    [ '/a/b/c/d', '/a/b', false ],
+    [ '/a/b', '/a/b/c/d', true ],
+    [ '/a/b/s', '/a/b/d', false ],
+    [ '/', '/c/b/d,', true ]
+];
+
+test('equalsQueryStr test', (() => {
     function equalsQueryStrTest([ original, expected, value ]) {
         const res = Uri.equalsQueryStr(original, expected);
         expect(res).toEqual(value);
     }
 
-    equalsTestData.forEach((item) => equalsQueryStrTest(item));
+    equalsQueryStrData.forEach((item) => equalsQueryStrTest(item));
 }));
 test('resolve test', (() => {
     function resolveTest([ ref, base, expected ]) {
@@ -104,3 +113,8 @@ describe('mixin test', (() => {
     }
     mixinData.forEach((item) => mixinTest(item));
 }));
+test.each(isSubPathData)('isSubPath test: "%s" "%s" %p',
+    (base, subbase, expected) => {
+        const res = uri.isSubPath(base, subbase);
+        expect(res).toEqual(expected);
+    });
