@@ -183,7 +183,7 @@ const checkFragmentEncodingData = [
     [ 'http://l:p@host:8080/s1/s2?q#f', 'Error' ],
     [ 'http://host', 'NoError' ]
 ];
-test.each(resolveData)('resolve test: \'%s\' \'%s\' \'%s\'',
+test.each(resolveData)('resolve test: [\'%s\', \'%s\', \'%s\']',
     (ref, base, expected) => {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
         const resStr = uri.recomposeComponents(res);
@@ -196,7 +196,7 @@ test('_preParseBaseUri test', (() => {
 }));
 
 test.each(percentEncodeData)(
-    'percentEncode test: \'%s\' \'%s\' \'%s\'',
+    'percentEncode test: [\'%s\', \'%s\', \'%s\']',
     (legalRange, input, expected) => {
         const res = uri.percentEncode(input, legalRange);
         expect(res).toEqual(expected);
@@ -204,7 +204,7 @@ test.each(percentEncodeData)(
 );
 
 test.each(componentsData)(
-    'component test: \'%s\' \'%s\' \'%s\'',
+    'component test: [\'%s\', \'%s\', \'%s\']',
     (original) => {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
@@ -239,7 +239,7 @@ test('recomposeAuthorityComponents test', (() => {
 }));
 
 test.each(encodeQueryData)(
-    'encode query test: \'%s\' \'%s\'',
+    'encode query test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeQuery(original);
         expect(res).toEqual(expected);
@@ -247,7 +247,7 @@ test.each(encodeQueryData)(
 );
 
 test.each(encodeSegmentData)(
-    'encode segment test: \'%s\' \'%s\'',
+    'encode segment test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeSegment(original);
         expect(res).toEqual(expected);
@@ -255,7 +255,7 @@ test.each(encodeSegmentData)(
 );
 
 test.each(encodeFragmentData)(
-    'encode fragment test: \'%s\' \'%s\'',
+    'encode fragment test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeFragment(original);
         expect(res).toEqual(expected);
@@ -263,7 +263,7 @@ test.each(encodeFragmentData)(
 );
 
 test.each(removeDotSegmentsData)(
-    'removeDotSegments test: \'%s\' \'%s\'',
+    'removeDotSegments test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.removeDotSegments(original);
         expect(res).toEqual(expected);
@@ -322,7 +322,7 @@ test.each(segmentsData)(
 );
 
 test.each(isSubordinateData)(
-    'isSubordinate test: \'%s\' \'%s\' "%p" "%p"',
+    'isSubordinate test: [\'%s\', \'%s\', %p, %p]',
     (parent, sub, orSame, expected) => {
         const uriParent = uri.decomposeComponents(parent);
         const uriSub = uri.decomposeComponents(sub);
@@ -334,11 +334,11 @@ test.each(isSubordinateData)(
 describe('parseQuery test', (() => {
     test('empty string expected using true ', () => {
         const a0 = uri.parseQuery('', true);
-        expect(a0).toBe({});
+        expect(a0).toEqual({});
     });
     test('empty string expected using false', () => {
         const a1 = uri.parseQuery('', false);
-        expect(a1).toBe({});
+        expect(a1).toEqual({});
     });
     test('null string expected using true', () => {
         const a2 = uri.parseQuery(null, true);
@@ -350,16 +350,16 @@ describe('parseQuery test', (() => {
     });
     test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8', true);
-        expect(a4).toBe({ x: [ '10', '6', '8' ], y: '5' });
+        expect(a4).toEqual({ x: [ '10', '6', '8' ], y: '5' });
     });
     test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8');
-        expect(a4).toBe({ x: [ '10', '6', '8' ], y: '5' });
+        expect(a4).toEqual({ x: [ '10', '6', '8' ], y: '5' });
     });
 }));
 
 test.each(checkSegmentsEncodingData)(
-    'checkSegmentsEncoding test: \'%s\' \'%s\'',
+    'checkSegmentsEncoding test: [\'%s\', \'%s\']',
     (original, ThrowMessage) => {
         const res = uri.checkSegmentsEncoding(original);
         if (ThrowMessage === 'NoError') {
@@ -371,7 +371,7 @@ test.each(checkSegmentsEncodingData)(
 );
 
 test.each(checkSegmentEncodingData)(
-    'checkSegmentEncoding test: \'%s\' \'%s\'',
+    'checkSegmentEncoding test: [\'%s\', \'%s\']',
     (original, ThrowMessage) => {
         const res = uri.checkSegmentEncoding(original);
         if (ThrowMessage === 'NoError') {
@@ -383,7 +383,7 @@ test.each(checkSegmentEncodingData)(
 );
 
 test.each(checkQueryEncodingData)(
-    'checkQueryEncoding test: \'%s\' \'%s\'',
+    'checkQueryEncoding test: [\'%s\', \'%s\']',
     (original, ThrowMessage) => {
         const res = uri.checkQueryEncoding(original);
         if (ThrowMessage === 'NoError') {
@@ -395,7 +395,7 @@ test.each(checkQueryEncodingData)(
 );
 
 test.each(checkFragmentEncodingData)(
-    'checkFragmentEncoding test: \'%s\' \'%s\'',
+    'checkFragmentEncoding test: [\'%s\', \'%s\']',
     (original, ThrowMessage) => {
         const res = uri.checkFragmentEncoding(original);
         if (ThrowMessage === 'NoError') {
