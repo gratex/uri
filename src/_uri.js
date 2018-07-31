@@ -28,6 +28,11 @@ const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g; //
 const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 // TODO: get rid of RFC2396 constants
 
+/**
+@summary uri string to be decomposed
+@param {string} uriStr
+@return {object}
+**/
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
     const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
@@ -40,6 +45,14 @@ function decomposeComponents(uriStr) {
     u.path == null && (u.path = '');
     return u;
 }
+
+/**
+@summary recomposing authority from userInfo, host and port
+@param {string} userInfo
+@param {string} host
+@param {string} port
+@return {string}
+**/
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
         throw new Error(`Illegal host:${host}`);
@@ -51,6 +64,13 @@ function recomposeAuthorityComponents(userInfo, host, port) {
     return result;
 }
 
+/**
+@summary this will check if authority is same as recomposed authority components
+@param {string} authority
+@param {string} userInfo
+@param {string} host
+@param {string} port
+**/
 function _checkAuthorityInvariant(authority, userInfo, host, port) {
     const b = (authority == null && userInfo == null && host == null && port == null) ||
         (authority != null && authority === recomposeAuthorityComponents(userInfo, host, port));
@@ -60,6 +80,9 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 }
 
 /**
+@summary this will recompose uri as string from each component
+@param {object} uriObj
+@return {string}
 @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
 Remarks:
 defined(x) is coded with !=null (means undefined and null are handled the same way)
@@ -77,6 +100,12 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 
     return result;
 }
+
+/**
+@summary this will encode every character of string with hexadecimal ASCII code
+@param {string} str
+@param {string} legalRange regex pattern
+**/
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
@@ -91,6 +120,12 @@ function percentEncode(str, legalRange) {
     retVal.forEach(encode);
     return retVal.join('');
 }
+
+/**
+@summary this will remove dot segments in path
+@param {string} path
+@return {string}
+**/
 function removeDotSegments(path) {
     let inputBufferStart = 0;
     const inputBufferEnd = path.length;
@@ -189,19 +224,24 @@ function _preParseBaseUri({ scheme }) {
         throw new Error('Violation 5.2.1, scheme component required');
     }
 }
+
+/**
+@summary TODO: I don't know what to write here
+@param {object} base
+@param {object} ref
+@return {object}
+**/
 function resolve(base, ref) {
     _preParseBaseUri(base);
     return _transformReference(base, ref);
 }
+
+/**
+@summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+@param {string} encodedPath
+@return {array} Path split to DECODED segments as array
+**/
 function decodeSegments(encodedPath) {
-    // summary:
-    //		Spliting path by "/".
-    // 		Main reason is to eliminate unambiquity of
-    // 		"/a%2f%b/c" and "/a/b/c".
-    // encodedPath: String
-    //		Encoded path
-    // returns:	String[]
-    //		Path split to DECODED segments, as array
     if (encodedPath === '') {
         return [];
     }
@@ -211,6 +251,12 @@ function decodeSegments(encodedPath) {
     }
     return segments.map((segment) => decodeURIComponent(segment));
 }
+
+/**
+@summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+@param {array} segments array of segments not encoded
+@return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified "" is returned
+**/
 function encodeSegments(segments) {
     // summary:
     //		Joining path segments by /
@@ -229,6 +275,14 @@ function encodeSegments(segments) {
     }
     return `/${segments.map((segment) => percentEncode(segment, RFC3986_SEGMENT)).join('/')}`;
 }
+
+/**
+@summary TODO: I don't know what to write here
+@param {object} uriParent
+@param {object} uriSub
+@param {boolean} orSame
+@return {boolean}
+**/
 function isSubordinate(uriParent, uriSub, orSame) {
     // if subordinate is absolute and parent is not or parent has different authority
     if (uriSub.authority != null && uriSub.authority !== uriParent.authority) {
@@ -249,13 +303,14 @@ function encodeFragment(str) {
     return percentEncode(str, RFC3986_FRAGMENT);
 }
 
+/**
+@summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
+@param {object} raw
+@param {string} legalRange regex expression
+@param {} doThrow
+@return {error} NULL if ok, Error if failed
+**/
 function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
-    // summary:
-    //		Validates if string contains legalRange + valid pchars PCHAR.
-    //		PCHARS represent valid UTF-8 sequence.
-    // returns:	Error?
-    //		Null if ok, Error if failed
-
     // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
     // TODO: flags: PERCENT_ENCODING_SHOULD_BE_UPPERCASE, SUPERFLUOUS_NON_ASCII_PERCENT_ENCODING
     if (!raw) {
@@ -304,16 +359,12 @@ function checkFragmentEncoding(str, doThrow) {
 
 /**
 * @summary Striktna varianta rozoznavajuca empty a undefined query.
-* @return Object
+* @param {string} query  Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
+*   ocakavane bez delimitera (?,#) teda z naseho API
+* @param {Uri} bDecode Default false, ci dekodovat mena a values
+* @return {any}
 */
 function parseQuery(query, bDecode) {
-    // summary:
-    //		Striktna varianta rozoznavajuca empty a undefined query.
-    // query: String
-    //		Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
-    //		ocakavane bez delimitera (?,#) teda z naseho API
-    // bDecode: Booelan
-    //		Default false, ci dekodovat mena a values
     // returns:	Object
     if (query == null) { return null; }
     if (query === '') { return {}; }
@@ -329,22 +380,22 @@ function parseQuery(query, bDecode) {
 }
 
 module.exports = {
-    decomposeComponents,
-    recomposeAuthorityComponents,
-    recomposeComponents,
-    encodeQuery,
-    resolve,
-    removeDotSegments,
+    checkEncoding,
+    checkFragmentEncoding,
+    checkQueryEncoding,
+    checkSegmentEncoding,
+    checkSegmentsEncoding,
     decodeSegments,
+    decomposeComponents,
+    encodeFragment,
+    encodeQuery,
+    encodeSegment,
     encodeSegments,
     isSubordinate,
+    parseQuery,
     percentEncode,
-    encodeSegment,
-    encodeFragment,
-    checkEncoding,
-    checkSegmentsEncoding,
-    checkSegmentEncoding,
-    checkQueryEncoding,
-    checkFragmentEncoding,
-    parseQuery
+    recomposeAuthorityComponents,
+    recomposeComponents,
+    removeDotSegments,
+    resolve
 };
