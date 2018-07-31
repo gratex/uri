@@ -268,19 +268,25 @@ test('removeDotSegments test', (() => {
 describe('decodeSegments test', (() => {
     test('empty array expected', () => {
         const a0 = uri.decodeSegments('');
-        expect(a0.length === 0).toBeTruthy();
+        expect(a0).toHaveLength(0);
     });
     test('1 void segment expected', () => {
         const a1 = uri.decodeSegments('/');
-        expect(a1.length === 1 && a1[0] === '').toBeTruthy();
+        expect(a1).toHaveLength(1);
+        expect(a1[0]).toBe('');
     });
     test('2 segmentsData a,b expected', () => {
         const a2 = uri.decodeSegments('/a/b');
-        expect(a2.length === 2 && a2[0] === 'a' && a2[1] === 'b').toBeTruthy();
+        expect(a2).toHaveLength(2);
+        expect(a2[0]).toBe('a');
+        expect(a2[1]).toBe('b');
     });
     test('3 segmentsData a,b,void expected', () => {
         const a3 = uri.decodeSegments('/a/b/');
-        expect(a3.length === 3 && a3[0] === 'a' && a3[1] === 'b' && a3[2] === '').toBeTruthy();
+        expect(a3).toHaveLength(3);
+        expect(a3[0]).toBe('a');
+        expect(a3[1]).toBe('b');
+        expect(a3[2]).toBe('');
     });
     test('4 path-abempty expected', () => {
         expect(() => uri.decodeSegments(' /a')).toThrow();
