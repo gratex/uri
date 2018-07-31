@@ -43,43 +43,6 @@ function resolve(base, ref) {
     }
     return s;
 }
-
-/* function mixin(that, { authority, userInfo, host, port, scheme, path, query, fragment }) {
-    // summary:
-    //		Use to set multiple URI parts at once.
-    // that: String|Object|null
-    //		URI string or URI object. Current window URI used when null or undefined.
-    // obj: Object
-    //		Available properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
-    //		If `authority` property is not undefine, `userInfo`, `host` and `port` are ignored.
-    //		All properties are strings except `query` and `fragment` which may also be objects.
-    // returns: String
-    //		Modified copy of `that`.
-     const u = param(that);
-    console.log(u);
-
-    if (authority !== undefined) {
-        u.authority = authority;
-        console.log(u);
-        if (u.authority) {
-            ({ userInfo, host, port } = uri.decomposeComponents(`//${u.authority}`));
-            Object.assign(u, { userInfo, host, port });
-        } else {
-            u.userInfo = u.host = u.port = undefined;
-        }
-    } else {
-        userInfo && (u.userInfo = userInfo);
-        host && (u.host = host);
-        port && (u.port = port);
-        u.authority = uri.recomposeAuthorityComponents(u.userInfo, u.host, u.port);
-    }
-    scheme && (u.scheme = scheme);
-    path && (u.path = path);
-    query && (u.query = query && typeof query != 'string' ? querystring.stringify(query) : query);
-    fragment && (u.fragment = fragment && typeof fragment != 'string' ? querystring.stringify(fragment) : fragment);
-    return uri.recomposeComponents(u);
-
-}*/
 function mixin(that, { authority, userInfo, host, port, scheme, path, query, fragment }) {
     // summary:
     //		Use to set multiple URI parts at once.
