@@ -4,6 +4,7 @@
   "description": "hello world",
   "main": "src/index.js",
   "dependencies": {
+    "dts-gen": "^0.5.7",
     "lodash.isequalwith": "^4.4.0"
   },
   "devDependencies": {
@@ -30,5 +31,6 @@
     "url": "git@gitlab01.hq.gratex.com:node/uri.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "typings": "src/uri.d.ts"
 }
