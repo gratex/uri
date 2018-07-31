@@ -187,7 +187,7 @@ test.each(resolveData)('resolve test: [\'%s\', \'%s\', \'%s\']',
     (ref, base, expected) => {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
         const resStr = uri.recomposeComponents(res);
-        expect(resStr).toEqual(expected);
+        expect(resStr).toBe(expected);
     });
 
 test('_preParseBaseUri test', (() => {
@@ -199,7 +199,7 @@ test.each(percentEncodeData)(
     'percentEncode test: [\'%s\', \'%s\', \'%s\']',
     (legalRange, input, expected) => {
         const res = uri.percentEncode(input, legalRange);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
@@ -208,7 +208,7 @@ test.each(componentsData)(
     (original) => {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
-        expect(original).toEqual(recomposed);
+        expect(original).toBe(recomposed);
     }
 );
 
@@ -242,7 +242,7 @@ test.each(encodeQueryData)(
     'encode query test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeQuery(original);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
@@ -250,7 +250,7 @@ test.each(encodeSegmentData)(
     'encode segment test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeSegment(original);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
@@ -258,7 +258,7 @@ test.each(encodeFragmentData)(
     'encode fragment test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.encodeFragment(original);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
@@ -266,7 +266,7 @@ test.each(removeDotSegmentsData)(
     'removeDotSegments test: [\'%s\', \'%s\']',
     (original, expected) => {
         const res = uri.removeDotSegments(original);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
@@ -317,7 +317,7 @@ test.each(segmentsData)(
     (original) => {
         const decoded = uri.decodeSegments(original);
         const res = uri.encodeSegments(decoded);
-        expect(res).toEqual(original);
+        expect(res).toBe(original);
     }
 );
 
@@ -327,7 +327,7 @@ test.each(isSubordinateData)(
         const uriParent = uri.decomposeComponents(parent);
         const uriSub = uri.decomposeComponents(sub);
         const res = uri.isSubordinate(uriParent, uriSub, orSame);
-        expect(res).toEqual(expected);
+        expect(res).toBe(expected);
     }
 );
 
