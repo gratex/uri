@@ -110,6 +110,14 @@ const stripData = [
     [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ]
 ];
 
+const equalsData = [
+    [ 'http://www.google.sk#w=3', 'http://www.google.sk#w=3', false, true ],
+    [ 'http://www.google.sk#w=f', 'http://www.google.sk', true, true ],
+    [ 'http://www.google.sk', 'http://www.gsoogle.sk', false, false ],
+    [ 'http://www.google.sk?w=f', 'http://www.google.sk?w=f', false, true ],
+    [ 'http://www.google.sk/a/b', 'http://www.google.sk/a/b', false, true ]
+];
+
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -166,3 +174,11 @@ test('toUri test', (() => {
     const res = Uri.toUri('http://www.google.sk');
     expect(res).toEqual(uri.decomposeComponents('http://www.google.sk'));
 }));
+
+test.each(equalsData)(
+    'equals test: [%p, %p, %p, %p]',
+    (that1, that2, ignoreFragment, expected) => {
+        const res = Uri.equals(that1, that2, ignoreFragment);
+        expect(res).toBe(expected);
+    }
+);

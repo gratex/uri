@@ -189,6 +189,26 @@ function strip(that, toStrip) {
     return uri.recomposeComponents(u);
 }
 
+function equals(that1, that2, ignoreFragment) {
+    // summary:
+    //		Use to test if URIs are equal. Order of query params is ignored.
+    // that1: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // that2: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // ignoreFragment: Boolean?
+    //		When true, fragment (hash) is ignored when determining equality.
+    // returns: Boolean
+    //		True if URIs are equal, false otherwise.
+
+    const { scheme, authority, path, query, fragment } = param(that1);
+    const { scheme: scheme2, authority: authority2, path: path2, query: query2, fragment: fragment2 } = param(that2);
+
+    return scheme === scheme2 && // return Boolean
+        authority === authority2 && path === path2 && this.equalsQueryStr(query, query2) &&
+        (ignoreFragment || fragment === fragment2);
+}
+
 module.exports = {
     equalsQueryStr,
     isSubPath,
@@ -199,5 +219,6 @@ module.exports = {
     toString,
     toUri,
     strip,
-    config
+    config,
+    equals
 };
