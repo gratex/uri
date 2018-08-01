@@ -116,6 +116,15 @@ const stripData = [
     [ 'http://www.google.sk/foo/bar?w=f#p=7', 'QUERY', 'http://www.google.sk/foo/bar#p=7' ]
 ];
 
+const equalsData = [
+    [ 'http://www.google.sk#w=3', 'http://www.google.sk#w=3', false, true ],
+    [ 'http://www.google.sk#w=f', 'http://www.google.sk', true, true ],
+    [ 'http://www.google.sk', 'http://www.bar.cz', false, false ],
+    [ 'http://www.google.sk?w=f', 'http://www.google.sk?w=f', false, true ],
+    [ '/a/b', '/a/b', false, true ],
+    [ '/foo/bar?type=animal&name=narwhal', '/foo/bar?name=narwhal&type=animal', false, true ]
+];
+
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -172,3 +181,11 @@ test('toUri test', (() => {
     const res = Uri.toUri('http://www.google.sk');
     expect(res).toEqual({ scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' });
 }));
+
+test.each(equalsData)(
+    'equals test: [%p, %p, %p, %p]',
+    (that1, that2, ignoreFragment, expected) => {
+        const res = Uri.equals(that1, that2, ignoreFragment);
+        expect(res).toBe(expected);
+    }
+);
