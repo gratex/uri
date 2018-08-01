@@ -126,62 +126,44 @@ const percentEncodeData = [
     [ 'abc', 'mama', '%6Da%6Da' ]
 ];
 
-const checkSegmentsEncodingData = [
-    [ null, 'NoError' ],
-    [ 'http:', 'NoError' ],
-    [ '%6Da%6Da%D1%88%D0%B5%D0%BB%D0%BB%D1%8B', 'NoError' ],
-    [ '%E0%A4%A', 'Error' ],
-    [ 'http://', 'NoError' ],
-    [ 'http://host', 'NoError' ],
-    [ 'http://@host', 'NoError' ],
-    [ 'http://l@', 'NoError' ],
-    [ 'http://l@:9090', 'NoError' ],
-    [ 'http://@', 'NoError' ],
-    [ 'http:///p', 'NoError' ],
-    [ 'http://l:p@host:8080/s1/s2?q#f', 'Error' ],
-    [ 'http://host', 'NoError' ]
+const checkSegmentEncodingData = [
+    [ null, true ],
+    [ 'foo', true ],
+    [ 'a/b', false ],
+    [ 'a?b', false ],
+    [ 'a#b', false ],
+    [ ' ', false ],
+    [ '%99', false ]
 ];
 
-const checkSegmentEncodingData = [
-    [ null, 'NoError' ],
-    [ 'http:', 'NoError' ],
-    [ 'http://', 'Error' ],
-    [ 'http://host', 'Error' ],
-    [ 'http://@host', 'Error' ],
-    [ 'http://l@', 'Error' ],
-    [ 'http://l@:9090', 'Error' ],
-    [ 'http://@', 'Error' ],
-    [ 'http:///p', 'Error' ],
-    [ 'http://l:p@host:8080/s1/s2?q#f', 'Error' ],
-    [ 'http://host', 'Error' ]
+const checkSegmentsEncodingData = [
+    [ null, true ],
+    [ 'foo', true ],
+    [ 'a/b', true ],
+    [ 'a?b', false ],
+    [ 'a#b', false ],
+    [ ' ', false ],
+    [ '%99', false ]
 ];
 
 const checkQueryEncodingData = [
-    [ null, 'NoError' ],
-    [ 'http:', 'NoError' ],
-    [ 'http://', 'NoError' ],
-    [ 'http://host', 'NoError' ],
-    [ 'http://@host', 'NoError' ],
-    [ 'http://l@', 'NoError' ],
-    [ 'http://l@:9090', 'NoError' ],
-    [ 'http://@', 'NoError' ],
-    [ 'http:///p', 'NoError' ],
-    [ 'http://l:p@host:8080/s1/s2?q#f', 'Error' ],
-    [ 'http://host', 'NoError' ]
+    [ null, true ],
+    [ 'foo', true ],
+    [ 'a/b', true ],
+    [ 'a?b', true ],
+    [ 'a#b', false ],
+    [ ' ', false ],
+    [ '%99', false ]
 ];
 
 const checkFragmentEncodingData = [
-    [ null, 'NoError' ],
-    [ 'http:', 'NoError' ],
-    [ 'http://', 'NoError' ],
-    [ 'http://host', 'NoError' ],
-    [ 'http://@host', 'NoError' ],
-    [ 'http://l@', 'NoError' ],
-    [ 'http://l@:9090', 'NoError' ],
-    [ 'http://@', 'NoError' ],
-    [ 'http:///p', 'NoError' ],
-    [ 'http://l:p@host:8080/s1/s2?q#f', 'Error' ],
-    [ 'http://host', 'NoError' ]
+    [ null, true ],
+    [ 'foo', true ],
+    [ 'a/b', true ],
+    [ 'a?b', true ],
+    [ 'a#b', false ],
+    [ ' ', false ],
+    [ '%99', false ]
 ];
 test.each(resolveData)('resolve test: [\'%s\', \'%s\', \'%s\']',
     (ref, base, expected) => {
@@ -358,50 +340,31 @@ describe('parseQuery test', (() => {
     });
 }));
 
-test.each(checkSegmentsEncodingData)(
-    'checkSegmentsEncoding test: [\'%s\', \'%s\']',
-    (original, ThrowMessage) => {
-        const res = uri.checkSegmentsEncoding(original);
-        if (ThrowMessage === 'NoError') {
-            expect(res).toBe(null);
-        } else {
-            expect(() => uri.checkSegmentsEncoding(original, ThrowMessage)).toThrow();
-        }
+function checkEncoding(checkFn, value, isCorrectValue) {
+    if (isCorrectValue) {
+        expect(checkFn(value)).toBeNull();
+    } else {
+        expect(checkFn(value)).not.toBeNull();
+        expect(() => checkFn(value, true)).toThrow();
     }
-);
+}
 
 test.each(checkSegmentEncodingData)(
-    'checkSegmentEncoding test: [\'%s\', \'%s\']',
-    (original, ThrowMessage) => {
-        const res = uri.checkSegmentEncoding(original);
-        if (ThrowMessage === 'NoError') {
-            expect(res).toBe(null);
-        } else {
-            expect(() => uri.checkSegmentEncoding(original, ThrowMessage)).toThrow();
-        }
-    }
+    'checkSegmentEncoding test: [%p, %p]',
+    (value, isCorrectValue) => checkEncoding(uri.checkSegmentEncoding, value, isCorrectValue)
+);
+
+test.each(checkSegmentsEncodingData)(
+    'checkSegmentsEncoding test: [%p, %p]',
+    (value, isCorrectValue) => checkEncoding(uri.checkSegmentsEncoding, value, isCorrectValue)
 );
 
 test.each(checkQueryEncodingData)(
-    'checkQueryEncoding test: [\'%s\', \'%s\']',
-    (original, ThrowMessage) => {
-        const res = uri.checkQueryEncoding(original);
-        if (ThrowMessage === 'NoError') {
-            expect(res).toBe(null);
-        } else {
-            expect(() => uri.checkQueryEncoding(original, ThrowMessage)).toThrow();
-        }
-    }
+    'checkQueryEncoding test: [%p, %p]',
+    (value, isCorrectValue) => checkEncoding(uri.checkQueryEncoding, value, isCorrectValue)
 );
 
 test.each(checkFragmentEncodingData)(
-    'checkFragmentEncoding test: [\'%s\', \'%s\']',
-    (original, ThrowMessage) => {
-        const res = uri.checkFragmentEncoding(original);
-        if (ThrowMessage === 'NoError') {
-            expect(res).toBe(null);
-        } else {
-            expect(() => uri.testFragmentEncoding(original, ThrowMessage)).toThrow();
-        }
-    }
+    'checkFragmentEncoding test: [%p, %p]',
+    (value, isCorrectValue) => checkEncoding(uri.checkFragmentEncoding, value, isCorrectValue)
 );
