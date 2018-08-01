@@ -1,7 +1,7 @@
 const Uri = require('../src/uri');
 const uri = require('../src/_uri');
 const packageJson = require('../package.json');
-const testURL = packageJson.jest.testURL;
+const TEST_URL = packageJson.jest.testURL;
 // const fullUri = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
 
 Uri.config({ CTX: '/a', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
@@ -83,7 +83,7 @@ const mixinData = [
     [ 'http://jozo@k.sk:80/g?j=l#ah',
         { scheme: 'https', host: 'afoj.sk', port: '78', userInfo: 'j', path: '/t', query: { w: '5' }, fragment: { s: '7' } },
         'https://j@afoj.sk:78/t?w=5#s=7' ],
-    [ null, { query: 'a=b' }, `${testURL}?a=b` ],
+    [ null, { query: 'a=b' }, `${TEST_URL}?a=b` ],
     [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, { host: 'www.afoj.sk' },
         'http://www.afoj.sk' ]
 ];
@@ -97,7 +97,7 @@ const isSubPathData = [
 ];
 
 const toStringData = [
-    [ null, testURL ],
+    [ null, TEST_URL ],
     [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, 'http://www.google.sk' ],
     [ 'http://www.google.sk/foo/bar', 'http://www.google.sk/foo/bar' ],
     [ { path: '/foo/bar', query: 'w=f', fragment: 'x=s' }, '/foo/bar?w=f#x=s' ]
