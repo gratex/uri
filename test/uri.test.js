@@ -119,9 +119,10 @@ const stripData = [
 const equalsData = [
     [ 'http://www.google.sk#w=3', 'http://www.google.sk#w=3', false, true ],
     [ 'http://www.google.sk#w=f', 'http://www.google.sk', true, true ],
-    [ 'http://www.google.sk', 'http://www.gsoogle.sk', false, false ],
+    [ 'http://www.google.sk', 'http://www.bar.cz', false, false ],
     [ 'http://www.google.sk?w=f', 'http://www.google.sk?w=f', false, true ],
-    [ 'http://www.google.sk/a/b', 'http://www.google.sk/a/b', false, true ]
+    [ '/a/b', '/a/b', false, true ],
+    [ '/foo/bar?type=animal&name=narwhal', '/foo/bar?name=narwhal&type=animal', false, true ]
 ];
 
 test.each(equalsQueryStrData)(
