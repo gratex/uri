@@ -84,7 +84,8 @@ const mixinData = [
         { scheme: 'https', host: 'afoj.sk', port: '78', userInfo: 'j', path: '/t', query: { w: '5' }, fragment: { s: '7' } },
         'https://j@afoj.sk:78/t?w=5#s=7' ],
     [ null, { query: 'a=b' }, `${testURL}?a=b` ],
-    [ uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
+    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, { host: 'www.afoj.sk' },
+        'http://www.afoj.sk' ]
 ];
 
 const isSubPathData = [
@@ -97,17 +98,24 @@ const isSubPathData = [
 
 const toStringData = [
     [ null, testURL ],
-    [ uri.decomposeComponents('http://www.google.sk'), 'http://www.google.sk' ]
+    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, 'http://www.google.sk' ],
+    [ 'http://www.google.sk/cesta/cesta2', 'http://www.google.sk/cesta/cesta2' ],
+    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '/cesta/cesta2', query: 'w=f', fragment: 'x=s' },
+        'http://www.google.sk/cesta/cesta2?w=f#x=s' ]
 ];
 
 const stripData = [
     [ 'http://www.google.sk', 'ORIGIN,EXTENSION', '' ],
     [ 'http://www.google.sk/.', 'ORIGIN,EXTENSION,QUERY,FRAGMENT', '/' ],
     [ 'http://www.google.sk', 'ORIGIN,QUERY,PATH,FRAGMENT', '' ],
+    [ 'http://www.google.sk/foo.bar', 'EXTENSION', 'http://www.google.sk/foo' ],
     [ 'http://www.google.sk/', 'EXTENSION', 'http://www.google.sk/' ],
-    [ '/a/ui/c/d/', 'CTX', '/ui/c/d/' ],
+    [ '/a/ui/c/d/', 'CTX', '/ui/c/d/' ], // see config of CTXs on the top
     [ '/a/ui/c/d/', 'CTX_PREFIX', '/c/d/' ],
-    [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ]
+    [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ],
+    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'ORIGIN', '/cesta/cesta2?w=f#p=7' ],
+    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'PATH,FRAGMENT', 'http://www.google.sk?w=f' ],
+    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'QUERY', 'http://www.google.sk/cesta/cesta2#p=7' ]
 ];
 
 test.each(equalsQueryStrData)(
@@ -158,11 +166,11 @@ test.each(stripData)(
     }
 );
 
-test('strip error test', (() => {
+test('strip should throw error when we try to strip CTX_PREFIX that does not exist', (() => {
     expect(() => Uri.strip('/b', 'CTX_PREFIX')).toThrow();
 }));
 
 test('toUri test', (() => {
     const res = Uri.toUri('http://www.google.sk');
-    expect(res).toEqual(uri.decomposeComponents('http://www.google.sk'));
+    expect(res).toEqual({ scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' });
 }));
