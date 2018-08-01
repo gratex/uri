@@ -99,23 +99,21 @@ const isSubPathData = [
 const toStringData = [
     [ null, testURL ],
     [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, 'http://www.google.sk' ],
-    [ 'http://www.google.sk/cesta/cesta2', 'http://www.google.sk/cesta/cesta2' ],
-    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '/cesta/cesta2', query: 'w=f', fragment: 'x=s' },
-        'http://www.google.sk/cesta/cesta2?w=f#x=s' ]
+    [ 'http://www.google.sk/foo/bar', 'http://www.google.sk/foo/bar' ],
+    [ { path: '/foo/bar', query: 'w=f', fragment: 'x=s' }, '/foo/bar?w=f#x=s' ]
 ];
 
 const stripData = [
-    [ 'http://www.google.sk', 'ORIGIN,EXTENSION', '' ],
-    [ 'http://www.google.sk/.', 'ORIGIN,EXTENSION,QUERY,FRAGMENT', '/' ],
-    [ 'http://www.google.sk', 'ORIGIN,QUERY,PATH,FRAGMENT', '' ],
+    [ 'http://www.google.sk/foo', 'QUERY,PATH,FRAGMENT', 'http://www.google.sk' ], // not existing parts are ignored
     [ 'http://www.google.sk/foo.bar', 'EXTENSION', 'http://www.google.sk/foo' ],
-    [ 'http://www.google.sk/', 'EXTENSION', 'http://www.google.sk/' ],
+    [ 'http://www.google.sk', 'EXTENSION', 'http://www.google.sk' ], // striping extension without path
+    [ 'http://www.google.sk/foo', 'EXTENSION', 'http://www.google.sk/foo' ], // striping extension with path but no ext
     [ '/a/ui/c/d/', 'CTX', '/ui/c/d/' ], // see config of CTXs on the top
     [ '/a/ui/c/d/', 'CTX_PREFIX', '/c/d/' ],
     [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ],
-    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'ORIGIN', '/cesta/cesta2?w=f#p=7' ],
-    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'PATH,FRAGMENT', 'http://www.google.sk?w=f' ],
-    [ 'http://www.google.sk/cesta/cesta2?w=f#p=7', 'QUERY', 'http://www.google.sk/cesta/cesta2#p=7' ]
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'ORIGIN', '/foo/bar?w=f#p=7' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'PATH,FRAGMENT', 'http://www.google.sk?w=f' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'QUERY', 'http://www.google.sk/foo/bar#p=7' ]
 ];
 
 test.each(equalsQueryStrData)(
