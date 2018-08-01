@@ -325,11 +325,11 @@ describe('parseQuery test', (() => {
     });
     test('null string expected using true', () => {
         const a2 = uri.parseQuery(null, true);
-        expect(a2).toBe(null);
+        expect(a2).toBeNull();
     });
     test('null string expected using false', () => {
         const a3 = uri.parseQuery(null);
-        expect(a3).toBe(null);
+        expect(a3).toBeNull();
     });
     test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8', true);

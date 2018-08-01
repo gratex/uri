@@ -1,5 +1,10 @@
 const Uri = require('../src/uri');
 const uri = require('../src/_uri');
+const packageJson = require('../package.json');
+const TEST_URL = packageJson.jest.testURL;
+// const fullUri = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
+
+Uri.config({ CTX: '/a', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
 
 const equalsQueryStrData = [
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal', true ],
@@ -78,8 +83,9 @@ const mixinData = [
     [ 'http://jozo@k.sk:80/g?j=l#ah',
         { scheme: 'https', host: 'afoj.sk', port: '78', userInfo: 'j', path: '/t', query: { w: '5' }, fragment: { s: '7' } },
         'https://j@afoj.sk:78/t?w=5#s=7' ],
-    [ null, { path: '/o' }, '/o' ],
-    [ uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
+    [ null, { query: 'a=b' }, `${TEST_URL}?a=b` ],
+    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, { host: 'www.afoj.sk' },
+        'http://www.afoj.sk' ]
 ];
 
 const isSubPathData = [
@@ -88,6 +94,26 @@ const isSubPathData = [
     [ '/a/b', '/a/b/c/d', true ],
     [ '/a/b/s', '/a/b/d', false ],
     [ '/', '/c/b/d,', true ]
+];
+
+const toStringData = [
+    [ null, TEST_URL ],
+    [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, 'http://www.google.sk' ],
+    [ 'http://www.google.sk/foo/bar', 'http://www.google.sk/foo/bar' ],
+    [ { path: '/foo/bar', query: 'w=f', fragment: 'x=s' }, '/foo/bar?w=f#x=s' ]
+];
+
+const stripData = [
+    [ 'http://www.google.sk/foo', 'QUERY,PATH,FRAGMENT', 'http://www.google.sk' ], // not existing parts are ignored
+    [ 'http://www.google.sk/foo.bar', 'EXTENSION', 'http://www.google.sk/foo' ],
+    [ 'http://www.google.sk', 'EXTENSION', 'http://www.google.sk' ], // striping extension without path
+    [ 'http://www.google.sk/foo', 'EXTENSION', 'http://www.google.sk/foo' ], // striping extension with path but no ext
+    [ '/a/ui/c/d/', 'CTX', '/ui/c/d/' ], // see config of CTXs on the top
+    [ '/a/ui/c/d/', 'CTX_PREFIX', '/c/d/' ],
+    [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'ORIGIN', '/foo/bar?w=f#p=7' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'PATH,FRAGMENT', 'http://www.google.sk?w=f' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'QUERY', 'http://www.google.sk/foo/bar#p=7' ]
 ];
 
 test.each(equalsQueryStrData)(
@@ -115,10 +141,34 @@ test.each(resolveData)(
 );
 
 test.each(mixinData)(
-    'mixin test: [\'%s\', \'%o\', \'%s\']',
+    'mixin test: [%p, %p, %p]',
     (that, obj, expected) => {
         const res = Uri.mixin(that, obj);
         expect(res).toBe(expected);
     }
 );
 
+test.each(toStringData)(
+    'toString test: [%p, %p]',
+    (that, expected) => {
+        const res = Uri.toString(that);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripData)(
+    'strip test: [%p, %p, %p]',
+    (that, toStrip, expected) => {
+        const res = Uri.strip(that, toStrip);
+        expect(res).toBe(expected);
+    }
+);
+
+test('strip should throw error when we try to strip CTX_PREFIX that does not exist', (() => {
+    expect(() => Uri.strip('/b', 'CTX_PREFIX')).toThrow();
+}));
+
+test('toUri test', (() => {
+    const res = Uri.toUri('http://www.google.sk');
+    expect(res).toEqual({ scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' });
+}));
