@@ -127,7 +127,7 @@ const percentEncodeData = [
 ];
 
 const checkSegmentEncodingData = [
-    [ null, true ],
+    [ '', true ],
     [ 'foo', true ],
     [ 'a/b', false ],
     [ 'a?b', false ],
@@ -137,7 +137,7 @@ const checkSegmentEncodingData = [
 ];
 
 const checkSegmentsEncodingData = [
-    [ null, true ],
+    [ '', true ],
     [ 'foo', true ],
     [ 'a/b', true ],
     [ 'a?b', false ],
@@ -147,7 +147,7 @@ const checkSegmentsEncodingData = [
 ];
 
 const checkQueryEncodingData = [
-    [ null, true ],
+    [ '', true ],
     [ 'foo', true ],
     [ 'a/b', true ],
     [ 'a?b', true ],
@@ -157,7 +157,7 @@ const checkQueryEncodingData = [
 ];
 
 const checkFragmentEncodingData = [
-    [ null, true ],
+    [ '', true ],
     [ 'foo', true ],
     [ 'a/b', true ],
     [ 'a?b', true ],
@@ -165,7 +165,8 @@ const checkFragmentEncodingData = [
     [ ' ', false ],
     [ '%99', false ]
 ];
-test.each(resolveData)('resolve test: [\'%s\', \'%s\', \'%s\']',
+
+test.each(resolveData)('resolve test: [%p, %p, %p]',
     (ref, base, expected) => {
         const res = uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref));
         const resStr = uri.recomposeComponents(res);
@@ -178,7 +179,7 @@ test('_preParseBaseUri test', (() => {
 }));
 
 test.each(percentEncodeData)(
-    'percentEncode test: [\'%s\', \'%s\', \'%s\']',
+    'percentEncode test: [%p, %p, %p]',
     (legalRange, input, expected) => {
         const res = uri.percentEncode(input, legalRange);
         expect(res).toBe(expected);
@@ -186,7 +187,7 @@ test.each(percentEncodeData)(
 );
 
 test.each(componentsData)(
-    'component test: [\'%s\', \'%s\', \'%s\']',
+    'component test: [%p, %p, %p]',
     (original) => {
         const decomposed = uri.decomposeComponents(original);
         const recomposed = uri.recomposeComponents(decomposed);
@@ -221,7 +222,7 @@ test('recomposeAuthorityComponents test', (() => {
 }));
 
 test.each(encodeQueryData)(
-    'encode query test: [\'%s\', \'%s\']',
+    'encode query test: [%p, %p]',
     (original, expected) => {
         const res = uri.encodeQuery(original);
         expect(res).toBe(expected);
@@ -229,7 +230,7 @@ test.each(encodeQueryData)(
 );
 
 test.each(encodeSegmentData)(
-    'encode segment test: [\'%s\', \'%s\']',
+    'encode segment test: [%p, %p]',
     (original, expected) => {
         const res = uri.encodeSegment(original);
         expect(res).toBe(expected);
@@ -237,7 +238,7 @@ test.each(encodeSegmentData)(
 );
 
 test.each(encodeFragmentData)(
-    'encode fragment test: [\'%s\', \'%s\']',
+    'encode fragment test: [%p, %p]',
     (original, expected) => {
         const res = uri.encodeFragment(original);
         expect(res).toBe(expected);
@@ -245,7 +246,7 @@ test.each(encodeFragmentData)(
 );
 
 test.each(removeDotSegmentsData)(
-    'removeDotSegments test: [\'%s\', \'%s\']',
+    'removeDotSegments test: [%p, %p]',
     (original, expected) => {
         const res = uri.removeDotSegments(original);
         expect(res).toBe(expected);
@@ -295,7 +296,7 @@ test('encodeSegments tests', (() => {
 }));
 
 test.each(segmentsData)(
-    'segments test: \'%s\'',
+    'segments test: %p',
     (original) => {
         const decoded = uri.decodeSegments(original);
         const res = uri.encodeSegments(decoded);
@@ -304,7 +305,7 @@ test.each(segmentsData)(
 );
 
 test.each(isSubordinateData)(
-    'isSubordinate test: [\'%s\', \'%s\', %p, %p]',
+    'isSubordinate test: [%p, %p, %p, %p]',
     (parent, sub, orSame, expected) => {
         const uriParent = uri.decomposeComponents(parent);
         const uriSub = uri.decomposeComponents(sub);
