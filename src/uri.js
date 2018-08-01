@@ -1,7 +1,16 @@
 const uri = require('./_uri.js');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
+const assert = require('assert');
+const ctx = '';
+const config = '';
+// eslint-disable-next-line no-undef
+const DEFAULT_THAT = typeof window != 'undefined' ? window.document.URL : /* istanbul ignore next */ '';
 
+// function fromWindow(){} NOT PORTED
+// function navigate(){} NOT PORTED
+
+// paramString window.document.URL instead use '' (or try use '/', or...)
 function equalsQueryStr(query1, query2) {
     function simpleCompare(a, b) {
         return (a < b ? -1 : (a > b ? 1 : 0));
@@ -28,7 +37,7 @@ function clone(uriArr) {
     return Object.assign({}, uriArr);
 }
 function param(that) {
-    that != null || (that = ''); // let "" continue
+    that != null || (that = DEFAULT_THAT); // let "" continue
     return (typeof that == 'string') ? uri.decomposeComponents(that) : clone(that);
 }
 function resolve(base, ref) {
@@ -90,11 +99,100 @@ function isSubPath(baseStr, refStr) {
     return bs.reverse().every((item, i) => item === rs[bs.length - 1 - i]);
 }
 
+function paramString(that) {
+    that != null || (that = DEFAULT_THAT);
+    return (typeof that === 'string') ? that : uri.recomposeComponents(that);
+}
+
+function contains(arr, what) {
+    return arr.indexOf(what) !== -1;
+}
+
+function toString(that) {
+    // summary:
+    //		Use to convert uri object to string.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		URI string.
+    return paramString(that);
+}
+
+function toUri(that) {
+    // summary:
+    //		Use to convert uri to uri object.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: Object
+    //		URI object with properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
+    return param(that);
+}
+
+function strip(that, toStrip) {
+    // summary:
+    //		Use to strip some parts of URI.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // toStrip: String
+    //		Comma separated values, available are: "ORIGIN", "CTX", "EXTENSION", "QUERY", "FRAGMENT".
+    // returns: String
+    //		Modified copy of `that`.
+    // example:
+    //	|	Uri.strip(uriStr, "QUERY,FRAGMENT");
+    const u = param(that);
+    toStrip = toStrip.split(',');
+
+    if (contains(toStrip, 'ORIGIN')) {
+        // clear them all to keep object consistent for auth invariant
+        u.scheme = u.authority = u.host = u.port = u.userInfo = undefined; // orig uses undefined not nulls
+    }
+    if (contains(toStrip, 'PATH')) {
+        u.path = ''; // dont use undefined, resulting path should be empty ("/")
+    } else {
+        if (contains(toStrip, 'CTX')) {
+            assert(isSubPath(ctx, u.path), 'IllegalArgument, context not present');
+            u.path = u.path.substring(ctx.length);
+        } else if (contains(toStrip, 'CTX_PREFIX')) {
+            const uiPrefix = config.uiCtxPrefix;
+            const svcPrefix = config.svcCtxPrefix;
+            if (isSubPath(uiPrefix, u.path)) {
+                u.path = u.path.substring(uiPrefix.length);
+            } else if (isSubPath(svcPrefix, u.path)) {
+                u.path = u.path.substring(svcPrefix.length);
+            } else {
+                assert(false, 'IllegalArgument, context prefix not present');
+            }
+        }
+        if (contains(toStrip, 'EXTENSION')) {
+            const segments = uri.decodeSegments(u.path);
+            const l = segments.length;
+            if (l) {
+                const last = segments[l - 1];
+                const dotIndex = last.indexOf('.');
+                if (dotIndex !== -1) {
+                    segments[l - 1] = last.substring(0, dotIndex);
+                    u.path = uri.encodeSegments(segments);
+                }
+            }
+        }
+    }
+    if (contains(toStrip, 'QUERY')) {
+        u.query = undefined;
+    }
+    if (contains(toStrip, 'FRAGMENT')) {
+        u.fragment = undefined;
+    }
+    return uri.recomposeComponents(u);
+}
+
 module.exports = {
     equalsQueryStr,
     isSubPath,
     clone,
     param,
     resolve,
-    mixin
+    mixin,
+    toString,
+    toUri,
+    strip
 };

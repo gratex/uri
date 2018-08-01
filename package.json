@@ -30,5 +30,8 @@
     "url": "git@gitlab01.hq.gratex.com:node/uri.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "jest": {
+    "testURL": "http://localhost/foo/"
+  }
 }

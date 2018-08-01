@@ -1,5 +1,8 @@
 const Uri = require('../src/uri');
 const uri = require('../src/_uri');
+const packageJson = require('../package.json');
+const testURL = packageJson.jest.testURL;
+const fullUri = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
 
 const equalsQueryStrData = [
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal', true ],
@@ -78,7 +81,7 @@ const mixinData = [
     [ 'http://jozo@k.sk:80/g?j=l#ah',
         { scheme: 'https', host: 'afoj.sk', port: '78', userInfo: 'j', path: '/t', query: { w: '5' }, fragment: { s: '7' } },
         'https://j@afoj.sk:78/t?w=5#s=7' ],
-    [ null, { path: '/o' }, '/o' ],
+    [ null, { query: 'a=b' }, `${testURL}?a=b` ],
     [ uri.decomposeComponents('http://www.google.sk'), { host: 'www.afoj.sk' }, 'http://www.afoj.sk' ]
 ];
 
@@ -90,6 +93,9 @@ const isSubPathData = [
     [ '/', '/c/b/d,', true ]
 ];
 
+const toStringData = [
+    [ null, testURL ]
+];
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -115,10 +121,17 @@ test.each(resolveData)(
 );
 
 test.each(mixinData)(
-    'mixin test: [\'%s\', \'%o\', \'%s\']',
+    'mixin test: [%p, %p, %p]',
     (that, obj, expected) => {
         const res = Uri.mixin(that, obj);
         expect(res).toBe(expected);
     }
 );
 
+test.each(toStringData)(
+    'toString test: [%p, %p]',
+    (that, expected) => {
+        const res = Uri.toString(that);
+        expect(res).toBe(expected);
+    }
+);
