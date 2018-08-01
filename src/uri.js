@@ -2,13 +2,19 @@ const uri = require('./_uri.js');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
 const assert = require('assert');
-const ctx = '';
-const config = '';
+let CTX = '';
+let UI_CTX_PREFIX = '';
+let SVC_CTX_PREFIX = '';
 // eslint-disable-next-line no-undef
 const DEFAULT_THAT = typeof window != 'undefined' ? window.document.URL : /* istanbul ignore next */ '';
 
 // function fromWindow(){} NOT PORTED
 // function navigate(){} NOT PORTED
+
+function config(conf) {
+    // NTH: assert not null, or fallback from CTX to others..
+    ({ CTX, UI_CTX_PREFIX, SVC_CTX_PREFIX } = conf);
+}
 
 // paramString window.document.URL instead use '' (or try use '/', or...)
 function equalsQueryStr(query1, query2) {
@@ -150,15 +156,13 @@ function strip(that, toStrip) {
         u.path = ''; // dont use undefined, resulting path should be empty ("/")
     } else {
         if (contains(toStrip, 'CTX')) {
-            assert(isSubPath(ctx, u.path), 'IllegalArgument, context not present');
-            u.path = u.path.substring(ctx.length);
+            assert(isSubPath(CTX, u.path), 'IllegalArgument, context not present');
+            u.path = u.path.substring(CTX.length);
         } else if (contains(toStrip, 'CTX_PREFIX')) {
-            const uiPrefix = config.uiCtxPrefix;
-            const svcPrefix = config.svcCtxPrefix;
-            if (isSubPath(uiPrefix, u.path)) {
-                u.path = u.path.substring(uiPrefix.length);
-            } else if (isSubPath(svcPrefix, u.path)) {
-                u.path = u.path.substring(svcPrefix.length);
+            if (isSubPath(UI_CTX_PREFIX, u.path)) {
+                u.path = u.path.substring(UI_CTX_PREFIX.length);
+            } else if (isSubPath(SVC_CTX_PREFIX, u.path)) {
+                u.path = u.path.substring(SVC_CTX_PREFIX.length);
             } else {
                 assert(false, 'IllegalArgument, context prefix not present');
             }
@@ -194,5 +198,6 @@ module.exports = {
     mixin,
     toString,
     toUri,
-    strip
+    strip,
+    config
 };

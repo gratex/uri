@@ -2,7 +2,9 @@ const Uri = require('../src/uri');
 const uri = require('../src/_uri');
 const packageJson = require('../package.json');
 const testURL = packageJson.jest.testURL;
-const fullUri = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
+// const fullUri = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
+
+Uri.config({ CTX: '/a', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
 
 const equalsQueryStrData = [
     [ 'type=animal&name=narwhal', 'name=narwhal&type=animal', true ],
@@ -94,8 +96,20 @@ const isSubPathData = [
 ];
 
 const toStringData = [
-    [ null, testURL ]
+    [ null, testURL ],
+    [ uri.decomposeComponents('http://www.google.sk'), 'http://www.google.sk' ]
 ];
+
+const stripData = [
+    [ 'http://www.google.sk', 'ORIGIN,EXTENSION', '' ],
+    [ 'http://www.google.sk/.', 'ORIGIN,EXTENSION,QUERY,FRAGMENT', '/' ],
+    [ 'http://www.google.sk', 'ORIGIN,QUERY,PATH,FRAGMENT', '' ],
+    [ 'http://www.google.sk/', 'EXTENSION', 'http://www.google.sk/' ],
+    [ '/a/ui/c/d/', 'CTX', '/ui/c/d/' ],
+    [ '/a/ui/c/d/', 'CTX_PREFIX', '/c/d/' ],
+    [ '/a/svc/c/d/', 'CTX_PREFIX', '/c/d/' ]
+];
+
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -135,3 +149,20 @@ test.each(toStringData)(
         expect(res).toBe(expected);
     }
 );
+
+test.each(stripData)(
+    'strip test: [%p, %p, %p]',
+    (that, toStrip, expected) => {
+        const res = Uri.strip(that, toStrip);
+        expect(res).toBe(expected);
+    }
+);
+
+test('strip error test', (() => {
+    expect(() => Uri.strip('/b', 'CTX_PREFIX')).toThrow();
+}));
+
+test('toUri test', (() => {
+    const res = Uri.toUri('http://www.google.sk');
+    expect(res).toEqual(uri.decomposeComponents('http://www.google.sk'));
+}));
