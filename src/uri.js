@@ -145,48 +145,49 @@ function strip(that, toStrip) {
     //		Modified copy of `that`.
     // example:
     //	|	Uri.strip(uriStr, "QUERY,FRAGMENT");
-    const u = param(that);
+    let { scheme, authority, host, port, userInfo, path, query, fragment } = param(that);
+
     toStrip = toStrip.split(',');
 
     if (contains(toStrip, 'ORIGIN')) {
         // clear them all to keep object consistent for auth invariant
-        u.scheme = u.authority = u.host = u.port = u.userInfo = undefined; // orig uses undefined not nulls
+        scheme = authority = host = port = userInfo = undefined; // orig uses undefined not nulls
     }
     if (contains(toStrip, 'PATH')) {
-        u.path = ''; // dont use undefined, resulting path should be empty ("/")
+        path = ''; // dont use undefined, resulting path should be empty ("/")
     } else {
         if (contains(toStrip, 'CTX')) {
-            assert(isSubPath(CTX, u.path), 'IllegalArgument, context not present');
-            u.path = u.path.substring(CTX.length);
+            assert(isSubPath(CTX, path), 'IllegalArgument, context not present');
+            path = path.substring(CTX.length);
         } else if (contains(toStrip, 'CTX_PREFIX')) {
-            if (isSubPath(UI_CTX_PREFIX, u.path)) {
-                u.path = u.path.substring(UI_CTX_PREFIX.length);
-            } else if (isSubPath(SVC_CTX_PREFIX, u.path)) {
-                u.path = u.path.substring(SVC_CTX_PREFIX.length);
+            if (isSubPath(UI_CTX_PREFIX, path)) {
+                path = path.substring(UI_CTX_PREFIX.length);
+            } else if (isSubPath(SVC_CTX_PREFIX, path)) {
+                path = path.substring(SVC_CTX_PREFIX.length);
             } else {
                 assert(false, 'IllegalArgument, context prefix not present');
             }
         }
         if (contains(toStrip, 'EXTENSION')) {
-            const segments = uri.decodeSegments(u.path);
+            const segments = uri.decodeSegments(path);
             const l = segments.length;
             if (l) {
                 const last = segments[l - 1];
                 const dotIndex = last.indexOf('.');
                 if (dotIndex !== -1) {
                     segments[l - 1] = last.substring(0, dotIndex);
-                    u.path = uri.encodeSegments(segments);
+                    path = uri.encodeSegments(segments);
                 }
             }
         }
     }
     if (contains(toStrip, 'QUERY')) {
-        u.query = undefined;
+        query = undefined;
     }
     if (contains(toStrip, 'FRAGMENT')) {
-        u.fragment = undefined;
+        fragment = undefined;
     }
-    return uri.recomposeComponents(u);
+    return uri.recomposeComponents({ scheme, authority, host, port, userInfo, path, query, fragment });
 }
 
 function equals(that1, that2, ignoreFragment) {
