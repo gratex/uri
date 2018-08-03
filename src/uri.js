@@ -1,10 +1,10 @@
-const uri = require('./_uri.js');
+const assert = require('assert');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
-const assert = require('assert');
+const uri = require('./_uri.js');
 let CTX = '';
-let UI_CTX_PREFIX = '';
 let SVC_CTX_PREFIX = '';
+let UI_CTX_PREFIX = '';
 // eslint-disable-next-line no-undef
 const DEFAULT_THAT = typeof window != 'undefined' ? window.document.URL : /* istanbul ignore next */ '';
 
@@ -210,16 +210,344 @@ function equals(that1, that2, ignoreFragment) {
         (ignoreFragment || fragment === fragment2);
 }
 
+// basic getters
+
+function getScheme(that) {
+    // summary:
+    //		Use instead of location.protocol
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String|undefined
+    //		String without ':' delimiter.
+    const { scheme } = param(that);
+    return scheme;
+}
+
+function getAuthority(that) {
+    // summary:
+    //		Use instead of location.host.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    const { authority } = param(that);
+    return authority;
+}
+
+function getUserInfo(that) {
+    // summary:
+    //		Use to get user info. No equivalent in location.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    const { userInfo } = param(that);
+    return userInfo;
+}
+
+function getHost(that) {
+    // summary:
+    //		Use instead of location.hostname.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    const { host } = param(that);
+    return host;
+}
+
+function getPort(that) {
+    // summary:
+    //		Use instead of location.port.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    const { port } = param(that);
+    return port;
+}
+
+function getPath(that) {
+    // summary:
+    //		Use instead of location.search.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String|undefined
+    //		String starting by '/'.
+    const { path } = param(that);
+    return path;
+}
+
+function getQuery(that, toObject) {
+    // summary:
+    //		Use instead of location.search.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // toObject: Boolean?
+    //		If `true` query is returned as object.
+    // returns: String|Object|undefined
+    //		String without '?' delimiter or key-value object.
+    //		/test, false		-> undefined
+    //		/test?, false		-> ""
+    //		/test?a=10, false	-> "a=10"
+    //
+    //		/test, true			-> undefined
+    //		/test?, true		-> {}
+    //		/test?a=10, true	-> {a:"10"}
+    const { query } = param(that);
+
+    if (toObject) {
+        return query === undefined ? undefined : //
+            uri.parseQuery(query, true); // "" -> {}
+    }
+    return query; // 1:1 with small uri.js, undefined, "" or string
+}
+
+function getFragment(that) {
+    // summary:
+    //		Use instead of location.hash.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String|undefined
+    //		String without '#' delimiter.
+    const { fragment } = param(that);
+    // NTH: implement toObject
+    //			if (toObject && u.fragment != null) {
+    //				return ioQuery.queryToObject(u.fragment) || u.fragment;
+    //			}
+    return fragment;
+}
+
+function getSegments(that) {
+    // summary:
+    //		Use to get path segments.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String[]
+    //		Array of strings, last is "" if path denotes a folder.
+    const { path } = param(that);
+    return uri.decodeSegments(path);
+}
+
+// basic setters
+function setScheme(that, scheme) {
+    // summary:
+    //		Use to set scheme.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // scheme: String
+    //		Scheme.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+
+    return uri.recomposeComponents({
+        ...u,
+        scheme
+    });
+}
+
+function setAuthority(that, authority) {
+    // summary:
+    //		Use to set authority.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // authority: S[ '', '' ]tring
+    //		Authority.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+
+    u.authority = authority;
+    if (authority) {
+        // NTH: uri.decomposeAuthorityComponents function
+        const { userInfo, host, port } = uri.decomposeComponents(`//${authority}`);
+        Object.assign(u, { userInfo, host, port });
+    } else {
+        u.userInfo = u.host = u.port = undefined;
+    }
+    return uri.recomposeComponents(u);
+}
+function setUserInfo(that, userInfo) {
+    // summary:
+    //		Use to set user info.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // userInfo: String
+    //		User info.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+
+    return uri.recomposeComponents({
+        ...u,
+        userInfo,
+        authority: uri.recomposeAuthorityComponents(userInfo, u.host, u.port)
+    });
+}
+function setHost(that, host) {
+    // summary:
+    //		Use to set host.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // host: String
+    //		Host.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+    return uri.recomposeComponents({
+        ...u,
+        host,
+        authority: uri.recomposeAuthorityComponents(u.userInfo, host, u.port)
+    });
+}
+function setPort(that, port) {
+    // summary:
+    //		Use to set port.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // port: String
+    //		Port.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+    return uri.recomposeComponents({
+        ...u,
+        port,
+        authority: uri.recomposeAuthorityComponents(u.userInfo, u.host, port)
+    });
+}
+function setPath(that, path) {
+    // summary:
+    //		Use to set path.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // path: String
+    //		Encoded path.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+    uri.checkSegmentsEncoding(path, true); // throws error is unencoded
+
+    return uri.recomposeComponents({
+        ...u,
+        path
+    });
+}
+function setQuery(that, query) {
+    // summary:
+    //		Use to set query.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // query: String|Object
+    //		Encoded string or unencoded key-value object.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+    query && typeof query != 'string' && (query = querystring.stringify(query));
+    uri.checkQueryEncoding(query, true); // throws error is unencoded
+    u.query = query;
+    return uri.recomposeComponents(u);
+}
+function appendQuery(that, query) {
+    // summary:
+    //		Use to append query.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // query: String|Object
+    //		Encoded string or key-value object.
+    // returns: String
+    //		Modified copy of `that`.
+    if (!query) {
+        return paramString(that);
+    }
+    const origQuery = this.getQuery(that);
+    typeof query != 'string' && (query = querystring.stringify(query));
+    return this.setQuery(that, `${origQuery ? `${origQuery}&` : ''}${query}`);
+}
+function setFragment(that, fragment) {
+    // summary:
+    //		Use to set fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // fragment: String|Object
+    //		Encoded string or key-value object.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(that);
+    fragment && typeof fragment != 'string' && (fragment = querystring.stringify(fragment));
+    uri.checkFragmentEncoding(fragment, true); // throws error is unencoded
+    u.fragment = fragment;
+    return uri.recomposeComponents(u);
+}
+function appendFragment(that, fragment) {
+    // summary:
+    //		Use to append fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // fragment: String|Object
+    //		Encoded string or key-value object.
+    // returns: String
+    //		Modified copy of `that`.
+    if (!fragment) {
+        return paramString(that);
+    }
+    const origFragment = this.getFragment(that);
+    typeof fragment != 'string' && (fragment = querystring.stringify(fragment));
+    return this.setFragment(that, `${origFragment ? `${origFragment}&` : ''}${fragment}`); // return String
+}
+function setSegments(that, segments) {
+    // summary:
+    //		Use to set path segments.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // segments: String[]
+    //		Array of unencoded path segments.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.setPath(that, uri.encodeSegments(segments));
+}
+
+function appendSegments(that, ...appendSegmets) {
+    // summary:
+    //		Use to append path segments.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // segments: String[]|String...
+    //		Array or multiple arguments of unencoded path segments.
+    // returns: String
+    //		Modified copy of `that`.
+
+    (Array.isArray(appendSegmets[0])) && (appendSegmets = appendSegmets[0]);
+    assert(appendSegmets[0] != null, 'IllegalArgument, segments argument not present');
+    const segments = this.getSegments(that);
+    !segments[segments.length - 1] && segments.pop(); // isLastSegmentEmpty
+    return this.setSegments(that, segments.concat(appendSegmets));
+}
+
 module.exports = {
-    equalsQueryStr,
-    isSubPath,
+    appendFragment,
+    appendQuery,
+    appendSegments,
     clone,
+    config,
+    equals,
+    equalsQueryStr,
+    getAuthority,
+    getFragment,
+    getHost,
+    getPath,
+    getPort,
+    getQuery,
+    getScheme,
+    getSegments,
+    getUserInfo,
+    isSubPath,
+    mixin,
     param,
     resolve,
-    mixin,
-    toString,
-    toUri,
+    setAuthority,
+    setFragment,
+    setHost,
+    setPath,
+    setPort,
+    setQuery,
+    setScheme,
+    setSegments,
+    setUserInfo,
     strip,
-    config,
-    equals
+    toString,
+    toUri
 };
