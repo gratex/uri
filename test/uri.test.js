@@ -273,7 +273,9 @@ const appendQueryData = [
     [ [ FULL_URI, 'search=newt' ],
         'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal&search=newt#nose' ],
     [ [ '/foo/bar/baz', 'search=newt' ], '/foo/bar/baz?search=newt' ],
-    [ [ '/foo/bar/baz', { search: 'newt' } ], '/foo/bar/baz?search=newt' ]
+    [ [ '/foo/bar/baz', { search: 'newt' } ], '/foo/bar/baz?search=newt' ],
+    [ [ FULL_URI, { foo: 'bar' } ],
+        'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal&foo=bar#nose' ]
 ];
 
 const setFragmentData = [
@@ -315,10 +317,6 @@ const appendSegmentsData = [
     [ [ FULL_URI, [ 'aaa', 'bbb' ] ],
         'foo://username:password@my.example.com:8042/over/there/index.x.dtb/aaa/bbb?type=animal&name=narwhal#nose' ],
     [ [ FULL_URI, [ 'aaa', 'bbb', '' ] ],
-        'foo://username:password@my.example.com:8042/over/there/index.x.dtb/aaa/bbb/?type=animal&name=narwhal#nose' ],
-    [ [ FULL_URI, [ 'aaa', 'bbb', '' ], null ],
-        'foo://username:password@my.example.com:8042/over/there/index.x.dtb/aaa/bbb/?type=animal&name=narwhal#nose' ],
-    [ [ FULL_URI, [ 'aaa', 'bbb', '' ], 'ccc' ],
         'foo://username:password@my.example.com:8042/over/there/index.x.dtb/aaa/bbb/?type=animal&name=narwhal#nose' ],
     [ [ FULL_URI, [ 'aaa', 'bbb', '', 'ccc' ] ],
         'foo://username:password@my.example.com:8042/over/there/index.x.dtb/aaa/bbb//ccc?type=animal&name=narwhal#nose' ],

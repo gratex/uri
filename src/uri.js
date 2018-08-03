@@ -1,10 +1,10 @@
-const uri = require('./_uri.js');
+const assert = require('assert');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
-const assert = require('assert');
+const uri = require('./_uri.js');
 let CTX = '';
-let UI_CTX_PREFIX = '';
 let SVC_CTX_PREFIX = '';
+let UI_CTX_PREFIX = '';
 // eslint-disable-next-line no-undef
 const DEFAULT_THAT = typeof window != 'undefined' ? window.document.URL : /* istanbul ignore next */ '';
 
@@ -332,9 +332,13 @@ function setScheme(that, scheme) {
     // returns: String
     //		Modified copy of `that`.
     const u = param(that);
-    u.scheme = scheme;
-    return uri.recomposeComponents(u);
+
+    return uri.recomposeComponents({
+        ...u,
+        scheme
+    });
 }
+
 function setAuthority(that, authority) {
     // summary:
     //		Use to set authority.
@@ -366,9 +370,12 @@ function setUserInfo(that, userInfo) {
     // returns: String
     //		Modified copy of `that`.
     const u = param(that);
-    u.userInfo = userInfo;
-    u.authority = uri.recomposeAuthorityComponents(userInfo, u.host, u.port);
-    return uri.recomposeComponents(u);
+
+    return uri.recomposeComponents({
+        ...u,
+        userInfo,
+        authority: uri.recomposeAuthorityComponents(userInfo, u.host, u.port)
+    });
 }
 function setHost(that, host) {
     // summary:
@@ -380,9 +387,11 @@ function setHost(that, host) {
     // returns: String
     //		Modified copy of `that`.
     const u = param(that);
-    u.host = host;
-    u.authority = uri.recomposeAuthorityComponents(u.userInfo, host, u.port);
-    return uri.recomposeComponents(u);
+    return uri.recomposeComponents({
+        ...u,
+        host,
+        authority: uri.recomposeAuthorityComponents(u.userInfo, host, u.port)
+    });
 }
 function setPort(that, port) {
     // summary:
@@ -394,9 +403,11 @@ function setPort(that, port) {
     // returns: String
     //		Modified copy of `that`.
     const u = param(that);
-    u.port = port;
-    u.authority = uri.recomposeAuthorityComponents(u.userInfo, u.host, port);
-    return uri.recomposeComponents(u);
+    return uri.recomposeComponents({
+        ...u,
+        port,
+        authority: uri.recomposeAuthorityComponents(u.userInfo, u.host, port)
+    });
 }
 function setPath(that, path) {
     // summary:
@@ -409,8 +420,11 @@ function setPath(that, path) {
     //		Modified copy of `that`.
     const u = param(that);
     uri.checkSegmentsEncoding(path, true); // throws error is unencoded
-    u.path = path;
-    return uri.recomposeComponents(u);
+
+    return uri.recomposeComponents({
+        ...u,
+        path
+    });
 }
 function setQuery(that, query) {
     // summary:
@@ -441,7 +455,7 @@ function appendQuery(that, query) {
     }
     const origQuery = this.getQuery(that);
     typeof query != 'string' && (query = querystring.stringify(query));
-    return this.setQuery(that, (origQuery ? `${origQuery}&` : '') + query);
+    return this.setQuery(that, `${origQuery ? `${origQuery}&` : ''}${query}`);
 }
 function setFragment(that, fragment) {
     // summary:
@@ -472,7 +486,7 @@ function appendFragment(that, fragment) {
     }
     const origFragment = this.getFragment(that);
     typeof fragment != 'string' && (fragment = querystring.stringify(fragment));
-    return this.setFragment(that, (origFragment ? `${origFragment}&` : '') + fragment); // return String
+    return this.setFragment(that, `${origFragment ? `${origFragment}&` : ''}${fragment}`); // return String
 }
 function setSegments(that, segments) {
     // summary:
@@ -485,7 +499,8 @@ function setSegments(that, segments) {
     //		Modified copy of `that`.
     return this.setPath(that, uri.encodeSegments(segments));
 }
-function appendSegments(that) {
+
+function appendSegments(that, ...appendSegmets) {
     // summary:
     //		Use to append path segments.
     // that: String|Object|null
@@ -495,45 +510,44 @@ function appendSegments(that) {
     // returns: String
     //		Modified copy of `that`.
 
-    const segments = this.getSegments(that);
-    let appendSegmets = Array.prototype.slice.call(arguments, 1);
     (Array.isArray(appendSegmets[0])) && (appendSegmets = appendSegmets[0]);
     assert(appendSegmets[0] != null, 'IllegalArgument, segments argument not present');
+    const segments = this.getSegments(that);
     !segments[segments.length - 1] && segments.pop(); // isLastSegmentEmpty
     return this.setSegments(that, segments.concat(appendSegmets));
 }
 
 module.exports = {
-    equalsQueryStr,
-    isSubPath,
+    appendFragment,
+    appendQuery,
+    appendSegments,
     clone,
-    param,
-    resolve,
-    mixin,
-    toString,
-    toUri,
-    strip,
     config,
     equals,
-    getScheme,
+    equalsQueryStr,
     getAuthority,
-    getUserInfo,
-    getHost,
-    getPort,
-    getPath,
-    getQuery,
     getFragment,
+    getHost,
+    getPath,
+    getPort,
+    getQuery,
+    getScheme,
     getSegments,
-    setScheme,
+    getUserInfo,
+    isSubPath,
+    mixin,
+    param,
+    resolve,
     setAuthority,
-    setUserInfo,
-    setHost,
-    setPort,
-    setPath,
-    setQuery,
     setFragment,
+    setHost,
+    setPath,
+    setPort,
+    setQuery,
+    setScheme,
     setSegments,
-    appendFragment,
-    appendSegments,
-    appendQuery
+    setUserInfo,
+    strip,
+    toString,
+    toUri
 };
