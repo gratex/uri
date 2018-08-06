@@ -43,7 +43,7 @@ function clone(uriArr) {
     return Object.assign({}, uriArr);
 }
 function param(that) {
-    that != null || (that = DEFAULT_THAT); // let "" continue
+    that != null || (that = DEFAULT_THAT); // let '' continue
     return (typeof that == 'string') ? uri.decomposeComponents(that) : clone(that);
 }
 function resolve(base, ref) {
@@ -71,7 +71,7 @@ function mixin(that, { authority, userInfo, host, port, scheme, path, query, fra
     //		Modified copy of `that`.
     const u = param(that);
 
-    /* "app/_base/rql" */
+    /* 'app/_base/rql' */
     if (authority !== undefined) {
         u.authority = authority;
         if (u.authority) {
@@ -140,11 +140,11 @@ function strip(that, toStrip) {
     // that: String|Object|null
     //		URI string or URI object. Current window URI used when null or undefined.
     // toStrip: String
-    //		Comma separated values, available are: "ORIGIN", "CTX", "EXTENSION", "QUERY", "FRAGMENT".
+    //		Comma separated values, available are: 'ORIGIN', 'CTX', 'EXTENSION', 'QUERY', 'FRAGMENT'.
     // returns: String
     //		Modified copy of `that`.
     // example:
-    //	|	Uri.strip(uriStr, "QUERY,FRAGMENT");
+    //	|	Uri.strip(uriStr, 'QUERY,FRAGMENT');
     let { scheme, authority, host, port, userInfo, path, query, fragment } = param(that);
 
     toStrip = toStrip.split(',');
@@ -154,7 +154,7 @@ function strip(that, toStrip) {
         scheme = authority = host = port = userInfo = undefined; // orig uses undefined not nulls
     }
     if (contains(toStrip, 'PATH')) {
-        path = ''; // dont use undefined, resulting path should be empty ("/")
+        path = ''; // dont use undefined, resulting path should be empty ('/')
     } else {
         if (contains(toStrip, 'CTX')) {
             assert(isSubPath(CTX, path), 'IllegalArgument, context not present');
@@ -280,19 +280,19 @@ function getQuery(that, toObject) {
     // returns: String|Object|undefined
     //		String without '?' delimiter or key-value object.
     //		/test, false		-> undefined
-    //		/test?, false		-> ""
-    //		/test?a=10, false	-> "a=10"
+    //		/test?, false		-> ''
+    //		/test?a=10, false	-> 'a=10'
     //
     //		/test, true			-> undefined
     //		/test?, true		-> {}
-    //		/test?a=10, true	-> {a:"10"}
+    //		/test?a=10, true	-> {a:'10'}
     const { query } = param(that);
 
     if (toObject) {
         return query === undefined ? undefined : //
-            uri.parseQuery(query, true); // "" -> {}
+            uri.parseQuery(query, true); // '' -> {}
     }
-    return query; // 1:1 with small uri.js, undefined, "" or string
+    return query; // 1:1 with small uri.js, undefined, '' or string
 }
 
 function getFragment(that) {
@@ -316,7 +316,7 @@ function getSegments(that) {
     // that: String|Object|null
     //		URI string or URI object. Current window URI used when null or undefined.
     // returns: String[]
-    //		Array of strings, last is "" if path denotes a folder.
+    //		Array of strings, last is '' if path denotes a folder.
     const { path } = param(that);
     return uri.decodeSegments(path);
 }
@@ -517,21 +517,155 @@ function appendSegments(that, ...appendSegmets) {
     return this.setSegments(that, segments.concat(appendSegmets));
 }
 
+// stripping specific parts of URI
+
+function stripOrigin(that) {
+    // summary:
+    //		Use to get path with query and fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'ORIGIN');
+}
+
+function stripExtension(that) {
+    // summary:
+    //		Use to get uri without path extension.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    // example:
+    //	|	Uri.stripExtension('/samples/ui/test/aam-test.standalone');	//	'/samples/ui/test/aam-test'
+    //	|	Uri.stripExtension('/samples/ui/test/aam-test.a.b.c');		//	'/samples/ui/test/aam-test'
+    //	|	Uri.stripExtension('/samples/ui/test/aam-test');			//	'/samples/ui/test/aam-test'
+    return this.strip(that, 'EXTENSION');
+}
+
+function stripCtxPath(that) {
+    // summary:
+    //		Use to get path after context with query and fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'ORIGIN,CTX');
+}
+
+function stripCtxPrefix(that) {
+    // summary:
+    //		Use to get path after context prefix (UI or svc) with query and fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'ORIGIN,CTX_PREFIX');
+}
+
+function stripPath(that) {
+    // summary:
+    //		Use to get origin, i.e. everything before path.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'PATH,QUERY,FRAGMENT');
+}
+
+function stripQuery(that) {
+    // summary:
+    //		Use to get URI without query.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'QUERY');
+}
+
+function stripFragment(that) {
+    // summary:
+    //		Use to get URI without fragment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'FRAGMENT');
+}
+
+function getScreenPath(that) {
+    // summary:
+    //		Use to get path after context and before extension.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    return this.strip(that, 'ORIGIN,CTX,EXTENSION,QUERY,FRAGMENT');
+}
+
+function getLastSegment(that) {
+    // summary:
+    //		Use to get the last path segment.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Empty string when `that` denotes folder, `undefined` if path is empty.
+
+    const { path } = param(that);
+    return uri.decodeSegments(path).pop();
+}
+
+// NTH: getLastNonVoidSegment ???
+function denotesFolder(that) {
+    // summary:
+    //		Use to test if path ends with '/'.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: Boolean
+    //
+    // will be string so this should be enough
+    return this.getLastSegment(that) === '';
+}
+function convertToFolder(that) {
+    // summary:
+    //		Use to convert URI path to folder.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that` ending with '/'.
+    // example:
+    //	|	Uri.convertToFolder('/samples/ui/test/aam-test');	// 	'/samples/ui/test/'
+    //	|	Uri.convertToFolder('/samples/ui/test/');	 		//	'/samples/ui/test/'
+    const u = param(that);
+    const segments = uri.decodeSegments(u.path);
+    if (segments.length) {
+        segments[segments.length - 1] = '';
+    } else {
+        segments.push('');
+    }
+    u.path = uri.encodeSegments(segments);
+    return uri.recomposeComponents(u);
+}
+
 module.exports = {
     appendFragment,
     appendQuery,
     appendSegments,
     clone,
     config,
+    convertToFolder,
+    denotesFolder,
     equals,
     equalsQueryStr,
     getAuthority,
     getFragment,
     getHost,
+    getLastSegment,
     getPath,
     getPort,
     getQuery,
     getScheme,
+    getScreenPath,
     getSegments,
     getUserInfo,
     isSubPath,
@@ -548,6 +682,13 @@ module.exports = {
     setSegments,
     setUserInfo,
     strip,
+    stripCtxPath,
+    stripCtxPrefix,
+    stripExtension,
+    stripFragment,
+    stripOrigin,
+    stripPath,
+    stripQuery,
     toString,
     toUri
 };
