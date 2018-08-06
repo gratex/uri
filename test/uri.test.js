@@ -323,6 +323,87 @@ const appendSegmentsData = [
     [ [ 'http://www.google.sk', 'bbb' ], 'http://www.google.sk/bbb' ]
 ];
 
+const stripExtensionData = [
+    [ FULL_URI, 'foo://username:password@my.example.com:8042/over/there/index?type=animal&name=narwhal#nose' ],
+    [ '/a/b/c.d', '/a/b/c' ],
+    [ '/a/b/c.d.f', '/a/b/c' ],
+    [ '/a/b/c.d.f/', '/a/b/c.d.f/' ]
+];
+
+const stripPathData = [
+    [ FULL_URI, 'foo://username:password@my.example.com:8042' ],
+    [ '/a/b/c.d', '' ]
+];
+
+const stripCtxPathData = [
+    [ 'http://www.google.sk/a/b/1/a/ui', '/b/1/a/ui' ],
+    [ '/a/d/3/a/ui', '/d/3/a/ui' ],
+    [ 'http://www.google.sk/a/b/1/a/svc', '/b/1/a/svc' ],
+    [ '/a/d/3/a/svc', '/d/3/a/svc' ]
+];
+
+const stripCtxPrefixData = [
+    [ '/a/ui/a/b/1', '/a/b/1' ],
+    [ '/a/ui/over/there/index.x.dtb?type=animal&name=narwhal#', '/over/there/index.x.dtb?type=animal&name=narwhal#' ],
+    [ '/a/svc/a/b/1', '/a/b/1' ],
+    [ '/a/svc/over/there/index.x.dtb?type=animal&name=narwhal#', '/over/there/index.x.dtb?type=animal&name=narwhal#' ]
+];
+
+const stripCtxThrowErrorData = [
+    'http:/a/b/1',
+    'http://localhost/a/b/1',
+    'http://localhost:8080/a/b/1',
+    '//localhost/a/b/1'
+];
+
+const stripOriginData = [
+    [ FULL_URI, '/over/there/index.x.dtb?type=animal&name=narwhal#nose' ],
+    [ '/a/b/c.d', '/a/b/c.d' ]
+];
+
+const stripFragmentData = [
+    [ FULL_URI, 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal' ],
+    [ 'http://www.google.sk/foo/bar?w=f#p=7', 'http://www.google.sk/foo/bar?w=f' ],
+    [ 'http://www.google.sk', 'http://www.google.sk' ]
+];
+
+const getLastSegmentData = [
+    [ FULL_URI, 'index.x.dtb' ],
+    [ '/a/b/c', 'c' ],
+    [ '/a/b/c.d', 'c.d' ],
+    [ '/a/b/', '' ],
+    [ '/', '' ],
+    [ '', undefined ]
+];
+const denotesFolderData = [
+    [ FULL_URI, false ],
+    [ '/a/b/c', false ],
+    [ '/a/b/c.d', false ],
+    [ '/a/b/', true ],
+    [ '/', true ],
+    [ '', false ]
+];
+const convertToFolderData = [
+    [ FULL_URI, 'foo://username:password@my.example.com:8042/over/there/?type=animal&name=narwhal#nose' ],
+    [ '/a/b/c', '/a/b/' ],
+    [ '/a/b/c.d', '/a/b/' ],
+    [ '/a/b/', '/a/b/' ],
+    [ '/', '/' ],
+    [ '', '/' ]
+];
+
+const stripQueryData = [
+    [ 'http://www.google.sk', 'http://www.google.sk' ],
+    [ 'http://www.kalendar.sk/foo?bar=ba', 'http://www.kalendar.sk/foo' ]
+];
+
+const getScreenPathData = [
+    [ 'http://www.google.sk/a/ui/this.exe', '/ui/this' ],
+    [ 'http://www.google.sk/a/ui/this?que=ry.exe', '/ui/this' ],
+    [ 'http://www.google.sk/a/ui/this#foo=bar.exe', '/ui/this' ],
+    [ '/a/ui/bar.exe?foo=baz&baz2=foo2', '/ui/bar' ]
+];
+
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -547,3 +628,99 @@ describe('basic setters test', (() => {
         }
     );
 }));
+
+test.each(denotesFolderData)(
+    'denotesFolder test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.denotesFolder(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(convertToFolderData)(
+    'convertToFolder test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.convertToFolder(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(getLastSegmentData)(
+    'getLastSegment test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.getLastSegment(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripExtensionData)(
+    'stripExtension test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripExtension(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripPathData)(
+    'stripPath test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripPath(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripOriginData)(
+    'stripOrigin test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripOrigin(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripFragmentData)(
+    'stripFragment test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripFragment(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripQueryData)(
+    'stripQuery test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripQuery(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripCtxPrefixData)(
+    'stripCtxPrefix test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripCtxPrefix(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(stripCtxThrowErrorData)(
+    'stripCtx should throw error when we try to strip CTX_PREFIX that does not exist',
+    (original) => {
+        expect(() => Uri.stripCtxPrefix(original)).toThrow('IllegalArgument, context prefix not present');
+    }
+);
+
+test.each(stripCtxPathData)(
+    'stripCtxPath test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.stripCtxPath(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(getScreenPathData)(
+    'getScreenPath test: [%p, %p]',
+    (original, expected) => {
+        const res = Uri.getScreenPath(original);
+        expect(res).toBe(expected);
+    }
+);
+
