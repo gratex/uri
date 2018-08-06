@@ -46,7 +46,7 @@ function param(that) {
     that != null || (that = DEFAULT_THAT); // let '' continue
     return (typeof that == 'string') ? uri.decomposeComponents(that) : clone(that);
 }
-function resolve(base, ref) {
+function _resolve(base, ref) {
     // less strict version of uri.resolve, scheme is not required
     const scheme = base.scheme;
     if (!scheme) {
@@ -648,6 +648,59 @@ function convertToFolder(that) {
     return uri.recomposeComponents({ path, ...others });
 }
 
+function isSubordinate(that, ref) {
+    // summary:
+    //		Use to test if ref URI is subordiante of base URI.
+    // that: String|Object|null
+    //		Base URI. URI string or URI object. Current window URI used when null or undefined.
+    // ref: String|Object|null
+    //		Ref URI. URI string or URI object. Current window URI used when null or undefined.
+    // returns: Boolean
+    //		True if `ref` is subordinate of `base`.
+
+    return uri.isSubordinate(param(that), param(ref), true);
+}
+
+function resolve(that, ref) {
+    // summary:
+    //		Use to resolve ref URI using base URI.
+    // that: String|Object|null
+    //		Base URI. URI string or URI object. Current window URI used when null or undefined.
+    // ref: String|Object|null
+    //		Ref URI. URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    const s = _resolve(param(that), param(ref));
+    return uri.recomposeComponents(s);
+}
+
+function resolveAsSubordinate(that, ref) {
+    // summary:
+    //		Use to resolve ref URI as subordinate of base URI.
+    // that: String|Object|null
+    //		Base URI. URI string or URI object. Current window URI used when null or undefined.
+    // ref: String|Object|null
+    //		Ref URI. URI string or URI object. Current window URI used when null or undefined.
+    // returns: String
+    //		Modified copy of `that`.
+    const u = param(convertToFolder(that));
+    const s = _resolve(u, param(ref));
+    assert(isSubordinate(u, s), 'IllegalArgument, not subordinate');
+    return uri.recomposeComponents(s);
+}
+
+function parseId(that) {
+    // summary:
+    //		Use to retrieve resource id from RESTful URI.
+    // that: String|Object|null
+    //		URI string or URI object. Current window URI used when null or undefined.
+    // returns: Integer
+    //		Id.
+    const id = parseInt(getLastSegment(that), 10);
+    assert(!isNaN(id), 'IllegalArgument, numeric id not present');
+    return id;
+}
+
 module.exports = {
     appendFragment,
     appendQuery,
@@ -672,7 +725,9 @@ module.exports = {
     isSubPath,
     mixin,
     param,
+    parseId,
     resolve,
+    resolveAsSubordinate,
     setAuthority,
     setFragment,
     setHost,
