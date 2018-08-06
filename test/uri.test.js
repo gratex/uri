@@ -404,6 +404,30 @@ const getScreenPathData = [
     [ '/a/ui/bar.exe?foo=baz&baz2=foo2', '/ui/bar' ]
 ];
 
+const parseIdErrorData = [
+    [ '/a/b/1/' ],
+    [ '/a/b/c' ]
+];
+
+const resolveAsSubordinateData = [
+    [ 'http:/a/b', '/a/b', 'http:/a/b' ],
+    [ 'http:/a/b', '/a/b/c/d', 'http:/a/b/c/d' ],
+    [ 'http:/a/b/', '/a/b/c/d', 'http:/a/b/c/d' ],
+
+    [ 'foo://username:password@my.example.com:8042/a/b?type=animal&name=narwhal#nose', '/a/b/c/d',
+        'foo://username:password@my.example.com:8042/a/b/c/d' ],
+
+    [ 'foo://username:password@my.example.com:8042/a/b/', 'http://username:password@my.example.com:8042/a/b/c/d',
+        'http://username:password@my.example.com:8042/a/b/c/d' ],
+    [ '/a/b/', '/a/b/c/d', '/a/b/c/d' ]
+];
+
+const resolveAsSubordinateErrorData = [
+    [ 'foo://username:password@my.example.com:8042/a/b/', 'http://jozko:mrkva@localhost:8080/a/b/c/d',
+        'Assertion failed: IllegalArgument, not subordinate' ], // different authority
+    [ 'http:/a/b', '/x/y/c/d', 'Assertion failed: IllegalArgument, not subordinate' ]
+];
+
 test.each(equalsQueryStrData)(
     'equalsQueryStrData test: [\'%s\', \'%s\', %p]',
     (original, expected, value) => {
@@ -423,7 +447,7 @@ test.each(isSubPathData)(
 test.each(resolveData)(
     'resolve test: [\'%s\', \'%s\', \'%s\']',
     (ref, base, expected) => {
-        const res = uri.recomposeComponents(Uri.resolve(uri.decomposeComponents(base), uri.decomposeComponents(ref)));
+        const res = Uri.resolve(base, ref);
         expect(res).toBe(expected);
     }
 );
@@ -724,3 +748,31 @@ test.each(getScreenPathData)(
     }
 );
 
+describe('parseId test', (() => {
+    test('parseId should return correct id', (() => {
+        const res = Uri.parseId('/a/b/3');
+        expect(res).toBe(3);
+    }));
+
+    test.each(parseIdErrorData)(
+        'Should throw error because id can be only number: %p',
+        (original) => {
+            expect(() => Uri.parseId(original)).toThrow();
+        }
+    );
+}));
+
+test.each(resolveAsSubordinateData)(
+    'resolveAsSubordinate test: [%p, %p]',
+    (original, ref, expected) => {
+        const res = Uri.resolveAsSubordinate(original, ref);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(resolveAsSubordinateErrorData)(
+    'Throws error if not subordinate',
+    (original, ref) => {
+        expect(() => Uri.resolveAsSubordinate(original, ref)).toThrow('IllegalArgument, not subordinate');
+    }
+);
