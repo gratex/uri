@@ -1,3 +1,3 @@
 import * as uri from './_uri';
-
-export {uri};
+import * as Uri from './uri';
+export {uri, Uri};
