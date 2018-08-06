@@ -636,15 +636,16 @@ function convertToFolder(that) {
     // example:
     //	|	Uri.convertToFolder('/samples/ui/test/aam-test');	// 	'/samples/ui/test/'
     //	|	Uri.convertToFolder('/samples/ui/test/');	 		//	'/samples/ui/test/'
-    const u = param(that);
-    const segments = uri.decodeSegments(u.path);
+    // const u = param(that);
+    let { path, ...others } = param(that);
+    const segments = uri.decodeSegments(path);
     if (segments.length) {
         segments[segments.length - 1] = '';
     } else {
         segments.push('');
     }
-    u.path = uri.encodeSegments(segments);
-    return uri.recomposeComponents(u);
+    path = uri.encodeSegments(segments);
+    return uri.recomposeComponents({ path, ...others });
 }
 
 module.exports = {

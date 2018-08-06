@@ -350,10 +350,10 @@ const stripCtxPrefixData = [
 ];
 
 const stripCtxThrowErrorData = [
-    [ 'http:/a/b/1', 'Assertion failed: IllegalArgument, context prefix not present' ],
-    [ 'http://localhost/a/b/1', 'Assertion failed: IllegalArgument, context prefix not present' ],
-    [ 'http://localhost:8080/a/b/1', 'Assertion failed: IllegalArgument, context prefix not present' ],
-    [ '//localhost/a/b/1', 'Assertion failed: IllegalArgument, context prefix not present' ]
+    'http:/a/b/1',
+    'http://localhost/a/b/1',
+    'http://localhost:8080/a/b/1',
+    '//localhost/a/b/1'
 ];
 
 const stripOriginData = [
@@ -702,9 +702,9 @@ test.each(stripCtxPrefixData)(
 );
 
 test.each(stripCtxThrowErrorData)(
-    'stripCtxPrefixThrowError test: [%p, %p]',
+    'stripCtx should throw error when we try to strip CTX_PREFIX that does not exist',
     (original) => {
-        expect(() => Uri.stripCtxPrefix(original)).toThrow();
+        expect(() => Uri.stripCtxPrefix(original)).toThrow('IllegalArgument, context prefix not present');
     }
 );
 
