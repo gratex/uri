@@ -16,375 +16,390 @@
  *  returns: String
  * 		Modified copy of `that`.
  */
-declare interface Ret {
+ declare interface uriObj {
+     scheme: string;
+     host: string;
+     port: string;
+     userInfo: string;
+     authority: string;
+     path: string;
+     query: string;
+     fragment: string;
+ }
 
-	/**
-	 *
-	 */
-	scheme : string;
-}
-// mixin.!1
+ declare interface config {
+     CTX: string;
+     UI_CTX_PREFIX: string;
+     SVC_CTX_PREFIX: string;
+ }
 
-/**
- *
- */
-
-/**
- *
- */
-export declare var CTX : string;
-
-/**
- *
- */
-export declare var SVC_CTX_PREFIX : string;
-
-/**
- *
- */
-export declare var UI_CTX_PREFIX : string;
-
-/**
- * eslint-disable-next-line no-undef
- */
-export declare var DEFAULT_THAT : string;
+export declare const CTX : string;
+export declare const SVC_CTX_PREFIX : string;
+export declare const UI_CTX_PREFIX : string;
+export declare const DEFAULT_THAT : string;
 
 /**
  * function fromWindow(){} NOT PORTED
  * function navigate(){} NOT PORTED
- * @param conf
+ *
+ * @param {config} conf
  */
-declare function config(conf : any): void;
+declare function config(conf : config): void;
 
 /**
  * paramString window.document.URL instead use '' (or try use '/', or...)
  * @param query1
  * @param query2
- * @return
+ * @return {string}
  */
-declare function equalsQueryStr(query1 : any, query2 : any): boolean;
+declare function equalsQueryStr(query1 : string, query2 : string): boolean;
 
 /**
  *
- * @param uriArr
- * @return
+ * @param {uriObj} uriArr
+ * @return {uriObj}
  */
-declare function clone(uriArr : string | /* clone.!ret */ any): Ret;
+declare function clone(uriArr : uriObj): uriObj;
 
 /**
  *
- * @param that
- * @return
+ * @param {string | uriObj} that
+ * @return {uriObj}
  */
-declare function param(that : string | /* clone.!ret */ any): /* clone.!ret */ any;
+declare function param(that : string | uriObj): uriObj;
 
 /**
  *
- * @param base
- * @param ref
+ * @param {uriObj} base
+ * @param {uriObj} ref
+ * @return {uriObj}
  */
-declare function _resolve(base : /* clone.!ret */ any, ref : /* clone.!ret */ any): void;
+declare function _resolve(base : uriObj, ref : uriObj): uriObj;
 
 /**
- *
- * @param that
- * @param undefined
- * @param undefined
- * @param undefined
- * @param undefined
- * @param undefined
- * @param undefined
- * @param undefined
- * @param fragment}
+ * @param {string | uriObj | null} that
+ * @param {uriObj} obj
+ * @return {string}
  */
-declare function mixin(that : any, param2 : any, param3 : /* userInfo */ any, param4 : /* host */ any, param5 : /* port */ any, param6 : /* scheme */ any, param7 : /* path */ any, param8 : /* query */ any, fragment : any): void;
+declare function mixin(that : string | uriObj | null, { authority, userInfo, host, port, scheme, path, query, fragment }: uriObj ): string;
 
 /**
- *
- * @param baseStr
- * @param refStr
- * @return
+ * @param {string} baseStr
+ * @param {string} refStr
+ * @return {boolean}
  */
 declare function isSubPath(baseStr : string, refStr : string): boolean;
 
 /**
  *
- * @param that
- * @return
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function paramString(that : string): string;
+declare function paramString(that : string | uriObj | null): string;
 
 /**
  *
- * @param arr
- * @param what
- * @return
+ * @param {Array<string>} arr
+ * @param {string} what
+ * @return {boolean}
  */
-declare function contains(arr : any, what : string): boolean;
+declare function contains(arr : Array<string>, what : string): boolean;
 
 /**
  *
- * @param that
- * @return
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function toString(that : any): any;
+declare function toString(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
- * @return
+ * @param {string | uriObj | null} that
+ * @return {uriObj}
  */
-declare function toUri(that : any): /* clone.!ret */ any;
+declare function toUri(that : string | uriObj | null): uriObj;
 
 /**
  *
- * @param that
- * @param toStrip
+ * @param {string | uriObj | null} that
+ * @param {string} toStrip
+ * @return {string}
  */
-declare function strip(that : any, toStrip : any): void;
+declare function strip(that : string | uriObj | null, toStrip : string): string;
 
 /**
  *
- * @param that1
- * @param that2
- * @param ignoreFragment
- * @return
+ * @param {string | uriObj | null} that1
+ * @param {string | uriObj | null} that2
+ * @param {boolean} ignoreFragment
+ * @return {boolean}
  */
-declare function equals(that1 : any, that2 : any, ignoreFragment : any): any;
+declare function equals(that1 : string | uriObj | null, that2 : string | uriObj | null, ignoreFragment : boolean): boolean;
 
 /**
  * basic getters
- * @param that
- * @return
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getScheme(that : any): string;
+declare function getScheme(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getAuthority(that : any): void;
+declare function getAuthority(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getUserInfo(that : any): void;
+declare function getUserInfo(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getHost(that : any): void;
+declare function getHost(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getPort(that : any): void;
+declare function getPort(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string}
  */
-declare function getPath(that : any): void;
+declare function getPath(that : string | uriObj | null): string;
 
 /**
  *
- * @param that
- * @param toObject
+ * @param {string | uriObj | null} that
+ * @param {boolean} toObject
+ * @return {string | uriObj | undefined}
  */
-declare function getQuery(that : any, toObject : any): void;
+declare function getQuery(that : string | uriObj | null, toObject : boolean): string | uriObj | undefined;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {string | undefined}
  */
-declare function getFragment(that : any): void;
+declare function getFragment(that : string | uriObj | null): string | undefined;
 
 /**
  *
- * @param that
+ * @param {string | uriObj | null} that
+ * @return {Array<string>}
  */
-declare function getSegments(that : any): void;
+declare function getSegments(that : string | uriObj | null): Array<string>;
 
 /**
  * basic setters
- * @param that
- * @param scheme
+ * @param {string | uriObj | null} that
+ * @param {string} scheme
+ * @return {string}
  */
-declare function setScheme(that : any, scheme : any): void;
+declare function setScheme(that : string | uriObj | null, scheme : string): string;
 
 /**
  *
- * @param that
- * @param authority
+ * @param {string | uriObj | null} that
+ * @param {string} authority
+ * @return {string}
  */
-declare function setAuthority(that : any, authority : any): void;
+declare function setAuthority(that : string | uriObj | null, authority : string): string;
 
 /**
  *
- * @param that
- * @param userInfo
+ * @param {string|uriObj|null} that
+ * @param {string} userInfo
+ * @return {string}
  */
-declare function setUserInfo(that : any, userInfo : any): void;
+declare function setUserInfo(that : string|uriObj|null, userInfo : string): string;
 
 /**
  *
- * @param that
- * @param host
+ * @param {string|uriObj|null} that
+ * @param {string} host
+ * @return {string}
  */
-declare function setHost(that : any, host : any): void;
+declare function setHost(that : string|uriObj|null, host : string): string;
 
 /**
  *
- * @param that
- * @param port
+ * @param {string|uriObj|null} that
+ * @param {string} port
+ * @return {string}
  */
-declare function setPort(that : any, port : any): void;
+declare function setPort(that : string|uriObj|null, port : string): string;
 
 /**
  *
- * @param that
- * @param path
+ * @param {string|uriObj|null} that
+ * @param {string} path
+ * @return {string}
  */
-declare function setPath(that : any, path : any): void;
+declare function setPath(that : string|uriObj|null, path : string): string;
 
 /**
  *
- * @param that
- * @param query
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj} query
+ * @return {string}
  */
-declare function setQuery(that : any, query : any): void;
+declare function setQuery(that : string|uriObj|null, query : string|uriObj): string;
 
 /**
  *
- * @param that
- * @param query
- * @return
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj} query
+ * @return {string}
  */
-declare function appendQuery(that : any, query : any): any;
+declare function appendQuery(that : string|uriObj|null, query : string|uriObj): string;
 
 /**
  *
- * @param that
- * @param fragment
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj} fragment
+ * @return {string}
  */
-declare function setFragment(that : any, fragment : any): void;
+declare function setFragment(that : string|uriObj|null, fragment : string|uriObj): string;
 
 /**
  *
- * @param that
- * @param fragment
- * @return
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj} fragment
+ * @return {string}
  */
-declare function appendFragment(that : any, fragment : any): any;
+declare function appendFragment(that : string|uriObj|null, fragment : string|uriObj): string;
 
 /**
  *
- * @param that
- * @param segments
+ * @param {string|uriObj|null} that
+ * @param {Array<string>} segments
+ * @return {string}
  */
-declare function setSegments(that : any, segments : any): void;
+declare function setSegments(that : string|uriObj|null, segments : Array<string>): string;
 
 /**
  *
- * @param that
- * @param ...appendSegmets
+ * @param {string|uriObj|null} that
+ * @param {Array<string>}...appendSegmets
+ * @return {string}
  */
-declare function appendSegments(that : any, ...appendSegmets : Array<string>): void;
+declare function appendSegments(that : string|uriObj|null, ...appendSegmets : Array<string>): string;
 
 /**
  * stripping specific parts of URI
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripOrigin(that : any): void;
+declare function stripOrigin(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripExtension(that : any): void;
+declare function stripExtension(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripCtxPath(that : any): void;
+declare function stripCtxPath(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripCtxPrefix(that : any): void;
+declare function stripCtxPrefix(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripPath(that : any): void;
+declare function stripPath(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripQuery(that : any): void;
+declare function stripQuery(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function stripFragment(that : any): void;
+declare function stripFragment(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function getScreenPath(that : any): void;
+declare function getScreenPath(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function getLastSegment(that : any): void;
+declare function getLastSegment(that : string|uriObj|null): string;
 
 /**
  * NTH: getLastNonVoidSegment ???
- * @param that
- * @return
+ * @param {string|uriObj|null} that
+ * @return {boolean}
  */
-declare function denotesFolder(that : any): boolean;
+declare function denotesFolder(that : string|uriObj|null): boolean;
 
 /**
  *
- * @param that
+ * @param {string|uriObj|null} that
+ * @return {string}
  */
-declare function convertToFolder(that : any): void;
+declare function convertToFolder(that : string|uriObj|null): string;
 
 /**
  *
- * @param that
- * @param ref
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj|null} ref
+ * @return {boolean}
  */
-declare function isSubordinate(that : /* clone.!ret */ any, ref : any): void;
+declare function isSubordinate(that : string|uriObj|null, ref : string|uriObj|null): boolean;
 
 /**
  *
- * @param that
- * @param ref
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj|null} ref
+ * @return {string}
  */
-declare function resolve(that : any, ref : any): void;
+declare function resolve(that : string|uriObj|null, ref : string|uriObj|null): string;
 
 /**
  *
- * @param that
- * @param ref
+ * @param {string|uriObj|null} that
+ * @param {string|uriObj|null} ref
+ * @return {string}
  */
-declare function resolveAsSubordinate(that : any, ref : any): void;
+declare function resolveAsSubordinate(that : string|uriObj|null, ref : string|uriObj|null): string;
 
 /**
  *
- * @param that
- * @return
+ * @param {string|uriObj|null} that
+ * @return {number}
  */
-declare function parseId(that : any): number;
+declare function parseId(that : string|uriObj|null): number;
