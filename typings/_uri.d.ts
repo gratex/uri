@@ -5,24 +5,7 @@
 // decomposeComponents.!ret
 
 
-export declare const splitUriRegex : RegExp;
-export declare const RFC2396_DIGIT : string;
-export declare const RFC2396_LOWALPHA : string;
-export declare const RFC2396_UPALPHA : string;
-export declare const RFC2396_ALPHA : string;
-export declare const RFC2396_ALPHANUM : string;
-export declare const RFC3986_UNRESERVED : string;
-export declare const RFC3986_SUBDELIMS : string;
-export declare const RFC3986_PCT_ENCODED : string;
-export declare const RFC3986_REG_NAME : string;
-export declare const RFC3986_PCHAR : string;
-export declare const RFC3986_QUERY : string;
-export declare const RFC3986_SEGMENT : string;
-export declare const RFC3986_FRAGMENT : string;
-export declare const RFC3986_PATH_SEGMENTS : string;
-export declare const PCHAR_TOKENIZER : RegExp;
-
-declare interface uriObj {
+declare interface UriObj {
     scheme: string;
     host: string;
     port: string;
@@ -35,9 +18,9 @@ declare interface uriObj {
 
 /**
  * @param {string} uriStr
- * @return {uriObj}
+ * @return {UriObj}
  */
-declare function decomposeComponents(uriStr : string): uriObj;
+declare function decomposeComponents(uriStr : string): UriObj;
 
 /**
  * @param {string} userInfo
@@ -48,24 +31,14 @@ declare function decomposeComponents(uriStr : string): uriObj;
 declare function recomposeAuthorityComponents(userInfo : string, host : string, port : string): string;
 
 /**
- *
- * @param authority
- * @param userInfo
- * @param host
- * @param port
- */
-
-declare function _checkAuthorityInvariant(authority : any, userInfo : any, host : any, port : any): void;
-
-/**
  * @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
  * Remarks:
  * defined(x) is coded with !=null (means undefined and null are handled the same way)
  * ignores "authority sub components"
- * @param {uriObj} obj
+ * @param {UriObj} obj
  * @return {string}
  */
-declare function recomposeComponents(obj: uriObj): string;
+declare function recomposeComponents(obj: UriObj): string;
 
 /**
  * @param {string} str
@@ -81,30 +54,13 @@ declare function percentEncode(str : string, legalRange : string): string;
  */
 declare function removeDotSegments(path : string): string;
 
-declare function _merge({authority, path} : uriObj, refPath : string): string;
-
-/**
- * 5.2.2.  Transform References
- * @param {uriObj} base
- * @param {uriObj} ref
- * @return {uriObj}
- */
-declare function _transformReference(base : uriObj, { scheme, authority, userInfo, host, port, path, query, fragment }: uriObj) : uriObj;
-
-/**
- * 5.2.1.  Pre-parse the Base URI
- * *
- * @param {scheme}
- */
-declare function _preParseBaseUri({scheme} : uriObj): void;
-
 /**
  *
- * @param {uriObj} base
- * @param {uriObj} ref
- * @return {uriObj}
+ * @param {UriObj} base
+ * @param {UriObj} ref
+ * @return {UriObj}
  */
-declare function resolve(base : uriObj, ref : uriObj): uriObj;
+declare function resolve(base : UriObj, ref : UriObj): UriObj;
 
 /**
  *
@@ -122,12 +78,12 @@ declare function encodeSegments(segments : Array<string>): string;
 
 /**
  *
- * @param {uriObj} uriParent
- * @param {uriObj} uriSub
+ * @param {UriObj} uriParent
+ * @param {UriObj} uriSub
  * @param {boolean} orSame
  * @return {boolean}
  */
-declare function isSubordinate(uriParent : uriObj, uriSub : uriObj, orSame : boolean): boolean;
+declare function isSubordinate(uriParent : UriObj, uriSub : UriObj, orSame : boolean): boolean;
 
 /**
  *

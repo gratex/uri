@@ -95,7 +95,6 @@ function mixin(that, { authority, userInfo, host, port, scheme, path, query, fra
 function isSubPath(baseStr, refStr) {
     const bs = uri.decodeSegments(baseStr);
     const rs = uri.decodeSegments(refStr);
-
     if (bs.length > rs.length) {
         return false;
     }
@@ -705,7 +704,6 @@ module.exports = {
     appendFragment,
     appendQuery,
     appendSegments,
-    clone,
     config,
     convertToFolder,
     denotesFolder,
@@ -722,9 +720,7 @@ module.exports = {
     getScreenPath,
     getSegments,
     getUserInfo,
-    isSubPath,
     mixin,
-    param,
     parseId,
     resolve,
     resolveAsSubordinate,

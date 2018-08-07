@@ -89,14 +89,6 @@ const mixinData = [
         'http://www.afoj.sk' ]
 ];
 
-const isSubPathData = [
-    [ '/a/b', '/a/b', true ],
-    [ '/a/b/c/d', '/a/b', false ],
-    [ '/a/b', '/a/b/c/d', true ],
-    [ '/a/b/s', '/a/b/d', false ],
-    [ '/', '/c/b/d,', true ]
-];
-
 const toStringData = [
     [ null, TEST_URL ],
     [ { scheme: 'http', authority: 'www.google.sk', host: 'www.google.sk', path: '' }, 'http://www.google.sk' ],
@@ -436,14 +428,6 @@ test.each(equalsQueryStrData)(
     }
 );
 
-test.each(isSubPathData)(
-    'isSubPath test: [\'%s\', \'%s\', %p]',
-    (base, subbase, expected) => {
-        const res = Uri.isSubPath(base, subbase);
-        expect(res).toBe(expected);
-    }
-);
-
 test.each(resolveData)(
     'resolve test: [\'%s\', \'%s\', \'%s\']',
     (ref, base, expected) => {
@@ -467,7 +451,6 @@ test.each(toStringData)(
         expect(res).toBe(expected);
     }
 );
-
 test.each(stripData)(
     'strip test: [%p, %p, %p]',
     (that, toStrip, expected) => {
@@ -475,6 +458,19 @@ test.each(stripData)(
         expect(res).toBe(expected);
     }
 );
+
+describe('strip empty context test', () => {
+    beforeAll(() => {
+        Uri.config({ CTX: '/', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
+    });
+    test('empty ctx', () => {
+        const res = Uri.strip('/', 'CTX');
+        expect(res).toBe('');
+    });
+    afterAll(() => {
+        Uri.config({ CTX: '/a', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
+    });
+});
 
 test('strip should throw error when we try to strip CTX_PREFIX that does not exist', (() => {
     expect(() => Uri.strip('/b', 'CTX_PREFIX')).toThrow();
