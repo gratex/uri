@@ -29,10 +29,10 @@ const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 // TODO: get rid of RFC2396 constants
 
 /**
-@summary uri string to be decomposed
-@param {string} uriStr
-@return {object}
-**/
+* @summary uri string to be decomposed
+* @param {string} uriStr
+* @return {object}
+*/
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
     const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
@@ -52,7 +52,7 @@ function decomposeComponents(uriStr) {
 @param {string} host
 @param {string} port
 @return {string}
-**/
+*/
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
         throw new Error(`Illegal host:${host}`);
@@ -64,13 +64,6 @@ function recomposeAuthorityComponents(userInfo, host, port) {
     return result;
 }
 
-/**
-@summary this will check if authority is same as recomposed authority components
-@param {string} authority
-@param {string} userInfo
-@param {string} host
-@param {string} port
-**/
 function _checkAuthorityInvariant(authority, userInfo, host, port) {
     const b = (authority == null && userInfo == null && host == null && port == null) ||
         (authority != null && authority === recomposeAuthorityComponents(userInfo, host, port));
@@ -87,7 +80,7 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 Remarks:
 defined(x) is coded with !=null (means undefined and null are handled the same way)
 ignores "authority sub components"
-**/
+*/
 function recomposeComponents({ scheme, authority, userInfo, host, port, path, query, fragment }) {
     _checkAuthorityInvariant(authority, userInfo, host, port);
 
@@ -105,7 +98,7 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 @summary this will encode every character of string with hexadecimal ASCII code
 @param {string} str
 @param {string} legalRange regex pattern
-**/
+*/
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
     const reLegal = legalRange && new RegExp(`[${legalRange}]`);
@@ -125,7 +118,7 @@ function percentEncode(str, legalRange) {
 @summary this will remove dot segments in path
 @param {string} path
 @return {string}
-**/
+*/
 function removeDotSegments(path) {
     let inputBufferStart = 0;
     const inputBufferEnd = path.length;
@@ -230,7 +223,7 @@ function _preParseBaseUri({ scheme }) {
 @param {object} base
 @param {object} ref
 @return {object}
-**/
+*/
 function resolve(base, ref) {
     _preParseBaseUri(base);
     return _transformReference(base, ref);
@@ -240,7 +233,7 @@ function resolve(base, ref) {
 @summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
 @param {string} encodedPath
 @return {array} Path split to DECODED segments as array
-**/
+*/
 function decodeSegments(encodedPath) {
     if (encodedPath === '') {
         return [];
@@ -256,7 +249,7 @@ function decodeSegments(encodedPath) {
 @summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
 @param {array} segments array of segments not encoded
 @return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified "" is returned
-**/
+*/
 function encodeSegments(segments) {
     // summary:
     //		Joining path segments by /
@@ -282,7 +275,7 @@ function encodeSegments(segments) {
 @param {object} uriSub
 @param {boolean} orSame
 @return {boolean}
-**/
+*/
 function isSubordinate(uriParent, uriSub, orSame) {
     // if subordinate is absolute and parent is not or parent has different authority
     if (uriSub.authority != null && uriSub.authority !== uriParent.authority) {
@@ -309,7 +302,7 @@ function encodeFragment(str) {
 @param {string} legalRange regex expression
 @param {} doThrow
 @return {error} NULL if ok, Error if failed
-**/
+*/
 function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
     // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
     // TODO: flags: PERCENT_ENCODING_SHOULD_BE_UPPERCASE, SUPERFLUOUS_NON_ASCII_PERCENT_ENCODING
