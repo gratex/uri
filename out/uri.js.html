@@ -29,7 +29,7 @@
             <pre class="prettyprint source linenums"><code>const assert = require('assert');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
-const uri = require('./smalluri');
+const uri = require('./_uri');
 let CTX = '';
 let SVC_CTX_PREFIX = '';
 let UI_CTX_PREFIX = '';
@@ -225,7 +225,6 @@ function strip(that, toStrip) {
  * @returns {boolean} True if URIs are equal, false otherwise.
  */
 function equals(that1, that2, ignoreFragment) {
-
     const { scheme, authority, path, query, fragment } = param(that1);
     const { scheme: scheme2, authority: authority2, path: path2, query: query2, fragment: fragment2 } = param(that2);
 
@@ -355,7 +354,7 @@ function setScheme(that, scheme) {
 
 /**
  * @summary Use to set authority.
- * @param {string|object|null} that 
+ * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} authority Authority.
  * @returns {string} Modified copy of `that`.
  */
@@ -729,13 +728,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#appendFragment">appendFragment</a></li><li><a href="global.html#appendQuery">appendQuery</a></li><li><a href="global.html#appendSegments">appendSegments</a></li><li><a href="global.html#convertToFolder">convertToFolder</a></li><li><a href="global.html#denotesFolder">denotesFolder</a></li><li><a href="global.html#equals">equals</a></li><li><a href="global.html#getAuthority">getAuthority</a></li><li><a href="global.html#getFragment">getFragment</a></li><li><a href="global.html#getHost">getHost</a></li><li><a href="global.html#getLastSegment">getLastSegment</a></li><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#getPort">getPort</a></li><li><a href="global.html#getQuery">getQuery</a></li><li><a href="global.html#getScheme">getScheme</a></li><li><a href="global.html#getScreenPath">getScreenPath</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getUserInfo">getUserInfo</a></li><li><a href="global.html#isSubordinate">isSubordinate</a></li><li><a href="global.html#mixin">mixin</a></li><li><a href="global.html#parseId">parseId</a></li><li><a href="global.html#resolve">resolve</a></li><li><a href="global.html#resolveAsSubordinate">resolveAsSubordinate</a></li><li><a href="global.html#setAuthority">setAuthority</a></li><li><a href="global.html#setFragment">setFragment</a></li><li><a href="global.html#setHost">setHost</a></li><li><a href="global.html#setPath">setPath</a></li><li><a href="global.html#setPort">setPort</a></li><li><a href="global.html#setQuery">setQuery</a></li><li><a href="global.html#setScheme">setScheme</a></li><li><a href="global.html#setSegments">setSegments</a></li><li><a href="global.html#setUserInfo">setUserInfo</a></li><li><a href="global.html#strip">strip</a></li><li><a href="global.html#stripCtxPath">stripCtxPath</a></li><li><a href="global.html#stripCtxPrefix">stripCtxPrefix</a></li><li><a href="global.html#stripExtension">stripExtension</a></li><li><a href="global.html#stripFragment">stripFragment</a></li><li><a href="global.html#stripOrigin">stripOrigin</a></li><li><a href="global.html#stripPath">stripPath</a></li><li><a href="global.html#stripQuery">stripQuery</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#toUri">toUri</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#appendFragment">appendFragment</a></li><li><a href="global.html#appendQuery">appendQuery</a></li><li><a href="global.html#appendSegments">appendSegments</a></li><li><a href="global.html#checkEncoding">checkEncoding</a></li><li><a href="global.html#convertToFolder">convertToFolder</a></li><li><a href="global.html#decodeSegments">decodeSegments</a></li><li><a href="global.html#decomposeComponents">decomposeComponents</a></li><li><a href="global.html#denotesFolder">denotesFolder</a></li><li><a href="global.html#encodeSegments">encodeSegments</a></li><li><a href="global.html#equals">equals</a></li><li><a href="global.html#getAuthority">getAuthority</a></li><li><a href="global.html#getFragment">getFragment</a></li><li><a href="global.html#getHost">getHost</a></li><li><a href="global.html#getLastSegment">getLastSegment</a></li><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#getPort">getPort</a></li><li><a href="global.html#getQuery">getQuery</a></li><li><a href="global.html#getScheme">getScheme</a></li><li><a href="global.html#getScreenPath">getScreenPath</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getUserInfo">getUserInfo</a></li><li><a href="global.html#isSubordinate">isSubordinate</a></li><li><a href="global.html#mixin">mixin</a></li><li><a href="global.html#parseId">parseId</a></li><li><a href="global.html#parseQuery">parseQuery</a></li><li><a href="global.html#percentEncode">percentEncode</a></li><li><a href="global.html#recomposeAuthorityComponents">recomposeAuthorityComponents</a></li><li><a href="global.html#recomposeComponents">recomposeComponents</a></li><li><a href="global.html#removeDotSegments">removeDotSegments</a></li><li><a href="global.html#resolve">resolve</a></li><li><a href="global.html#resolveAsSubordinate">resolveAsSubordinate</a></li><li><a href="global.html#setAuthority">setAuthority</a></li><li><a href="global.html#setFragment">setFragment</a></li><li><a href="global.html#setHost">setHost</a></li><li><a href="global.html#setPath">setPath</a></li><li><a href="global.html#setPort">setPort</a></li><li><a href="global.html#setQuery">setQuery</a></li><li><a href="global.html#setScheme">setScheme</a></li><li><a href="global.html#setSegments">setSegments</a></li><li><a href="global.html#setUserInfo">setUserInfo</a></li><li><a href="global.html#strip">strip</a></li><li><a href="global.html#stripCtxPath">stripCtxPath</a></li><li><a href="global.html#stripCtxPrefix">stripCtxPrefix</a></li><li><a href="global.html#stripExtension">stripExtension</a></li><li><a href="global.html#stripFragment">stripFragment</a></li><li><a href="global.html#stripOrigin">stripOrigin</a></li><li><a href="global.html#stripPath">stripPath</a></li><li><a href="global.html#stripQuery">stripQuery</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#toUri">toUri</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Aug 08 2018 15:59:52 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Aug 09 2018 10:46:26 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
