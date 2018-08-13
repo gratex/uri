@@ -21,15 +21,26 @@ const RFC2396_UPALPHA = 'A-Z';
 const RFC2396_ALPHA = RFC2396_LOWALPHA + RFC2396_UPALPHA;
 const RFC2396_ALPHANUM = RFC2396_DIGIT + RFC2396_ALPHA;
 const RFC3986_UNRESERVED = `${RFC2396_ALPHANUM}-._~`;
-const RFC3986_SUBDELIMS = '\u0021\u0024\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u003b\u003d';
+const RFC3986_SUBDELIMS = '!$&\'()*+,;=';
 const RFC3986_PCT_ENCODED = '';
 const RFC3986_REG_NAME = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}${RFC3986_SUBDELIMS}`;
 const RFC3986_PCHAR = `${RFC3986_REG_NAME}:@`;
 const RFC3986_QUERY = `${RFC3986_PCHAR}?/`;
 const RFC3986_SEGMENT = RFC3986_PCHAR;
-const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
-const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g; //
-const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
+const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`;
+const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g;
+const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`;
+
+// must encode 'RQL query control' chars in value
+// like RFC3986_QUERY, but these are not safe
+//	'=><!'	FIQL syntax
+//	','		arguments separator
+//	':'		converter separator
+//	'&|'	and, or operator
+//	'/'		nested property marker
+//	'()'	brackets for grouping operators
+// const RQL_VALUE = `${RFC3986_UNRESERVED}${RFC3986_PCT_ENCODED}@?$'*+`;
+const RQL_VALUE = RFC3986_QUERY.replace(/[=><!,:&|/()]/g, '');
 
 /**
 * @summary uri string to be decomposed
@@ -294,6 +305,10 @@ function encodeQuery(str) {
     return percentEncode(str, RFC3986_QUERY);
 }
 
+function encodeRqlValue(str) {
+    return percentEncode(str, RQL_VALUE);
+}
+
 function encodeFragment(str) {
     return percentEncode(str, RFC3986_FRAGMENT);
 }
@@ -388,6 +403,7 @@ module.exports = {
     encodeQuery,
     encodeSegment,
     encodeSegments,
+    encodeRqlValue,
     isSubordinate,
     parseQuery,
     percentEncode,

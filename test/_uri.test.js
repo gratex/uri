@@ -29,6 +29,11 @@ const encodeFragmentData = [
     [ ' ', '%20' ]
 ];
 
+const encodeRqlValueData = [
+    [ 'ab?c', 'ab?c' ],
+    [ '=><!,:&|/()', '%3D%3E%3C%21%2C%3A%26%7C%2F%28%29' ]
+];
+
 const isSubordinateData = [
     [ '/a/b/c', '/a/b/c', true, true ],
     [ '/a/b/', '/a/b/c', true, true ],
@@ -241,6 +246,14 @@ test.each(encodeFragmentData)(
     'encode fragment test: [%p, %p]',
     (original, expected) => {
         const res = uri.encodeFragment(original);
+        expect(res).toBe(expected);
+    }
+);
+
+test.each(encodeRqlValueData)(
+    'encode fragment test: [%p, %p]',
+    (original, expected) => {
+        const res = uri.encodeRqlValue(original);
         expect(res).toBe(expected);
     }
 );
