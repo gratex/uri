@@ -1,3 +1,7 @@
+/**
+ * @module builder
+*/
+
 const uri = require('../src/_uri');
 
 const PLACEHOLDER = '$$$'; // should be safe string, not occuring in url templates, and not breaking decomposition
@@ -17,6 +21,15 @@ function encode(value, encoder) {
     return value instanceof EncodedString ? value.string : encoder(`${value}`); // template to get string from value
 }
 
+/**
+ * ES6 template literal tag, used to build URLs safely (correctly encoded path/query/segment)
+ * @memberof module:builder
+ * @example
+ * import { uriBuilder } from '@gjax/uri'
+ * const url = uriBuilder`/foo/${p1}/bar/?x=${p2}#/baz/${p3}`
+ * @returns {string} builded URL
+ *
+ */
 function uriBuilder(strings, ...values) {
     const uriTemplate = strings.reduce((last, actual) => `${last}${PLACEHOLDER}${actual}`);
 
@@ -34,6 +47,16 @@ function uriBuilder(strings, ...values) {
     return recomposed;
 }
 
+/**
+ * Use to wrap value for uriBuilder to enforce no encoding for it
+ * @param value
+ * @memberof module:builder
+ * @example
+ * import { uriBuilder, raw } from '@gjax/uri'
+ * const query = 'name=John%20Doe&age=20';
+ * const url = builder`/foo/${p1}/bar/?${raw(query)}`
+ * @returns object representing wrapped value with encoded flag.
+ */
 function raw(string) {
     return new EncodedString(string);
 }

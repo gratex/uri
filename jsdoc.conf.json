@@ -11,7 +11,7 @@
         "monospaceLinks": false
     },
     "source":{
-        "include": ["src/_uri.js",  "src/uri.js", "src/index.js"]
+        "include": ["src" ]
     },
     "access": "public",
     "opts": {
@@ -19,8 +19,8 @@
         "destination": "./doc/api/"
       },
         "docdash": {
-            "static": true,  
+            "static": true,
             "sort": true
         }
-    
+
 }
