@@ -55,7 +55,11 @@ const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 * @summary uri string to be decomposed
 * @param {string} uriStr
 * @memberof module:uri
+<<<<<<< HEAD
 * @return {UriObj}
+=======
+* @returns {object}
+>>>>>>> origin
 */
 
 function decomposeComponents(uriStr) {
@@ -77,7 +81,7 @@ function decomposeComponents(uriStr) {
 * @param {string} host
 * @param {string} port
 * @memberof module:uri
-* @return {string}
+* @returns {string}
 */
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
@@ -102,7 +106,7 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 * @summary this will recompose uri as string from each component
 * @param {UriObj} object
 * @memberof module:uri
-* @return {string}
+* @returns {string}
 * @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
 Remarks:
 defined(x) is coded with !=null (means undefined and null are handled the same way)
@@ -126,7 +130,7 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 * @param {string} str
 * @param {string} legalRange regex pattern
 * @memberof module:uri
-* @return {string}
+* @returns {string}
 */
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
@@ -147,7 +151,7 @@ function percentEncode(str, legalRange) {
 * @summary this will remove dot segments in path
 * @param {string} path
 * @memberof module:uri
-* @return {string}
+* @returns {string}
 */
 function removeDotSegments(path) {
     let inputBufferStart = 0;
@@ -250,7 +254,11 @@ function _preParseBaseUri({ scheme }) {
 * @param {UriObj} base
 * @param {UriObj} ref
 * @memberof module:uri
+<<<<<<< HEAD
 * @return {UriObj}
+=======
+* @returns {object}
+>>>>>>> origin
 */
 function resolve(base, ref) {
     _preParseBaseUri(base);
@@ -261,7 +269,7 @@ function resolve(base, ref) {
 * @summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
 * @param {string} encodedPath
 * @memberof module:uri
-* @return {array} Path split to DECODED segments as array
+* @returns {array} Path split to DECODED segments as array
 */
 function decodeSegments(encodedPath) {
     if (encodedPath === '') {
@@ -278,7 +286,7 @@ function decodeSegments(encodedPath) {
 * @summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
 * @param {array} segments array of segments not encoded
 * @memberof module:uri
-* @return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified
+* @returns {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified
 * "" is returned
 */
 function encodeSegments(segments) {
@@ -297,7 +305,7 @@ function encodeSegments(segments) {
 * @param {UriObj} uriSub
 * @param {boolean} orSame
 * @memberof module:uri
-* @return {boolean}
+* @returns {boolean}
 */
 function isSubordinate(uriParent, uriSub, orSame) {
     // if subordinate is absolute and parent is not or parent has different authority
@@ -325,7 +333,7 @@ function encodeFragment(str) {
 * @param {string} legalRange regex expression
 * @param {string} doThrow
 * @memberof module:uri
-* @return {error} NULL if ok, Error if failed
+* @returns {error} NULL if ok, Error if failed
 */
 function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
     // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
@@ -380,7 +388,7 @@ function checkFragmentEncoding(str, doThrow) {
 *   ocakavane bez delimitera (?,#) teda z naseho API
 * @param {Uri} bDecode Default false, ci dekodovat mena a values
 * @memberof module:uri
-* @return {any}
+* @returns {any}
 */
 function parseQuery(query, bDecode) {
     // returns:	Object

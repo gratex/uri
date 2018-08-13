@@ -70,7 +70,7 @@ function _resolve(base, ref) {
 * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
 * @param {object} obj Available properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
 * @memberof module:Uri
-* @return {string} Modified copy of `that`.
+* @returns {string} Modified copy of `that`.
 */
 function mixin(that, { authority, userInfo, host, port, scheme, path, query, fragment }) {
     const u = param(that);
