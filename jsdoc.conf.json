@@ -1,0 +1,26 @@
+{
+    "plugins": [],
+    "recurseDepth": 10,
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "source":{
+        "include": ["src/_uri.js",  "src/uri.js", "src/index.js"]
+    },
+    "access": "public",
+    "opts": {
+        "template": "node_modules/docdash",
+        "destination": "./doc/api/"
+      },
+        "docdash": {
+            "static": true,  
+            "sort": true
+        }
+    
+}
