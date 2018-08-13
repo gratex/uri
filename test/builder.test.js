@@ -1,4 +1,4 @@
-const { uriBuilder, raw } = require('../src/builder');
+const { uriBuilder, raw, uriBuilderRql } = require('../src/builder');
 
 describe('uri builder test', (() => {
     it('only path parameter', () => {
@@ -63,11 +63,17 @@ describe('uri builder test', (() => {
     });
 
     // difference from builderRql
-    it('Most "RQL query control" chars "!,:=&/()" in SIMPLE query value are NOT ENCODED', () => {
+    it('Most RQL query control chars "!,:=&/()" in SIMPLE query value are NOT ENCODED', () => {
         const unencoded = '!,:=&/()';
         const encoded = '><|';
-        expect(uriBuilder`/foo/?unencoded=${unencoded}&encoded=${encoded}`)
-            .toBe('/foo/?unencoded=!,:=&/()&encoded=%3E%3C%7C');
+        expect(uriBuilder`/foo/?eq(unencoded,${unencoded})&eq(encoded,${encoded})`)
+            .toBe('/foo/?eq(unencoded,!,:=&/())&eq(encoded,%3E%3C%7C)');
+    });
+
+    it('RQL query control chars are correctly ENCODED using uriBuilderRql', () => {
+        const encoded = '=><!,:&|/()';
+        expect(uriBuilderRql`/foo/?eq(encoded,${encoded})`)
+            .toBe('/foo/?eq(encoded,%3D%3E%3C%21%2C%3A%26%7C%2F%28%29)');
     });
 
     it('params outside path/query/fragment should throw', () => {

@@ -1,5 +1,5 @@
 import * as uri from './_uri';
 import * as Uri from './uri';
-import { uriBuilder, raw } from './builder';
+import { uriBuilder, uriBuilderRql, raw } from './builder';
 
-export { uri, Uri, uriBuilder, raw };
+export { uri, Uri, uriBuilder, uriBuilderRql, raw };
