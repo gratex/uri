@@ -1,7 +1,7 @@
 {
   "name": "uri",
   "version": "1.0.0",
-  "description": "hello world",
+  "description": "Convenient uri API",
   "main": "./src/index.js",
   "dependencies": {
     "lodash.isequalwith": "^4.4.0"
