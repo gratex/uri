@@ -55,11 +55,7 @@ const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
 * @summary uri string to be decomposed
 * @param {string} uriStr
 * @memberof module:uri
-<<<<<<< HEAD
 * @return {UriObj}
-=======
-* @returns {object}
->>>>>>> origin
 */
 
 function decomposeComponents(uriStr) {
@@ -254,11 +250,7 @@ function _preParseBaseUri({ scheme }) {
 * @param {UriObj} base
 * @param {UriObj} ref
 * @memberof module:uri
-<<<<<<< HEAD
 * @return {UriObj}
-=======
-* @returns {object}
->>>>>>> origin
 */
 function resolve(base, ref) {
     _preParseBaseUri(base);
