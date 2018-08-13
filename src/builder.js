@@ -52,7 +52,7 @@ function build(encoders, strings, ...values) {
  * @returns {string} builded URL
  *
  * @example
- * import { uriBuilder } from '@gjax/uri';
+ * const { uriBuilder } = require('@gjax/uri');
  * const p1 = 'a/b?c', p2 = 'a#b', p3 = 'a b';
  * const url = uriBuilder`/foo/${p1}/bar/?x=${p2}#/baz/${p3}`;
  * // RESULT: /foo/a%2Fb%3Fc/bar/?x=a%23b#/baz/a%20b
@@ -69,7 +69,7 @@ function uriBuilder(strings, ...values) {
  * @returns {string} builded URL
  *
  * @example
- * import { uriBuilder } from '@gjax/uri'
+ * const { uriBuilder, uriBuilderRql } = require('@gjax/uri');
  * const p1 = 10, p2 = 'a)b';
  *
  * const url = uriBuilder`/foo/${p1}/bar/?eq(x,${p2})`
@@ -91,7 +91,7 @@ function uriBuilderRql(strings, ...values) {
  * @returns object representing wrapped value with encoded flag.
  *
  * @example
- * import { uriBuilder, raw } from '@gjax/uri'
+ * const { uriBuilder, raw } = require('@gjax/uri');
  * const p1 = 'a/b?c', query = 'name=John%20Doe&age=20';
  *
  * uriBuilder`/foo/${p1}/bar/?${query}`
