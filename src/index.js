@@ -1,8 +1,5 @@
-const uri = require('./_uri');
+const uri = require('_uri');
+const Uri = require('uri');
 const { uriBuilder, raw } = require('./builder');
 
-module.exports = {
-    uri,
-    uriBuilder,
-    raw
-};
+module.exports = { uri, Uri, uriBuilder, raw };

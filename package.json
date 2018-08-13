@@ -2,9 +2,12 @@
   "name": "uri",
   "version": "1.0.0",
   "description": "hello world",
-  "main": "src/index.js",
-  "dependencies": {},
+  "main": "./src/index.js",
+  "dependencies": {
+    "lodash.isequalwith": "^4.4.0"
+  },
   "devDependencies": {
+    "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
     "esformatter-eol-last": "^1.0.0",
     "esformatter-limit-linebreaks": "0.0.3",
@@ -28,5 +31,9 @@
     "url": "git@gitlab01.hq.gratex.com:node/uri.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "typings": "./typings/index.d.ts",
+  "jest": {
+    "testURL": "http://localhost/foo/"
+  }
 }
