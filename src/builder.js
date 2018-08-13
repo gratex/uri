@@ -26,7 +26,12 @@ function uriBuilder(strings, ...values) {
     query = query && query.replace(REPLACE, () => encode(values.shift(), uri.encodeQuery));
     fragment = fragment && fragment.replace(REPLACE, () => encode(values.shift(), uri.encodeFragment));
 
-    return uri.recomposeComponents({ ...otherComponents, path, query, fragment });
+    const recomposed = uri.recomposeComponents({ ...otherComponents, path, query, fragment });
+
+    if (REPLACE.test(recomposed)) {
+        throw new Error('Params outside path/query/fragment are unsupported');
+    }
+    return recomposed;
 }
 
 function raw(string) {

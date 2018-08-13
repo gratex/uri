@@ -69,4 +69,12 @@ describe('uri builder test', (() => {
         expect(uriBuilder`/foo/?unencoded=${unencoded}&encoded=${encoded}`)
             .toBe('/foo/?unencoded=!,:=&/()&encoded=%3E%3C%7C');
     });
+
+    it('params outside path/query/fragment should throw', () => {
+        const foo = 'sk';
+        expect(() => uriBuilder`http://www.google.${foo}/test/`)
+            .toThrow('Params outside path/query/fragment are unsupported');
+        expect(() => uriBuilder`${foo}://${foo}@www.google.com/test/`)
+            .toThrow('Params outside path/query/fragment are unsupported');
+    });
 }));
