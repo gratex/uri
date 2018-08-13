@@ -1,3 +1,7 @@
+/**
+ * @module uri
+ */
+
 const splitUriRegex = new RegExp( // IRI lib regexp
     '^' +
     '(([^:/?#]*):)?' + // scheme
@@ -26,11 +30,11 @@ const RFC3986_SEGMENT = RFC3986_PCHAR;
 const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
 const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g; //
 const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
-// TODO: get rid of RFC2396 constants
 
 /**
 * @summary uri string to be decomposed
 * @param {string} uriStr
+* @memberof module:uri
 * @return {object}
 */
 function decomposeComponents(uriStr) {
@@ -47,11 +51,12 @@ function decomposeComponents(uriStr) {
 }
 
 /**
-@summary recomposing authority from userInfo, host and port
-@param {string} userInfo
-@param {string} host
-@param {string} port
-@return {string}
+* @summary recomposing authority from userInfo, host and port
+* @param {string} userInfo
+* @param {string} host
+* @param {string} port
+* @memberof module:uri
+* @return {string}
 */
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
@@ -73,10 +78,11 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 }
 
 /**
-@summary this will recompose uri as string from each component
-@param {object} uriObj
-@return {string}
-@see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
+* @summary this will recompose uri as string from each component
+* @param {object} uriObj
+* @memberof module:uri
+* @return {string}
+* @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
 Remarks:
 defined(x) is coded with !=null (means undefined and null are handled the same way)
 ignores "authority sub components"
@@ -95,9 +101,11 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 }
 
 /**
-@summary this will encode every character of string with hexadecimal ASCII code
-@param {string} str
-@param {string} legalRange regex pattern
+* @summary this will encode every character of string with hexadecimal ASCII code
+* @param {string} str
+* @param {string} legalRange regex pattern
+* @memberof module:uri
+* @return {string}
 */
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
@@ -115,9 +123,10 @@ function percentEncode(str, legalRange) {
 }
 
 /**
-@summary this will remove dot segments in path
-@param {string} path
-@return {string}
+* @summary this will remove dot segments in path
+* @param {string} path
+* @memberof module:uri
+* @return {string}
 */
 function removeDotSegments(path) {
     let inputBufferStart = 0;
@@ -216,10 +225,11 @@ function _preParseBaseUri({ scheme }) {
 }
 
 /**
-@summary TODO: I don't know what to write here
-@param {object} base
-@param {object} ref
-@return {object}
+* @summary TODO
+* @param {object} base
+* @param {object} ref
+* @memberof module:uri
+* @return {object}
 */
 function resolve(base, ref) {
     _preParseBaseUri(base);
@@ -227,9 +237,10 @@ function resolve(base, ref) {
 }
 
 /**
-@summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
-@param {string} encodedPath
-@return {array} Path split to DECODED segments as array
+* @summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+* @param {string} encodedPath
+* @memberof module:uri
+* @return {array} Path split to DECODED segments as array
 */
 function decodeSegments(encodedPath) {
     if (encodedPath === '') {
@@ -243,20 +254,13 @@ function decodeSegments(encodedPath) {
 }
 
 /**
-@summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
-@param {array} segments array of segments not encoded
-@return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified "" is returned
+* @summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+* @param {array} segments array of segments not encoded
+* @memberof module:uri
+* @return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified
+* "" is returned
 */
 function encodeSegments(segments) {
-    // summary:
-    //		Joining path segments by /
-    // 		Main reason is to eliminate unambiquity of
-    // 		"/a%2f%b/c" and "/a/b/c"
-    // segments: String[]
-    //		array of segments not encoded
-    // returns:	String
-    //		path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded
-    //		if [] specified "" is returned
     if (!(segments instanceof Array)) {
         throw new Error('IllegalArgumentException, array of segments expected');
     }
@@ -267,11 +271,12 @@ function encodeSegments(segments) {
 }
 
 /**
-@summary TODO: I don't know what to write here
-@param {object} uriParent
-@param {object} uriSub
-@param {boolean} orSame
-@return {boolean}
+* @summary Check if path is subordinate
+* @param {object} uriParent
+* @param {object} uriSub
+* @param {boolean} orSame
+* @memberof module:uri
+* @return {boolean}
 */
 function isSubordinate(uriParent, uriSub, orSame) {
     // if subordinate is absolute and parent is not or parent has different authority
@@ -294,11 +299,12 @@ function encodeFragment(str) {
 }
 
 /**
-@summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
-@param {object} raw
-@param {string} legalRange regex expression
-@param {} doThrow
-@return {error} NULL if ok, Error if failed
+* @summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
+* @param {object} raw
+* @param {string} legalRange regex expression
+* @param {string} doThrow
+* @memberof module:uri
+* @return {error} NULL if ok, Error if failed
 */
 function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
     // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
@@ -352,6 +358,7 @@ function checkFragmentEncoding(str, doThrow) {
 * @param {string} query  Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
 *   ocakavane bez delimitera (?,#) teda z naseho API
 * @param {Uri} bDecode Default false, ci dekodovat mena a values
+* @memberof module:uri
 * @return {any}
 */
 function parseQuery(query, bDecode) {

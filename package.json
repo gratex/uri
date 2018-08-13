@@ -7,11 +7,13 @@
     "lodash.isequalwith": "^4.4.0"
   },
   "devDependencies": {
+    "docdash": "^0.4.0",
     "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
     "esformatter-eol-last": "^1.0.0",
     "esformatter-limit-linebreaks": "0.0.3",
     "eslint": "^5.1.0",
+    "jaguarjs-jsdoc": "^1.1.0",
     "jest": "^23.4.1",
     "jsdoc": "^3.5.5",
     "pre-commit": "^1.2.2"
@@ -36,5 +38,9 @@
   "typings": "./typings/index.d.ts",
   "jest": {
     "testURL": "http://localhost/foo/"
+  },
+  "script": {
+    "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.json"
   }
+
 }

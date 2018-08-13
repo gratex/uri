@@ -2,22 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: _uri.js</title>
+    <title>_uri.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: _uri.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-uri.html">uri</a><ul class='methods'><li data-type='method'><a href="module-uri.html#.checkEncoding">checkEncoding</a></li><li data-type='method'><a href="module-uri.html#.decodeSegments">decodeSegments</a></li><li data-type='method'><a href="module-uri.html#.decomposeComponents">decomposeComponents</a></li><li data-type='method'><a href="module-uri.html#.encodeSegments">encodeSegments</a></li><li data-type='method'><a href="module-uri.html#.isSubordinate">isSubordinate</a></li><li data-type='method'><a href="module-uri.html#.parseQuery">parseQuery</a></li><li data-type='method'><a href="module-uri.html#.percentEncode">percentEncode</a></li><li data-type='method'><a href="module-uri.html#.recomposeAuthorityComponents">recomposeAuthorityComponents</a></li><li data-type='method'><a href="module-uri.html#.recomposeComponents">recomposeComponents</a></li><li data-type='method'><a href="module-uri.html#.removeDotSegments">removeDotSegments</a></li><li data-type='method'><a href="module-uri.html#.resolve">resolve</a></li></ul></li><li><a href="module-Uri_.html">Uri</a><ul class='methods'><li data-type='method'><a href="module-Uri_.html#.appendFragment">appendFragment</a></li><li data-type='method'><a href="module-Uri_.html#.appendQuery">appendQuery</a></li><li data-type='method'><a href="module-Uri_.html#.appendSegments">appendSegments</a></li><li data-type='method'><a href="module-Uri_.html#.convertToFolder">convertToFolder</a></li><li data-type='method'><a href="module-Uri_.html#.denotesFolder">denotesFolder</a></li><li data-type='method'><a href="module-Uri_.html#.equals">equals</a></li><li data-type='method'><a href="module-Uri_.html#.getAuthority">getAuthority</a></li><li data-type='method'><a href="module-Uri_.html#.getFragment">getFragment</a></li><li data-type='method'><a href="module-Uri_.html#.getHost">getHost</a></li><li data-type='method'><a href="module-Uri_.html#.getLastSegment">getLastSegment</a></li><li data-type='method'><a href="module-Uri_.html#.getPath">getPath</a></li><li data-type='method'><a href="module-Uri_.html#.getPort">getPort</a></li><li data-type='method'><a href="module-Uri_.html#.getQuery">getQuery</a></li><li data-type='method'><a href="module-Uri_.html#.getScheme">getScheme</a></li><li data-type='method'><a href="module-Uri_.html#.getScreenPath">getScreenPath</a></li><li data-type='method'><a href="module-Uri_.html#.getSegments">getSegments</a></li><li data-type='method'><a href="module-Uri_.html#.getUserInfo">getUserInfo</a></li><li data-type='method'><a href="module-Uri_.html#.isSubordinate">isSubordinate</a></li><li data-type='method'><a href="module-Uri_.html#.mixin">mixin</a></li><li data-type='method'><a href="module-Uri_.html#.parseId">parseId</a></li><li data-type='method'><a href="module-Uri_.html#.resolve">resolve</a></li><li data-type='method'><a href="module-Uri_.html#.resolveAsSubordinate">resolveAsSubordinate</a></li><li data-type='method'><a href="module-Uri_.html#.setAuthority">setAuthority</a></li><li data-type='method'><a href="module-Uri_.html#.setFragment">setFragment</a></li><li data-type='method'><a href="module-Uri_.html#.setHost">setHost</a></li><li data-type='method'><a href="module-Uri_.html#.setPath">setPath</a></li><li data-type='method'><a href="module-Uri_.html#.setPort">setPort</a></li><li data-type='method'><a href="module-Uri_.html#.setQuery">setQuery</a></li><li data-type='method'><a href="module-Uri_.html#.setScheme">setScheme</a></li><li data-type='method'><a href="module-Uri_.html#.setSegments">setSegments</a></li><li data-type='method'><a href="module-Uri_.html#.setUserInfo">setUserInfo</a></li><li data-type='method'><a href="module-Uri_.html#.strip">strip</a></li><li data-type='method'><a href="module-Uri_.html#.stripCtxPath">stripCtxPath</a></li><li data-type='method'><a href="module-Uri_.html#.stripCtxPrefix">stripCtxPrefix</a></li><li data-type='method'><a href="module-Uri_.html#.stripExtension">stripExtension</a></li><li data-type='method'><a href="module-Uri_.html#.stripFragment">stripFragment</a></li><li data-type='method'><a href="module-Uri_.html#.stripOrigin">stripOrigin</a></li><li data-type='method'><a href="module-Uri_.html#.stripPath">stripPath</a></li><li data-type='method'><a href="module-Uri_.html#.stripQuery">stripQuery</a></li><li data-type='method'><a href="module-Uri_.html#.toString">toString</a></li><li data-type='method'><a href="module-Uri_.html#.toUri">toUri</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">_uri.js</h1>
+    
 
     
 
@@ -26,7 +37,11 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const splitUriRegex = new RegExp( // IRI lib regexp
+            <pre class="prettyprint source linenums"><code>/**
+ * @module uri
+ */
+
+const splitUriRegex = new RegExp( // IRI lib regexp
     '^' +
     '(([^:/?#]*):)?' + // scheme
     '(//((([^/?#@]*)@)?' + // user
@@ -54,11 +69,11 @@ const RFC3986_SEGMENT = RFC3986_PCHAR;
 const RFC3986_FRAGMENT = `${RFC3986_PCHAR}?/`; /* "?/" */
 const PCHAR_TOKENIZER = /(?:%[0-9A-Fa-f]{2}){1,}|./g; //
 const RFC3986_PATH_SEGMENTS = `${RFC3986_SEGMENT}/`; /* "/" */
-// TODO: get rid of RFC2396 constants
 
 /**
 * @summary uri string to be decomposed
 * @param {string} uriStr
+* @memberof module:uri
 * @return {object}
 */
 function decomposeComponents(uriStr) {
@@ -75,11 +90,12 @@ function decomposeComponents(uriStr) {
 }
 
 /**
-@summary recomposing authority from userInfo, host and port
-@param {string} userInfo
-@param {string} host
-@param {string} port
-@return {string}
+* @summary recomposing authority from userInfo, host and port
+* @param {string} userInfo
+* @param {string} host
+* @param {string} port
+* @memberof module:uri
+* @return {string}
 */
 function recomposeAuthorityComponents(userInfo, host, port) {
     if (host == null) {
@@ -101,10 +117,11 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 }
 
 /**
-@summary this will recompose uri as string from each component
-@param {object} uriObj
-@return {string}
-@see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
+* @summary this will recompose uri as string from each component
+* @param {object} uriObj
+* @memberof module:uri
+* @return {string}
+* @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
 Remarks:
 defined(x) is coded with !=null (means undefined and null are handled the same way)
 ignores "authority sub components"
@@ -123,9 +140,11 @@ function recomposeComponents({ scheme, authority, userInfo, host, port, path, qu
 }
 
 /**
-@summary this will encode every character of string with hexadecimal ASCII code
-@param {string} str
-@param {string} legalRange regex pattern
+* @summary this will encode every character of string with hexadecimal ASCII code
+* @param {string} str
+* @param {string} legalRange regex pattern
+* @memberof module:uri
+* @return {string}
 */
 function percentEncode(str, legalRange) {
     const retVal = Array.from(str);
@@ -143,9 +162,10 @@ function percentEncode(str, legalRange) {
 }
 
 /**
-@summary this will remove dot segments in path
-@param {string} path
-@return {string}
+* @summary this will remove dot segments in path
+* @param {string} path
+* @memberof module:uri
+* @return {string}
 */
 function removeDotSegments(path) {
     let inputBufferStart = 0;
@@ -244,10 +264,11 @@ function _preParseBaseUri({ scheme }) {
 }
 
 /**
-@summary TODO: I don't know what to write here
-@param {object} base
-@param {object} ref
-@return {object}
+* @summary TODO
+* @param {object} base
+* @param {object} ref
+* @memberof module:uri
+* @return {object}
 */
 function resolve(base, ref) {
     _preParseBaseUri(base);
@@ -255,9 +276,10 @@ function resolve(base, ref) {
 }
 
 /**
-@summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
-@param {string} encodedPath
-@return {array} Path split to DECODED segments as array
+* @summary Spliting path by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+* @param {string} encodedPath
+* @memberof module:uri
+* @return {array} Path split to DECODED segments as array
 */
 function decodeSegments(encodedPath) {
     if (encodedPath === '') {
@@ -271,20 +293,13 @@ function decodeSegments(encodedPath) {
 }
 
 /**
-@summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
-@param {array} segments array of segments not encoded
-@return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified "" is returned
+* @summary Joining path segments by "/". Main reason is to eliminate unambiquity of "/a%2f%b/c" and "/a/b/c".
+* @param {array} segments array of segments not encoded
+* @memberof module:uri
+* @return {string} path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded if [] specified
+* "" is returned
 */
 function encodeSegments(segments) {
-    // summary:
-    //		Joining path segments by /
-    // 		Main reason is to eliminate unambiquity of
-    // 		"/a%2f%b/c" and "/a/b/c"
-    // segments: String[]
-    //		array of segments not encoded
-    // returns:	String
-    //		path-abempty, ENCODED path, only characters specified in RFC3986_SEGMENT are encoded
-    //		if [] specified "" is returned
     if (!(segments instanceof Array)) {
         throw new Error('IllegalArgumentException, array of segments expected');
     }
@@ -295,11 +310,12 @@ function encodeSegments(segments) {
 }
 
 /**
-@summary TODO: I don't know what to write here
-@param {object} uriParent
-@param {object} uriSub
-@param {boolean} orSame
-@return {boolean}
+* @summary Check if path is subordinate
+* @param {object} uriParent
+* @param {object} uriSub
+* @param {boolean} orSame
+* @memberof module:uri
+* @return {boolean}
 */
 function isSubordinate(uriParent, uriSub, orSame) {
     // if subordinate is absolute and parent is not or parent has different authority
@@ -322,11 +338,12 @@ function encodeFragment(str) {
 }
 
 /**
-@summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
-@param {object} raw
-@param {string} legalRange regex expression
-@param {} doThrow
-@return {error} NULL if ok, Error if failed
+* @summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
+* @param {object} raw
+* @param {string} legalRange regex expression
+* @param {string} doThrow
+* @memberof module:uri
+* @return {error} NULL if ok, Error if failed
 */
 function checkEncoding(raw, legalRange, doThrow /* , flags*/) {
     // TODO: flags: ILLEGAL_PERCENT_ENCODING, SUPERFLUOUS_ASCII_PERCENT_ENCODING
@@ -380,6 +397,7 @@ function checkFragmentEncoding(str, doThrow) {
 * @param {string} query  Ak undefined alebo null vracia null. Ak "" vracia {}, inak vracia {p1:v1,ps:[]},
 *   ocakavane bez delimitera (?,#) teda z naseho API
 * @param {Uri} bDecode Default false, ci dekodovat mena a values
+* @memberof module:uri
 * @return {any}
 */
 function parseQuery(query, bDecode) {
@@ -426,17 +444,13 @@ module.exports = {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#appendFragment">appendFragment</a></li><li><a href="global.html#appendQuery">appendQuery</a></li><li><a href="global.html#appendSegments">appendSegments</a></li><li><a href="global.html#checkEncoding">checkEncoding</a></li><li><a href="global.html#convertToFolder">convertToFolder</a></li><li><a href="global.html#decodeSegments">decodeSegments</a></li><li><a href="global.html#decomposeComponents">decomposeComponents</a></li><li><a href="global.html#denotesFolder">denotesFolder</a></li><li><a href="global.html#encodeSegments">encodeSegments</a></li><li><a href="global.html#equals">equals</a></li><li><a href="global.html#getAuthority">getAuthority</a></li><li><a href="global.html#getFragment">getFragment</a></li><li><a href="global.html#getHost">getHost</a></li><li><a href="global.html#getLastSegment">getLastSegment</a></li><li><a href="global.html#getPath">getPath</a></li><li><a href="global.html#getPort">getPort</a></li><li><a href="global.html#getQuery">getQuery</a></li><li><a href="global.html#getScheme">getScheme</a></li><li><a href="global.html#getScreenPath">getScreenPath</a></li><li><a href="global.html#getSegments">getSegments</a></li><li><a href="global.html#getUserInfo">getUserInfo</a></li><li><a href="global.html#isSubordinate">isSubordinate</a></li><li><a href="global.html#mixin">mixin</a></li><li><a href="global.html#parseId">parseId</a></li><li><a href="global.html#parseQuery">parseQuery</a></li><li><a href="global.html#percentEncode">percentEncode</a></li><li><a href="global.html#recomposeAuthorityComponents">recomposeAuthorityComponents</a></li><li><a href="global.html#recomposeComponents">recomposeComponents</a></li><li><a href="global.html#removeDotSegments">removeDotSegments</a></li><li><a href="global.html#resolve">resolve</a></li><li><a href="global.html#resolveAsSubordinate">resolveAsSubordinate</a></li><li><a href="global.html#setAuthority">setAuthority</a></li><li><a href="global.html#setFragment">setFragment</a></li><li><a href="global.html#setHost">setHost</a></li><li><a href="global.html#setPath">setPath</a></li><li><a href="global.html#setPort">setPort</a></li><li><a href="global.html#setQuery">setQuery</a></li><li><a href="global.html#setScheme">setScheme</a></li><li><a href="global.html#setSegments">setSegments</a></li><li><a href="global.html#setUserInfo">setUserInfo</a></li><li><a href="global.html#strip">strip</a></li><li><a href="global.html#stripCtxPath">stripCtxPath</a></li><li><a href="global.html#stripCtxPrefix">stripCtxPrefix</a></li><li><a href="global.html#stripExtension">stripExtension</a></li><li><a href="global.html#stripFragment">stripFragment</a></li><li><a href="global.html#stripOrigin">stripOrigin</a></li><li><a href="global.html#stripPath">stripPath</a></li><li><a href="global.html#stripQuery">stripQuery</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#toUri">toUri</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Aug 09 2018 10:46:26 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Aug 13 2018 08:50:59 GMT+0200 (Central European Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

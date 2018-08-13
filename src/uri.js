@@ -1,3 +1,7 @@
+/**
+ *@module Uri
+*/
+
 const assert = require('assert');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
@@ -23,7 +27,7 @@ function equalsQueryStr(query1, query2) {
     }
 
     function customizer(a, b) {
-        if (Array.isArray(a) && Array.isArray(b)) {
+        if (a instanceof Array && b instanceof Array) {
             // order is not important, so just sort them before comparing
             a.sort(simpleCompare);
             b.sort(simpleCompare);
@@ -39,9 +43,11 @@ function equalsQueryStr(query1, query2) {
 
     return isEqualWith(q1, q2, customizer);
 }
+
 function clone(uriArr) {
     return Object.assign({}, uriArr);
 }
+
 function param(that) {
     that != null || (that = DEFAULT_THAT); // let '' continue
     return (typeof that == 'string') ? uri.decomposeComponents(that) : clone(that);
@@ -61,19 +67,12 @@ function _resolve(base, ref) {
 
 /**
 * @summary Use to set multiple URI parts at once.
-* @return Modified copy of `that`.
+* @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+* @param {object} obj Available properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
+* @memberof module:Uri
+* @return {string} Modified copy of `that`.
 */
 function mixin(that, { authority, userInfo, host, port, scheme, path, query, fragment }) {
-    // summary:
-    //		Use to set multiple URI parts at once.
-    // that: String|Object|null
-    //		URI string or URI object. Current window URI used when null or undefined.
-    // obj: Object
-    //		Available properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
-    //		If `authority` property is present, `userInfo`, `host` and `port` are ignored.
-    //		All properties are strings except `query` and `fragment` which may also be objects.
-    // returns: String
-    //		Modified copy of `that`.
     const u = param(that);
 
     /* 'app/_base/rql' */
@@ -97,6 +96,7 @@ function mixin(that, { authority, userInfo, host, port, scheme, path, query, fra
     fragment && (u.fragment = fragment && typeof fragment != 'string' ? querystring.stringify(fragment) : fragment);
     return uri.recomposeComponents(u);
 }
+
 function isSubPath(baseStr, refStr) {
     const bs = uri.decodeSegments(baseStr);
     const rs = uri.decodeSegments(refStr);
@@ -121,6 +121,7 @@ function contains(arr, what) {
 /**
  * @summary Use to convert uri object to string.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} URI string.
  */
 function toString(that) {
@@ -130,6 +131,7 @@ function toString(that) {
 /**
  * @summary Use to convert uri to uri object.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {object} URI object with properties: `scheme`, `authority`, `userInfo`, `host`, `port`, `path`, `query`, `fragment`.
  */
 function toUri(that) {
@@ -140,6 +142,7 @@ function toUri(that) {
  * @summary Use to strip some parts of URI.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} toStrip Comma separated values, available are: 'ORIGIN', 'CTX', 'EXTENSION', 'QUERY', 'FRAGMENT'.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  * @example Uri.strip(uriStr, 'QUERY,FRAGMENT');
  */
@@ -194,6 +197,7 @@ function strip(that, toStrip) {
  * @param {string|object|null} that1 URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object|null} that2 URI string or URI object. Current window URI used when null or undefined.
  * @param {boolean} ignoreFragment When true, fragment (hash) is ignored when determining equality.\
+ * @memberof module:Uri
  * @returns {boolean} True if URIs are equal, false otherwise.
  */
 function equals(that1, that2, ignoreFragment) {
@@ -209,6 +213,7 @@ function equals(that1, that2, ignoreFragment) {
 /**
  * @summary Use instead of location.protocol
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string|undefined} String without ':' delimiter.
  */
 function getScheme(that) {
@@ -225,6 +230,8 @@ function getScheme(that) {
 /**
  * @summary Use instead of location.host.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string|undefined}
  */
 function getAuthority(that) {
     const { authority } = param(that);
@@ -234,6 +241,8 @@ function getAuthority(that) {
 /**
  * @summary Use to get user info. No equivalent in location.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string|undefined}
  */
 function getUserInfo(that) {
     const { userInfo } = param(that);
@@ -243,6 +252,8 @@ function getUserInfo(that) {
 /**
  * @summary Use instead of location.hostname.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string|undefined}
  */
 function getHost(that) {
     const { host } = param(that);
@@ -252,6 +263,8 @@ function getHost(that) {
 /**
  * @summary Use instead of location.port.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string|undefined}
  */
 function getPort(that) {
     const { port } = param(that);
@@ -261,6 +274,7 @@ function getPort(that) {
 /**
  * @summary Use instead of location.search.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string|undefined} String starting by '/'.
  */
 function getPath(that) {
@@ -272,6 +286,7 @@ function getPath(that) {
  * @summary Use instead of location.search.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {boolean} toObject If `true` query is returned as object.
+ * @memberof module:Uri
  * @returns {string|object|undefined} String without '?' delimiter or key-value object.
  */
 function getQuery(that, toObject) {
@@ -287,6 +302,7 @@ function getQuery(that, toObject) {
 /**
  * @summary Use instead of location.hash.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string|undefined} String without '#' delimiter.
  */
 function getFragment(that) {
@@ -301,6 +317,7 @@ function getFragment(that) {
 /**
  * @summary Use to get path segments.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {Array<string>} Array of strings, last is '' if path denotes a folder.
  */
 function getSegments(that) {
@@ -313,6 +330,7 @@ function getSegments(that) {
  * @summary Use to set scheme.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} scheme Scheme.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setScheme(that, scheme) {
@@ -328,6 +346,7 @@ function setScheme(that, scheme) {
  * @summary Use to set authority.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} authority Authority.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setAuthority(that, authority) {
@@ -348,6 +367,7 @@ function setAuthority(that, authority) {
  * @summary Use to set user info.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} userInfo User info.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setUserInfo(that, userInfo) {
@@ -364,6 +384,7 @@ function setUserInfo(that, userInfo) {
  * @summary Use to set host.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} host Host.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setHost(that, host) {
@@ -379,6 +400,7 @@ function setHost(that, host) {
  * @summary Use to set port.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} port Port.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setPort(that, port) {
@@ -394,6 +416,7 @@ function setPort(that, port) {
  * @summary Use to set path.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string} path Encoded path.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setPath(that, path) {
@@ -410,6 +433,7 @@ function setPath(that, path) {
  * @summary Use to set query.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object} query Encoded string or unencoded key-value object.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setQuery(that, query) {
@@ -424,6 +448,7 @@ function setQuery(that, query) {
  * @summary Use to append query.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object} query Encoded string or unencoded key-value object.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function appendQuery(that, query) {
@@ -439,6 +464,7 @@ function appendQuery(that, query) {
  * @summary Use to set fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object} fragment Encoded string or key-value object.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setFragment(that, fragment) {
@@ -453,6 +479,7 @@ function setFragment(that, fragment) {
  * @summary Use to append fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object} fragment Encoded string or key-value object.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function appendFragment(that, fragment) {
@@ -468,6 +495,7 @@ function appendFragment(that, fragment) {
  * @summary Use to set segments.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {Array<string>} segments Array of unencoded path segments.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function setSegments(that, segments) {
@@ -478,6 +506,7 @@ function setSegments(that, segments) {
  * @summary Use to append path segments.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
  * @param {Array<string>|string} segments Array or multiple arguments of unencoded path segments.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function appendSegments(that, ...appendSegmets) {
@@ -492,6 +521,7 @@ function appendSegments(that, ...appendSegmets) {
 /**
  * @summary Use to get path with query and fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripOrigin(that) {
@@ -501,6 +531,7 @@ function stripOrigin(that) {
 /**
  * @summary Use to get uri without path extension.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  * @example Uri.stripExtension('/samples/ui/test/aam-test.standalone'); // '/samples/ui/test/aam-test'
  */
@@ -511,6 +542,7 @@ function stripExtension(that) {
 /**
  * @summary Use to get path after context with query and fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripCtxPath(that) {
@@ -520,6 +552,7 @@ function stripCtxPath(that) {
 /**
  * @summary Use to get path after context prefix (UI or svc) with query and fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripCtxPrefix(that) {
@@ -529,6 +562,7 @@ function stripCtxPrefix(that) {
 /**
  * @summary Use to get origin, i.e. everything before path.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripPath(that) {
@@ -538,6 +572,7 @@ function stripPath(that) {
 /**
  * @summary Use to get URI without query.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripQuery(that) {
@@ -547,6 +582,7 @@ function stripQuery(that) {
 /**
  * @summary Use to get URI without fragment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function stripFragment(that) {
@@ -556,6 +592,7 @@ function stripFragment(that) {
 /**
  * @summary Use to get path after context and before extension.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function getScreenPath(that) {
@@ -565,6 +602,7 @@ function getScreenPath(that) {
 /**
  * @summary Use to get the last path segment.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Empty string when `that` denotes folder, `undefined` if path is empty.
  */
 function getLastSegment(that) {
@@ -576,6 +614,7 @@ function getLastSegment(that) {
 /**
  * @summary Use to test if path ends with '/'.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {boolean}
  */
 function denotesFolder(that) {
@@ -586,6 +625,7 @@ function denotesFolder(that) {
 /**
  * @summary Use to convert URI path to folder.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that` ending with '/'.
  * @example Uri.convertToFolder('/samples/ui/test/aam-test');	// 	'/samples/ui/test/'
  */
@@ -605,6 +645,7 @@ function convertToFolder(that) {
  * @summary Use to test if ref URI is subordiante of base URI.
  * @param {string|object|null} that Base URI. URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object|null} ref Ref URI. URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {boolean} True if `ref` is subordinate of `base`.
  */
 function isSubordinate(that, ref) {
@@ -615,6 +656,7 @@ function isSubordinate(that, ref) {
  * @summary Use to resolve ref URI using base URI.
  * @param {string|object|null} that Base URI. URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object|null} ref Ref URI. URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function resolve(that, ref) {
@@ -626,6 +668,7 @@ function resolve(that, ref) {
  * @summary Use to resolve ref URI as subordinate of base URI.
  * @param {string|object|null} that Base URI. URI string or URI object. Current window URI used when null or undefined.
  * @param {string|object|null} ref Ref URI. URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {string} Modified copy of `that`.
  */
 function resolveAsSubordinate(that, ref) {
@@ -638,6 +681,7 @@ function resolveAsSubordinate(that, ref) {
 /**
  * @summary Use to retrieve resource id from RESTful URI.
  * @param {string|object|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
  * @returns {number} Id.
  */
 function parseId(that) {
