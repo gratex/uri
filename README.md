@@ -1,3 +1,8 @@
+
+![Github All Releases](https://img.shields.io/github/downloads/gratex/uri/total.svg)
+
+
+
 # Convenient uri API
 
 
@@ -17,4 +22,4 @@ const res = uri.decomposeComponents('http://a/b/c/d;p?q');
 ```
 
 ## Documentation:
-[API Documentation TODO](http://gratex.github.io/uri/doc/api/index.html)
+[API Documentation](http://gratex.github.io/uri/doc/api/index.html)
