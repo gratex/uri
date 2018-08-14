@@ -1,5 +1,8 @@
 
 ![Github All Releases](https://img.shields.io/github/downloads/gratex/uri/total.svg)
+![Depfu](https://img.shields.io/gratex/uri/example-ruby.svg)
+
+![Chrome Web Store](https://img.shields.io/gratex/uri/nimelepbpejjlbmoobocpfnjhihnpked.svg)
 
 
 
