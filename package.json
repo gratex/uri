@@ -11,6 +11,7 @@
     "node": "^8.6.0"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "docdash": "^0.4.0",
     "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
@@ -23,6 +24,7 @@
     "typescript": "^3.0.1"
   },
   "scripts": {
+    "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "lint": "eslint ./src ./test",
