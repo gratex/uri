@@ -1,4 +1,4 @@
-[![build status](https://img.shields.io/travis/gratex/uri/gh-pages.svg?style=flat-square)](https://travis-ci.orgg/ratex/uri)
+[![build status](https://img.shields.io/travis/gratex/uri/gh-pages.svg?style=flat-square)](https://travis-ci.org/gratex/uri)
 
 ![Github All Releases](https://img.shields.io/github/downloads/gratex/uri/total.svg)
 ![NodeVersion](https://img.shields.io/node/v/@gjax/uri.svg)
