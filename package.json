@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "lodash.isequalwith": "^4.4.0",
-    "node": "^8.6.0",
-    "typescript": "^3.0.1"
+    "node": "^8.6.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
@@ -21,7 +20,8 @@
     "eslint": "^5.1.0",
     "jest": "^23.5.0",
     "jsdoc": "^3.5.5",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "typescript": "^3.0.1"
   },
   "scripts": {
     "test": "jest",
