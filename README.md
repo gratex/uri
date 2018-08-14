@@ -1,6 +1,9 @@
 
 ![Github All Releases](https://img.shields.io/github/downloads/gratex/uri/total.svg)
-http://img.shields.io/node/v/<module>.svg
+
+![NpmVersion](https://img.shields.io/npm/v/uri.svg)
+
+![NodeVersion](https://img.shields.io/node/v/uri.svg)
 
 
 # Convenient uri API
