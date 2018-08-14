@@ -11,8 +11,8 @@
 Node module, so use:
 
 ```
-npm install @gjax/uri  
-npm install @gjax/Uri  
+npm install --save @gjax/uri  
+npm install --save @gjax/Uri  
 ```
 
 ## Usage
