@@ -17,4 +17,4 @@ const res = uri.decomposeComponents('http://a/b/c/d;p?q');
 ```
 
 ## Documentation:
-[API Documentation TODO](gratex.github.io/uri)
+[API Documentation TODO](http://gratex.github.io/uri/doc/api/index.html)
