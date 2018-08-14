@@ -1,5 +1,5 @@
 {
-  "name": "uri",
+  "name": "@gjax/uri",
   "version": "1.0.0",
   "description": "Convenient uri API",
   "main": "./src/index.js",
@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "lodash.isequalwith": "^4.4.0",
-    "node": "^8.6.0"
+    "node": "^8.6.0",
+    "typescript": "^3.0.1"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "docdash": "^0.4.0",
     "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
