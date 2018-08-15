@@ -3,7 +3,3 @@ coverage/
 
 # npm
 node_modules/
-package-lock.json
-
-# dts
-typings/
