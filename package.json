@@ -1,29 +1,35 @@
 {
-  "name": "uri",
-  "version": "1.0.0",
-  "description": "hello world",
+  "name": "@gjax/uri",
+  "version": "1.1.3",
+  "description": "Convenient uri API",
   "main": "./src/index.js",
+  "engines": {
+    "node": "=>8.6.0"
+  },
   "dependencies": {
     "lodash.isequalwith": "^4.4.0"
   },
   "devDependencies": {
+    "coveralls": "^3.0.2",
     "docdash": "^0.4.0",
     "dtsmake": "0.0.10",
     "esformatter": "^0.10.0",
     "esformatter-eol-last": "^1.0.0",
     "esformatter-limit-linebreaks": "0.0.3",
     "eslint": "^5.1.0",
-    "jest": "^23.4.1",
+    "jest": "^23.5.0",
     "jsdoc": "^3.5.5",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "typescript": "^3.0.1"
   },
   "scripts": {
+    "coveralls": "cat ./coverage/lcov.info | node coveralls",
     "test": "jest",
     "test-coverage": "jest --coverage",
     "lint": "eslint ./src ./test",
     "lint-hook": "bash ./scripts/lint-hook.sh",
     "formatter-hook": "bash ./scripts/formatter-hook.sh",
-    "gen-docs": "jsdoc -c jsdoc.conf.json"
+    "gen-docs": "rm -rf doc/api | jsdoc -c jsdoc.conf.json"
   },
   "pre-commit": [
     "lint-hook",
@@ -31,7 +37,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@gitlab01.hq.gratex.com:node/uri.git"
+    "url": "https://github.com/gratex/uri"
   },
   "author": "",
   "license": "ISC",

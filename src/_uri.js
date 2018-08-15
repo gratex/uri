@@ -1,7 +1,27 @@
 /**
+	 Credits to:
+	 -------------------------
+     1.	uri_funcs.js - URI functions based on STD 66 / RFC 3986
+        Author (original): Mike J. Brown <mike at skew.org>  Version: 2007-01-04
+	 2.	http://jena.sourceforge.net/iri/javadoc/index.html
+	 -------------------------
+ **/
+
+/**
  * @module uri
  */
 
+/**
+ * @typedef {object} UriObj
+ * @property {string} scheme
+ * @property {string} host
+ * @property {string} port
+ * @property {string} userInfo
+ * @property {string} authority
+ * @property {string} path
+ * @property {string} query
+ * @property {string} fragment
+*/
 const splitUriRegex = new RegExp( // IRI lib regexp
     '^' +
     '(([^:/?#]*):)?' + // scheme
@@ -46,8 +66,9 @@ const RQL_VALUE = RFC3986_QUERY.replace(/[=><!,:&|/()]/g, '');
 * @summary uri string to be decomposed
 * @param {string} uriStr
 * @memberof module:uri
-* @returns {object}
+* @return {UriObj}
 */
+
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
     const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
@@ -90,7 +111,7 @@ function _checkAuthorityInvariant(authority, userInfo, host, port) {
 
 /**
 * @summary this will recompose uri as string from each component
-* @param {object} uriObj
+* @param {UriObj} object
 * @memberof module:uri
 * @returns {string}
 * @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
@@ -237,10 +258,10 @@ function _preParseBaseUri({ scheme }) {
 
 /**
 * @summary TODO
-* @param {object} base
-* @param {object} ref
+* @param {UriObj} base
+* @param {UriObj} ref
 * @memberof module:uri
-* @returns {object}
+* @return {UriObj}
 */
 function resolve(base, ref) {
     _preParseBaseUri(base);
@@ -283,8 +304,8 @@ function encodeSegments(segments) {
 
 /**
 * @summary Check if path is subordinate
-* @param {object} uriParent
-* @param {object} uriSub
+* @param {UriObj} uriParent
+* @param {UriObj} uriSub
 * @param {boolean} orSame
 * @memberof module:uri
 * @returns {boolean}
@@ -315,7 +336,7 @@ function encodeFragment(str) {
 
 /**
 * @summary Validates if string contains legalRange + valid pchars PCHAR. PCHARS represent valid UTF-8 sequence
-* @param {object} raw
+* @param {UriObj} raw
 * @param {string} legalRange regex expression
 * @param {string} doThrow
 * @memberof module:uri
