@@ -2,7 +2,7 @@
 // Project: @gjax/uri
 
 
-declare interface UriObj {
+export declare interface UriObj {
     scheme: string;
     host: string;
     port: string;
@@ -17,7 +17,7 @@ declare interface UriObj {
  * @param {string} uriStr
  * @return {UriObj}
  */
-declare function decomposeComponents(uriStr : string): UriObj;
+export declare function decomposeComponents(uriStr : string): UriObj;
 
 /**
  * @param {string} userInfo
@@ -25,7 +25,7 @@ declare function decomposeComponents(uriStr : string): UriObj;
  * @param {string} port
  * @return
  */
-declare function recomposeAuthorityComponents(userInfo : string, host : string, port : string): string;
+export declare function recomposeAuthorityComponents(userInfo : string, host : string, port : string): string;
 
 /**
  * @see 5.3.  Component Recomposition  . . . . . . . . . . . . . . . . 35
@@ -35,21 +35,21 @@ declare function recomposeAuthorityComponents(userInfo : string, host : string, 
  * @param {UriObj} obj
  * @return {string}
  */
-declare function recomposeComponents(obj: UriObj): string;
+export declare function recomposeComponents(obj: UriObj): string;
 
 /**
  * @param {string} str
  * @param {string} legalRange
  * @return {string}
  */
-declare function percentEncode(str : string, legalRange : string): string;
+export declare function percentEncode(str : string, legalRange : string): string;
 
 /**
  *
  * @param {string} path
  * @return {string}
  */
-declare function removeDotSegments(path : string): string;
+export declare function removeDotSegments(path : string): string;
 
 /**
  *
@@ -57,21 +57,21 @@ declare function removeDotSegments(path : string): string;
  * @param {UriObj} ref
  * @return {UriObj}
  */
-declare function resolve(base : UriObj, ref : UriObj): UriObj;
+export declare function resolve(base : UriObj, ref : UriObj): UriObj;
 
 /**
  *
  * @param {string} encodedPath
  * @return {Array<string>}
  */
-declare function decodeSegments(encodedPath : string): Array<string>;
+export declare function decodeSegments(encodedPath : string): Array<string>;
 
 /**
  *
  * @param {Array<string>} segments
  * @return {string}
  */
-declare function encodeSegments(segments : Array<string>): string;
+export declare function encodeSegments(segments : Array<string>): string;
 
 /**
  *
@@ -80,28 +80,28 @@ declare function encodeSegments(segments : Array<string>): string;
  * @param {boolean} orSame
  * @return {boolean}
  */
-declare function isSubordinate(uriParent : UriObj, uriSub : UriObj, orSame : boolean): boolean;
+export declare function isSubordinate(uriParent : UriObj, uriSub : UriObj, orSame : boolean): boolean;
 
 /**
  *
  * @param {string} segment
  * @return {string}
  */
-declare function encodeSegment(segment : string): string;
+export declare function encodeSegment(segment : string): string;
 
 /**
  *
  * @param {string} str
  * @return {string}
  */
-declare function encodeQuery(str : string): string;
+export declare function encodeQuery(str : string): string;
 
 /**
  *
  * @param {string} str
  * @return {string}
  */
-declare function encodeFragment(str : string): string;
+export declare function encodeFragment(str : string): string;
 
 /**
  *
@@ -110,7 +110,7 @@ declare function encodeFragment(str : string): string;
  * @param {string} doThrow
  * @return {null | Error}
  */
-declare function checkEncoding(raw : string, legalRange : string, doThrow : string): Error | null;
+export declare function checkEncoding(raw : string, legalRange : string, doThrow : string): Error | null;
 
 /**
  *
@@ -118,7 +118,7 @@ declare function checkEncoding(raw : string, legalRange : string, doThrow : stri
  * @param {string} doThrow
  * @return {null | Error}
  */
-declare function checkSegmentsEncoding(str : string, doThrow : string): Error | null;
+export declare function checkSegmentsEncoding(str : string, doThrow : string): Error | null;
 
 /**
  *
@@ -126,7 +126,7 @@ declare function checkSegmentsEncoding(str : string, doThrow : string): Error | 
  * @param {string} doThrow
  * @return {null | Error}
  */
-declare function checkSegmentEncoding(str : string, doThrow : string): Error | null;
+export declare function checkSegmentEncoding(str : string, doThrow : string): Error | null;
 
 /**
  *
@@ -134,7 +134,7 @@ declare function checkSegmentEncoding(str : string, doThrow : string): Error | n
  * @param {string} doThrow
  * @return {null | Error}
  */
-declare function checkQueryEncoding(str : string, doThrow : string): Error | null;
+export declare function checkQueryEncoding(str : string, doThrow : string): Error | null;
 
 /**
  *
@@ -142,7 +142,7 @@ declare function checkQueryEncoding(str : string, doThrow : string): Error | nul
  * @param {string} doThrow
  * @return {null | Error}
  */
-declare function checkFragmentEncoding(str : string, doThrow : string): Error | null;
+export declare function checkFragmentEncoding(str : string, doThrow : string): Error | null;
 
 /**
  *
@@ -150,4 +150,4 @@ declare function checkFragmentEncoding(str : string, doThrow : string): Error | 
  * @param {boolean} bDecode
  * @return {object}
  */
-declare function parseQuery(query : string, bDecode : boolean): object;
+export declare function parseQuery(query : string, bDecode : boolean): { [ key : string ] : any };
