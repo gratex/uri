@@ -1,3 +1,6 @@
+**DEPRECATED REPO!!! Moved to https://github.com/gratex/uri**
+<br><br>
+
 [![Build Status](https://travis-ci.org/gratex/uri.svg?branch=readme)](https://travis-ci.org/gratex/uri)
 [![npm](https://img.shields.io/npm/dm/@gjax/uri.svg)](https://www.npmjs.com/package/@gjax/uri)
 ![NodeVersion](https://img.shields.io/node/v/@gjax/uri.svg)
