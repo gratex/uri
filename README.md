@@ -1,9 +1,8 @@
 [![Build Status](https://travis-ci.org/gratex/uri.svg?branch=readme)](https://travis-ci.org/gratex/uri)
-![npm](https://img.shields.io/npm/dm/@gjax/uri.svg)
+[![npm](https://img.shields.io/npm/dm/@gjax/uri.svg)](https://www.npmjs.com/package/@gjax/uri)
 ![NodeVersion](https://img.shields.io/node/v/@gjax/uri.svg)
 ![npm type definitions](https://img.shields.io/npm/types/@gjax/uri.svg)
 [![Coverage Status](https://coveralls.io/repos/github/gratex/uri/badge.svg?branch=readme)](https://coveralls.io/github/gratex/uri?branch=readme)
-
 
 # Convenient uri API
 
