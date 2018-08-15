@@ -29,7 +29,7 @@
     "lint": "eslint ./src ./test",
     "lint-hook": "bash ./scripts/lint-hook.sh",
     "formatter-hook": "bash ./scripts/formatter-hook.sh",
-    "gen-docs": "rm -rf api | jsdoc -c jsdoc.conf.json"
+    "gen-docs": "rm -rf doc/api | jsdoc -c jsdoc.conf.json"
   },
   "pre-commit": [
     "lint-hook",
