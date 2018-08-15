@@ -18,8 +18,8 @@ npm install --save @gjax/uri
 ## Usage
 
 ```
-const {_uri, uri, uriBuilder} = require('@gjax/uri'); // RESULT: Load the full build.
-const res = _uri.decomposeComponents('http://a/b/c/d;p?q'); // RESULT: Object with certain property values.  
+const {uri, Uri, uriBuilder} = require('@gjax/uri'); // RESULT: Load the full build.
+const res = uri.decomposeComponents('http://a/b/c/d;p?q'); // RESULT: Object with certain property values.  
 const res2 = Uri.equalsQueryStr('type=animal&name=narwhal', 'name=narwhal&type=animal'); // RESULT : TRUE  
 const p1 = 'a/b?c', p2 = 'a#b', p3 = 'a b';  
 const url = uriBuilder`/foo/${p1}/bar/?x=${p2}#/baz/${p3}`; // RESULT: /foo/a%2Fb%3Fc/bar/?x=a%23b#/baz/a%20b 
