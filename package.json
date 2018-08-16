@@ -1,6 +1,10 @@
 {
   "name": "@gjax/uri",
+<<<<<<< HEAD
   "version": "1.1.5",
+=======
+  "version": "1.1.7",
+>>>>>>> 6e7025f827fe3773015fca13990a9b3d9b8ab2aa
   "description": "Convenient uri API",
   "main": "./src/index.js",
   "engines": {
@@ -20,7 +24,7 @@
     "jest": "^23.5.0",
     "jsdoc": "^3.5.5",
     "pre-commit": "^1.2.2",
-    "typescript": "^3.0.1"
+    "typescript": "^2.0.0"
   },
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | node coveralls",
@@ -29,7 +33,8 @@
     "lint": "eslint ./src ./test",
     "lint-hook": "bash ./scripts/lint-hook.sh",
     "formatter-hook": "bash ./scripts/formatter-hook.sh",
-    "gen-docs": "rm -rf doc/api | jsdoc -c jsdoc.conf.json"
+    "gen-docs": "rm -rf doc/api | jsdoc -c jsdoc.conf.json",
+    "check-typings": "tsc --project typings"
   },
   "pre-commit": [
     "lint-hook",

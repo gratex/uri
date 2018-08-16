@@ -13,7 +13,7 @@
  *  returns: String
  * 		Modified copy of `that`.
  */
- declare interface UriObj {
+ export declare interface UriObj {
      scheme: string;
      host: string;
      port: string;
@@ -24,7 +24,7 @@
      fragment: string;
  }
 
- declare interface config {
+ export declare interface config {
      CTX: string;
      UI_CTX_PREFIX: string;
      SVC_CTX_PREFIX: string;
@@ -41,7 +41,7 @@ export declare const DEFAULT_THAT : string;
  *
  * @param {config} conf
  */
-declare function config(conf : config): void;
+export declare function config(conf : config): void;
 
 /**
  * paramString window.document.URL instead use '' (or try use '/', or...)
@@ -49,50 +49,42 @@ declare function config(conf : config): void;
  * @param query2
  * @return {string}
  */
-declare function equalsQueryStr(query1 : string, query2 : string): boolean;
+export declare function equalsQueryStr(query1 : string, query2 : string): boolean;
 
 /**
  *
  * @param {UriObj} uriArr
  * @return {UriObj}
  */
-declare function clone(uriArr : UriObj): UriObj;
+export declare function clone(uriArr : UriObj): UriObj;
 
 /**
  *
  * @param {string | UriObj} that
  * @return {UriObj}
  */
-declare function param(that : string | UriObj): UriObj;
-
-/**
- *
- * @param {UriObj} base
- * @param {UriObj} ref
- * @return {UriObj}
- */
-declare function _resolve(base : UriObj, ref : UriObj): UriObj;
+export declare function param(that : string | UriObj): UriObj;
 
 /**
  * @param {string | UriObj | null} that
  * @param {UriObj} obj
  * @return {string}
  */
-declare function mixin(that : string | UriObj | null, obj: UriObj ): string;
+export declare function mixin(that : string | UriObj | null, obj: UriObj ): string;
 
 /**
  * @param {string} baseStr
  * @param {string} refStr
  * @return {boolean}
  */
-declare function isSubPath(baseStr : string, refStr : string): boolean;
+export declare function isSubPath(baseStr : string, refStr : string): boolean;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function paramString(that : string | UriObj | null): string;
+export declare function paramString(that : string | UriObj | null): string;
 
 /**
  *
@@ -100,21 +92,21 @@ declare function paramString(that : string | UriObj | null): string;
  * @param {string} what
  * @return {boolean}
  */
-declare function contains(arr : Array<string>, what : string): boolean;
+export declare function contains(arr : Array<string>, what : string): boolean;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function toString(that : string | UriObj | null): string;
+export declare function toString(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {UriObj}
  */
-declare function toUri(that : string | UriObj | null): UriObj;
+export declare function toUri(that : string | UriObj | null): UriObj;
 
 /**
  *
@@ -122,7 +114,7 @@ declare function toUri(that : string | UriObj | null): UriObj;
  * @param {string} toStrip
  * @return {string}
  */
-declare function strip(that : string | UriObj | null, toStrip : string): string;
+export declare function strip(that : string | UriObj | null, toStrip : string): string;
 
 /**
  *
@@ -131,49 +123,49 @@ declare function strip(that : string | UriObj | null, toStrip : string): string;
  * @param {boolean} ignoreFragment
  * @return {boolean}
  */
-declare function equals(that1 : string | UriObj | null, that2 : string | UriObj | null, ignoreFragment : boolean): boolean;
+export declare function equals(that1 : string | UriObj | null, that2 : string | UriObj | null, ignoreFragment : boolean): boolean;
 
 /**
  * basic getters
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getScheme(that : string | UriObj | null): string;
+export declare function getScheme(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getAuthority(that : string | UriObj | null): string;
+export declare function getAuthority(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getUserInfo(that : string | UriObj | null): string;
+export declare function getUserInfo(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getHost(that : string | UriObj | null): string;
+export declare function getHost(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getPort(that : string | UriObj | null): string;
+export declare function getPort(that : string | UriObj | null): string;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string}
  */
-declare function getPath(that : string | UriObj | null): string;
+export declare function getPath(that : string | UriObj | null): string;
 
 /**
  *
@@ -181,21 +173,21 @@ declare function getPath(that : string | UriObj | null): string;
  * @param {boolean} toObject
  * @return {string | UriObj | undefined}
  */
-declare function getQuery(that : string | UriObj | null, toObject : boolean): string | UriObj | undefined;
+export declare function getQuery(that : string | UriObj | null, toObject : boolean): string | UriObj | undefined;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {string | undefined}
  */
-declare function getFragment(that : string | UriObj | null): string | undefined;
+export declare function getFragment(that : string | UriObj | null): string | undefined;
 
 /**
  *
  * @param {string | UriObj | null} that
  * @return {Array<string>}
  */
-declare function getSegments(that : string | UriObj | null): Array<string>;
+export declare function getSegments(that : string | UriObj | null): Array<string>;
 
 /**
  * basic setters
@@ -203,7 +195,7 @@ declare function getSegments(that : string | UriObj | null): Array<string>;
  * @param {string} scheme
  * @return {string}
  */
-declare function setScheme(that : string | UriObj | null, scheme : string): string;
+export declare function setScheme(that : string | UriObj | null, scheme : string): string;
 
 /**
  *
@@ -211,7 +203,7 @@ declare function setScheme(that : string | UriObj | null, scheme : string): stri
  * @param {string} authority
  * @return {string}
  */
-declare function setAuthority(that : string | UriObj | null, authority : string): string;
+export declare function setAuthority(that : string | UriObj | null, authority : string): string;
 
 /**
  *
@@ -219,7 +211,7 @@ declare function setAuthority(that : string | UriObj | null, authority : string)
  * @param {string} userInfo
  * @return {string}
  */
-declare function setUserInfo(that : string|UriObj|null, userInfo : string): string;
+export declare function setUserInfo(that : string|UriObj|null, userInfo : string): string;
 
 /**
  *
@@ -227,7 +219,7 @@ declare function setUserInfo(that : string|UriObj|null, userInfo : string): stri
  * @param {string} host
  * @return {string}
  */
-declare function setHost(that : string|UriObj|null, host : string): string;
+export declare function setHost(that : string|UriObj|null, host : string): string;
 
 /**
  *
@@ -235,7 +227,7 @@ declare function setHost(that : string|UriObj|null, host : string): string;
  * @param {string} port
  * @return {string}
  */
-declare function setPort(that : string|UriObj|null, port : string): string;
+export declare function setPort(that : string|UriObj|null, port : string): string;
 
 /**
  *
@@ -243,7 +235,7 @@ declare function setPort(that : string|UriObj|null, port : string): string;
  * @param {string} path
  * @return {string}
  */
-declare function setPath(that : string|UriObj|null, path : string): string;
+export declare function setPath(that : string|UriObj|null, path : string): string;
 
 /**
  *
@@ -251,7 +243,7 @@ declare function setPath(that : string|UriObj|null, path : string): string;
  * @param {string|UriObj} query
  * @return {string}
  */
-declare function setQuery(that : string|UriObj|null, query : string|UriObj): string;
+export declare function setQuery(that : string|UriObj|null, query : string|UriObj): string;
 
 /**
  *
@@ -259,7 +251,7 @@ declare function setQuery(that : string|UriObj|null, query : string|UriObj): str
  * @param {string|UriObj} query
  * @return {string}
  */
-declare function appendQuery(that : string|UriObj|null, query : string|UriObj): string;
+export declare function appendQuery(that : string|UriObj|null, query : string|UriObj): string;
 
 /**
  *
@@ -267,7 +259,7 @@ declare function appendQuery(that : string|UriObj|null, query : string|UriObj): 
  * @param {string|UriObj} fragment
  * @return {string}
  */
-declare function setFragment(that : string|UriObj|null, fragment : string|UriObj): string;
+export declare function setFragment(that : string|UriObj|null, fragment : string|UriObj): string;
 
 /**
  *
@@ -275,7 +267,7 @@ declare function setFragment(that : string|UriObj|null, fragment : string|UriObj
  * @param {string|UriObj} fragment
  * @return {string}
  */
-declare function appendFragment(that : string|UriObj|null, fragment : string|UriObj): string;
+export declare function appendFragment(that : string|UriObj|null, fragment : string|UriObj): string;
 
 /**
  *
@@ -283,7 +275,7 @@ declare function appendFragment(that : string|UriObj|null, fragment : string|Uri
  * @param {Array<string>} segments
  * @return {string}
  */
-declare function setSegments(that : string|UriObj|null, segments : Array<string>): string;
+export declare function setSegments(that : string|UriObj|null, segments : Array<string>): string;
 
 /**
  *
@@ -291,84 +283,84 @@ declare function setSegments(that : string|UriObj|null, segments : Array<string>
  * @param {Array<string>}...appendSegmets
  * @return {string}
  */
-declare function appendSegments(that : string|UriObj|null, ...appendSegmets : Array<string>): string;
+export declare function appendSegments(that : string|UriObj|null, ...appendSegmets : Array<string>): string;
 
 /**
  * stripping specific parts of URI
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripOrigin(that : string|UriObj|null): string;
+export declare function stripOrigin(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripExtension(that : string|UriObj|null): string;
+export declare function stripExtension(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripCtxPath(that : string|UriObj|null): string;
+export declare function stripCtxPath(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripCtxPrefix(that : string|UriObj|null): string;
+export declare function stripCtxPrefix(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripPath(that : string|UriObj|null): string;
+export declare function stripPath(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripQuery(that : string|UriObj|null): string;
+export declare function stripQuery(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function stripFragment(that : string|UriObj|null): string;
+export declare function stripFragment(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function getScreenPath(that : string|UriObj|null): string;
+export declare function getScreenPath(that : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function getLastSegment(that : string|UriObj|null): string;
+export declare function getLastSegment(that : string|UriObj|null): string;
 
 /**
  * NTH: getLastNonVoidSegment ???
  * @param {string|UriObj|null} that
  * @return {boolean}
  */
-declare function denotesFolder(that : string|UriObj|null): boolean;
+export declare function denotesFolder(that : string|UriObj|null): boolean;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {string}
  */
-declare function convertToFolder(that : string|UriObj|null): string;
+export declare function convertToFolder(that : string|UriObj|null): string;
 
 /**
  *
@@ -376,7 +368,7 @@ declare function convertToFolder(that : string|UriObj|null): string;
  * @param {string|UriObj|null} ref
  * @return {boolean}
  */
-declare function isSubordinate(that : string|UriObj|null, ref : string|UriObj|null): boolean;
+export declare function isSubordinate(that : string|UriObj|null, ref : string|UriObj|null): boolean;
 
 /**
  *
@@ -384,7 +376,7 @@ declare function isSubordinate(that : string|UriObj|null, ref : string|UriObj|nu
  * @param {string|UriObj|null} ref
  * @return {string}
  */
-declare function resolve(that : string|UriObj|null, ref : string|UriObj|null): string;
+export declare function resolve(that : string|UriObj|null, ref : string|UriObj|null): string;
 
 /**
  *
@@ -392,11 +384,11 @@ declare function resolve(that : string|UriObj|null, ref : string|UriObj|null): s
  * @param {string|UriObj|null} ref
  * @return {string}
  */
-declare function resolveAsSubordinate(that : string|UriObj|null, ref : string|UriObj|null): string;
+export declare function resolveAsSubordinate(that : string|UriObj|null, ref : string|UriObj|null): string;
 
 /**
  *
  * @param {string|UriObj|null} that
  * @return {number}
  */
-declare function parseId(that : string|UriObj|null): number;
+export declare function parseId(that : string|UriObj|null): number;
