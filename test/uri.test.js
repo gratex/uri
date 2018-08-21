@@ -341,11 +341,18 @@ const stripCtxPrefixData = [
     [ '/a/svc/over/there/index.x.dtb?type=animal&name=narwhal#', '/over/there/index.x.dtb?type=animal&name=narwhal#' ]
 ];
 
-const stripCtxThrowErrorData = [
+const stripCtxPrefixThrowErrorData = [
     'http:/a/b/1',
     'http://localhost/a/b/1',
     'http://localhost:8080/a/b/1',
     '//localhost/a/b/1'
+];
+
+const stripCtxThrowErrorData = [
+    'http:/x/b/1',
+    'http://localhost/x/b/1',
+    'http://localhost:8080/x/b/1',
+    '//localhost/x/b/1'
 ];
 
 const stripOriginData = [
@@ -647,6 +654,10 @@ describe('basic setters test', (() => {
             expect(res).toBe(expected);
         }
     );
+
+    test('appendSegments should throw if no segments passed', () => {
+        expect(() => Uri.appendSegments('/foo')).toThrow('IllegalArgument, segments argument not present');
+    });
 }));
 
 test.each(denotesFolderData)(
@@ -721,10 +732,17 @@ test.each(stripCtxPrefixData)(
     }
 );
 
-test.each(stripCtxThrowErrorData)(
+test.each(stripCtxPrefixThrowErrorData)(
     'stripCtx should throw error when we try to strip CTX_PREFIX that does not exist',
     (original) => {
         expect(() => Uri.stripCtxPrefix(original)).toThrow('IllegalArgument, context prefix not present');
+    }
+);
+
+test.each(stripCtxThrowErrorData)(
+    'stripCtx should throw error when we try to strip CTX_PREFIX that does not exist',
+    (original) => {
+        expect(() => Uri.stripCtxPath(original)).toThrow('IllegalArgument, context not present');
     }
 );
 

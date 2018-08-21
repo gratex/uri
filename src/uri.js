@@ -14,7 +14,6 @@
  * @property {string} fragment
 */
 
-const assert = require('assert');
 const isEqualWith = require('lodash.isequalwith');
 const querystring = require('querystring');
 const uri = require('./_uri');
@@ -171,7 +170,9 @@ function strip(that, toStrip) {
         path = ''; // dont use undefined, resulting path should be empty ('/')
     } else {
         if (contains(toStrip, 'CTX')) {
-            assert(isSubPath(CTX, path), 'IllegalArgument, context not present');
+            if (!isSubPath(CTX, path)) {
+                throw new Error('IllegalArgument, context not present');
+            }
             path = path.substring(CTX.length);
         } else if (contains(toStrip, 'CTX_PREFIX')) {
             if (isSubPath(UI_CTX_PREFIX, path)) {
@@ -179,7 +180,7 @@ function strip(that, toStrip) {
             } else if (isSubPath(SVC_CTX_PREFIX, path)) {
                 path = path.substring(SVC_CTX_PREFIX.length);
             } else {
-                assert(false, 'IllegalArgument, context prefix not present');
+                throw new Error('IllegalArgument, context prefix not present');
             }
         }
         if (contains(toStrip, 'EXTENSION')) {
@@ -517,7 +518,9 @@ function setSegments(that, segments) {
  */
 function appendSegments(that, ...appendSegmets) {
     (Array.isArray(appendSegmets[0])) && (appendSegmets = appendSegmets[0]);
-    assert(appendSegmets[0] != null, 'IllegalArgument, segments argument not present');
+    if (!appendSegmets.length) {
+        throw new Error('IllegalArgument, segments argument not present');
+    }
     const segments = this.getSegments(that);
     !segments[segments.length - 1] && segments.pop(); // isLastSegmentEmpty
     return this.setSegments(that, segments.concat(appendSegmets));
@@ -680,7 +683,9 @@ function resolve(that, ref) {
 function resolveAsSubordinate(that, ref) {
     const u = param(convertToFolder(that));
     const s = _resolve(u, param(ref));
-    assert(isSubordinate(u, s), 'IllegalArgument, not subordinate');
+    if (!isSubordinate(u, s)) {
+        throw new Error('IllegalArgument, not subordinate');
+    }
     return uri.recomposeComponents(s);
 }
 
@@ -692,7 +697,9 @@ function resolveAsSubordinate(that, ref) {
  */
 function parseId(that) {
     const id = parseInt(getLastSegment(that), 10);
-    assert(!isNaN(id), 'IllegalArgument, numeric id not present');
+    if (isNaN(id)) {
+        throw new Error('IllegalArgument, numeric id not present');
+    }
     return id;
 }
 
