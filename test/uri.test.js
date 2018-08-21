@@ -790,3 +790,28 @@ test.each(resolveAsSubordinateErrorData)(
         expect(() => Uri.resolveAsSubordinate(original, ref)).toThrow('IllegalArgument, not subordinate');
     }
 );
+
+test('resolveUiCtx', () => {
+    expect(Uri.resolveUiCtx('/foo')).toBe('/a/ui/foo');
+    expect(Uri.resolveUiCtx('/a/ui/foo')).toBe('/a/ui/foo');
+    expect(() => Uri.resolveUiCtx('http://a.b.c/foo')).toThrow();
+});
+
+test('resolvesvcCtx', () => {
+    expect(Uri.resolveSvcCtx('/foo')).toBe('/a/svc/foo');
+    expect(Uri.resolveSvcCtx('/a/svc/foo')).toBe('/a/svc/foo');
+    expect(() => Uri.resolveSvcCtx('http://a.b.c/foo')).toThrow();
+});
+
+describe('strip empty context test', () => {
+    beforeAll(() => {
+        Uri.config({ CTX: '/', UI_CTX_PREFIX: null, SVC_CTX_PREFIX: null });
+    });
+    test('empty ctx', () => {
+        expect(() => Uri.resolveUiCtx('http://a.b.c/foo')).toThrow();
+        expect(() => Uri.resolveSvcCtx('http://a.b.c/foo')).toThrow();
+    });
+    afterAll(() => {
+        Uri.config({ CTX: '/a', UI_CTX_PREFIX: '/a/ui', SVC_CTX_PREFIX: '/a/svc' });
+    });
+});

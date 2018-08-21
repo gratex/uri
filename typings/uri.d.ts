@@ -392,3 +392,17 @@ export declare function resolveAsSubordinate(that : string|UriObj|null, ref : st
  * @return {number}
  */
 export declare function parseId(that : string|UriObj|null): number;
+
+/**
+ *
+ * @param {string|UriObj|null} that
+ * @return {string}
+ */
+export declare function resolveSvcCtx(that : string|UriObj|null): string;
+
+/**
+ *
+ * @param {string|UriObj|null} that
+ * @return {string}
+ */
+export declare function resolveUiCtx(that : string|UriObj|null): string;

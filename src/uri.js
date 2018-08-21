@@ -703,6 +703,46 @@ function parseId(that) {
     return id;
 }
 
+function prependCtxPrefix(that, prefix) {
+    const u = param(that);
+    if (u.authority || u.scheme) {
+        throw new Error('IllegalArgument, origin not expected');
+    }
+    const segments = uri.decodeSegments(u.path);
+    const ctxSegments = uri.decodeSegments(prefix);
+    const hasPrefix = ctxSegments.every((seg, i) => segments[i] === seg);
+    if (!hasPrefix) {
+        u.path = uri.encodeSegments(ctxSegments.concat(segments));
+    }
+    return uri.recomposeComponents(u);
+}
+
+/**
+ * @summary Prepends SVC CTX PREFIX
+ * @param {string|UriObj|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string}
+ */
+function resolveSvcCtx(that) {
+    if (!SVC_CTX_PREFIX) {
+        throw new Error('SVC_CTX_PREFIX is not defined, use config() before calling resolveSvcCtx');
+    }
+    return prependCtxPrefix(that, SVC_CTX_PREFIX);
+}
+
+/**
+ * @summary Prepends SVC CTX PREFIX
+ * @param {string|UriObj|null} that URI string or URI object. Current window URI used when null or undefined.
+ * @memberof module:Uri
+ * @returns {string}
+ */
+function resolveUiCtx(that) {
+    if (!UI_CTX_PREFIX) {
+        throw new Error('UI_CTX_PREFIX is not defined, use config() before calling resolveSvcCtx');
+    }
+    return prependCtxPrefix(that, UI_CTX_PREFIX);
+}
+
 module.exports = {
     appendFragment,
     appendQuery,
@@ -727,6 +767,8 @@ module.exports = {
     parseId,
     resolve,
     resolveAsSubordinate,
+    resolveSvcCtx,
+    resolveUiCtx,
     setAuthority,
     setFragment,
     setHost,
