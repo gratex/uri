@@ -107,42 +107,42 @@ export declare function encodeFragment(str : string): string;
  *
  * @param {string} raw
  * @param {string} legalRange
- * @param {string} doThrow
+ * @param {boolean} doThrow
  * @return {null | Error}
  */
-export declare function checkEncoding(raw : string, legalRange : string, doThrow : string): Error | null;
+export declare function checkEncoding(raw : string, legalRange : string, doThrow : boolean): Error | null;
 
 /**
  *
  * @param {string} str
- * @param {string} doThrow
+ * @param {boolean} doThrow
  * @return {null | Error}
  */
-export declare function checkSegmentsEncoding(str : string, doThrow : string): Error | null;
+export declare function checkSegmentsEncoding(str : string, doThrow : boolean): Error | null;
 
 /**
  *
  * @param {string} str
- * @param {string} doThrow
+ * @param {boolean} doThrow
  * @return {null | Error}
  */
-export declare function checkSegmentEncoding(str : string, doThrow : string): Error | null;
+export declare function checkSegmentEncoding(str : string, doThrow : boolean): Error | null;
 
 /**
  *
  * @param {string} str
- * @param {string} doThrow
+ * @param {boolean} doThrow
  * @return {null | Error}
  */
-export declare function checkQueryEncoding(str : string, doThrow : string): Error | null;
+export declare function checkQueryEncoding(str : string, doThrow : boolean): Error | null;
 
 /**
  *
  * @param {string} str
- * @param {string} doThrow
+ * @param {boolean} doThrow
  * @return {null | Error}
  */
-export declare function checkFragmentEncoding(str : string, doThrow : string): Error | null;
+export declare function checkFragmentEncoding(str : string, doThrow : boolean): Error | null;
 
 /**
  *
