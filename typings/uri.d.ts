@@ -173,7 +173,7 @@ export declare function getPath(that : string | UriObj | null): string;
  * @param {boolean} toObject
  * @return {string | UriObj | undefined}
  */
-export declare function getQuery(that : string | UriObj | null, toObject : boolean): string | UriObj | undefined;
+export declare function getQuery(that : string | UriObj | null, toObject : boolean): string | {[key:string]:any} | undefined;
 
 /**
  *
