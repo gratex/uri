@@ -1,6 +1,6 @@
 {
   "name": "@gjax/uri",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "Convenient uri API",
   "main": "./src/index.js",
   "engines": {
