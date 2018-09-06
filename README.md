@@ -1,4 +1,4 @@
-![NpmVersion](https://img.shields.io/npm/v/@gjax/uri.svg)
+[![NpmVersion](https://img.shields.io/npm/v/@gjax/uri.svg)](https://www.npmjs.com/package/@gjax/uri)
 [![npm](https://img.shields.io/npm/dm/@gjax/uri.svg)](https://www.npmjs.com/package/@gjax/uri)
 [![Build Status](https://travis-ci.org/gratex/uri.svg?branch=readme)](https://travis-ci.org/gratex/uri)
 [![Coverage Status](https://coveralls.io/repos/github/gratex/uri/badge.svg?branch=readme)](https://coveralls.io/github/gratex/uri?branch=readme)
