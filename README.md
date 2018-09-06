@@ -21,7 +21,7 @@ npm install @gjax/uri
 
 See [API Documentation](http://gratex.github.io/uri/doc/api/index.html) for full list of methods and modules.
 
-### Uri - high-level API
+### *Uri* - high-level API
 
 Provides methods for safe URL manipulation.
 
@@ -33,7 +33,7 @@ const code = 'john/doe';
 const url = Uri.appendSegments('/my/sample/', 'collection', code); // '/my/sample/collection/john%2Fdoe'  
 ```
 
-### uri - low-level API
+### *uri* - low-level API
 
 Provides methods which are used by *Uri* implematation but can also be used directly.
 (like: decompising/recomposing components, encoding single URI parts, etc.)
