@@ -44,7 +44,7 @@ const { uri } = require('@gjax/uri');
 const res = uri.encodeQuery('foo#bar'); // 'foo%23bar'
 ```
 
-### uri builder
+### URI builder tags
 
 ES6 template literal tags & utils used for building URL strings with correct encoding.
 
