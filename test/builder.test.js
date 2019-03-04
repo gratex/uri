@@ -83,4 +83,10 @@ describe('uri builder test', (() => {
         expect(() => uriBuilder`${foo}://${foo}@www.google.com/test/`)
             .toThrow('Params outside path/query/fragment are unsupported');
     });
+
+    it('rql ri builder with path params work', () => {
+        const bar = 'bar';
+        expect(uriBuilderRql`/foo/${bar}/?eq(bar,${bar})`)
+            .toBe('/foo/bar/?eq(bar,bar)');
+    });
 }));

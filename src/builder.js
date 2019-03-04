@@ -80,7 +80,8 @@ function uriBuilder(strings, ...values) {
  *
  */
 function uriBuilderRql(strings, ...values) {
-    const encoders = [ [ 'query', uri.encodeRqlValue ], ...ENCODERS.slice(1) ];
+    const encoders = ENCODERS.slice(0);
+    encoders.splice(1, 1, [ 'query', uri.encodeRqlValue ]);
     return build(encoders, strings, ...values);
 }
 
