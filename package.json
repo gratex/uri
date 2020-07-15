@@ -18,17 +18,17 @@
         "lodash.isequalwith": "^4.4.0"
     },
     "devDependencies": {
-        "coveralls": "^3.0.2",
+        "coveralls": "^3.1.0",
         "docdash": "^0.4.0",
         "dtsmake": "0.0.10",
         "esformatter": "^0.10.0",
         "esformatter-eol-last": "^1.0.0",
         "esformatter-limit-linebreaks": "0.0.3",
-        "eslint": "^5.1.0",
-        "jest": "^23.5.0",
-        "jsdoc": "^3.5.5",
+        "eslint": "^5.16.0",
+        "jest": "^23.6.0",
+        "jsdoc": "^3.6.4",
         "pre-commit": "^1.2.2",
-        "typescript": "^2.0.0"
+        "typescript": "^2.9.2"
     },
     "scripts": {
         "coveralls": "cat ./coverage/lcov.info | node coveralls",
