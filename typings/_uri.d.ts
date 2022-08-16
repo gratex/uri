@@ -151,3 +151,10 @@ export declare function checkFragmentEncoding(str : string, doThrow : boolean): 
  * @return {object}
  */
 export declare function parseQuery(query : string, bDecode : boolean): { [ key : string ] : any };
+
+/**
+ *
+ * @param {string} str
+ * @return {string}
+ */
+export declare function encodeRqlValue(str : string): string;
