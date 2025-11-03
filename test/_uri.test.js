@@ -183,6 +183,12 @@ test('_preParseBaseUri test', (() => {
     expect(() => uri.resolve(decomposed, null)).toThrow();
 }));
 
+test('_preParseBaseUri should throw specific error for missing scheme', () => {
+    const decomposed = uri.decomposeComponents('//a/b/c/d;p?q');
+    const ref = uri.decomposeComponents('g'); // A valid, non-null ref
+    expect(() => uri.resolve(decomposed, ref)).toThrow('Violation 5.2.1, scheme component required');
+});
+
 test.each(percentEncodeData)(
     'percentEncode test: [%p, %p, %p]',
     (legalRange, input, expected) => {
