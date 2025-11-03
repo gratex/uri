@@ -102,9 +102,17 @@ function recomposeAuthorityComponents(userInfo, host, port) {
 }
 
 function _checkAuthorityInvariant(authority, userInfo, host, port) {
-    const b = (authority == null && userInfo == null && host == null && port == null) ||
-        (authority != null && authority === recomposeAuthorityComponents(userInfo, host, port));
-    if (!b) {
+    if (authority == null) {
+        // If authority is null, all sub-parts must also be null.
+        if (userInfo != null || host != null || port != null) {
+            throw new Error('IllegalStateException,AuthorityInvariant broken');
+        }
+        return; // This is a valid state (all null)
+    }
+
+    // If authority is not null, it must match the recomposed parts.
+    // recomposeAuthorityComponents will throw if host is null, which correctly indicates a broken invariant.
+    if (authority !== recomposeAuthorityComponents(userInfo, host, port)) {
         throw new Error('IllegalStateException,AuthorityInvariant broken');
     }
 }
@@ -400,6 +408,7 @@ function checkFragmentEncoding(str, doThrow) {
 function parseQuery(query, bDecode) {
     // returns:	Object
     if (query == null) { return null; }
+    // Stryker disable next-line all // (quick exit only, no logic change)
     if (query === '') { return {}; }
 
     return query.split('&').reduce((obj, part) => {

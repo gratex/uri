@@ -772,7 +772,7 @@ describe('parseId test', (() => {
     test.each(parseIdErrorData)(
         'Should throw error because id can be only number: %p',
         (original) => {
-            expect(() => Uri.parseId(original)).toThrow();
+            expect(() => Uri.parseId(original)).toThrow('IllegalArgument, numeric id not present');
         }
     );
 }));

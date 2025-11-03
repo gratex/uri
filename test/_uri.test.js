@@ -190,6 +190,12 @@ test.each(percentEncodeData)(
         expect(res).toBe(expected);
     }
 );
+test('percentEncode should correctly encode Russian Unicode letters', () => {
+    const input = 'привет';
+    const expected = '%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82';
+    const result = uri.percentEncode(input);
+    expect(result).toBe(expected);
+});
 
 test.each(componentsData)(
     'component test: [%p, %p, %p]',
@@ -204,19 +210,34 @@ test('checkAuthorityInvariant should throw in recompose on invalid input', (() =
     let decomposed = uri.decomposeComponents('http://a@b:800');
     decomposed.port = '87';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
 
     decomposed = uri.decomposeComponents('http://a@b:800');
     decomposed.host = 'c';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
 
     decomposed = uri.decomposeComponents('http://a@b:800');
     decomposed.userInfo = 'c';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
 
     decomposed = uri.decomposeComponents('http://a@b:800');
     decomposed.authority = 'b@b:800';
     expect(() => uri.recomposeComponents(decomposed)).toThrow();
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
 }));
+
+test('checkAuthorityInvariant should throw when authority is null but sub-components are not', () => {
+    let decomposed = { scheme: 'http', path: '/foo', host: 'example.com' };
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
+
+    decomposed = { scheme: 'http', path: '/foo', userInfo: 'user' };
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
+
+    decomposed = { scheme: 'http', path: '/foo', port: '8080' };
+    expect(() => uri.recomposeComponents(decomposed)).toThrow('IllegalStateException,AuthorityInvariant broken');
+});
 
 test('recomposeAuthorityComponents test', (() => {
     expect(uri.recomposeAuthorityComponents('foo', 'bar', '123')).toBe('foo@bar:123');
