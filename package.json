@@ -15,20 +15,22 @@
         "es6 template"
     ],
     "dependencies": {
-        "lodash.isequalwith": "^4.4.0"
+        "lodash.isequalwith": "^4.4.0",
+        "qs": "^6.14.0"
     },
     "devDependencies": {
         "coveralls": "^3.1.0",
-        "docdash": "^0.4.0",
-        "dtsmake": "0.0.10",
+        "docdash": "^2.0.2",
+        "dtsmake": "^0.0.6",
         "esformatter": "^0.11.3",
         "esformatter-eol-last": "^1.0.0",
         "esformatter-limit-linebreaks": "0.0.3",
-        "eslint": "^7.4.0",
-        "jest": "^26.1.0",
-        "jsdoc": "^3.6.4",
+        "eslint": "^9.39.0",
+        "jest": "^30.2.0",
+        "jest-environment-jsdom": "^30.2.0",
+        "jsdoc": "^4.0.5",
         "pre-commit": "^1.2.2",
-        "typescript": "^2.9.2"
+        "typescript": "^5.9.3"
     },
     "scripts": {
         "coveralls": "cat ./coverage/lcov.info | node coveralls",
@@ -52,6 +54,9 @@
     "license": "ISC",
     "typings": "./typings/index.d.ts",
     "jest": {
-        "testURL": "http://localhost/foo/"
+        "testEnvironment": "jsdom",
+        "testEnvironmentOptions": {
+            "url": "http://localhost/foo/"
+        }
     }
 }

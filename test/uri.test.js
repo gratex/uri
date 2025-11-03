@@ -1,7 +1,8 @@
 const Uri = require('../src/uri');
 const uri = require('../src/_uri');
 const packageJson = require('../package.json');
-const TEST_URL = packageJson.jest.testURL;
+const TEST_URL = packageJson.jest.testEnvironmentOptions.url;
+
 const TEST_URL_OBJ = uri.decomposeComponents(TEST_URL);
 const FULL_URI = 'foo://username:password@my.example.com:8042/over/there/index.x.dtb?type=animal&name=narwhal#nose';
 
