@@ -354,6 +354,11 @@ describe('parseQuery test', (() => {
     });
 }));
 
+test('checkSegmentEncoding should allow uppercase characters', () => {
+    // This test kills the mutant that removes 'A-Z' from the list of valid characters.
+    expect(uri.checkSegmentEncoding('A')).toBeNull();
+});
+
 function checkEncoding(checkFn, value, isCorrectValue) {
     if (isCorrectValue) {
         expect(checkFn(value)).toBeNull();
