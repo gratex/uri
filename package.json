@@ -19,6 +19,8 @@
         "qs": "^6.14.0"
     },
     "devDependencies": {
+        "@stryker-mutator/core": "^9.3.0",
+        "@stryker-mutator/jest-runner": "^9.3.0",
         "coveralls": "^3.1.0",
         "docdash": "^2.0.2",
         "dtsmake": "^0.0.6",
