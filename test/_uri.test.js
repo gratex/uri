@@ -223,7 +223,7 @@ test('recomposeAuthorityComponents test', (() => {
     expect(uri.recomposeAuthorityComponents(null, 'bar', '123')).toBe('bar:123');
     expect(uri.recomposeAuthorityComponents('foo', 'bar')).toBe('foo@bar');
     expect(uri.recomposeAuthorityComponents(null, 'bar')).toBe('bar');
-    expect(() => uri.recomposeAuthorityComponents('foo', null, '123')).toThrow();
+    expect(() => uri.recomposeAuthorityComponents('foo', null, '123')).toThrow('Illegal host:null');
 }));
 
 test.each(encodeQueryData)(
