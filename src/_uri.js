@@ -282,6 +282,7 @@ function resolve(base, ref) {
 * @returns {array} Path split to DECODED segments as array
 */
 function decodeSegments(encodedPath) {
+    // Stryker disable next-line all // (quick exit only, no logic change)
     if (encodedPath === '') {
         return [];
     }

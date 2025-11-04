@@ -46,7 +46,9 @@ const isSubordinateData = [
     [ '', '/a/b/', true, true ],
     [ ' ', '/a/b/c/', true, false ],
     [ '//john.doe@www.example.com:123/forum/questions/', '//john.doe@www.example.com:123/forum/questions/', true, true ],
-    [ '//john.doe@www.example.com:123/forum/questions/', '//michal.zajic@www.example.com:123/forum/questions/', true, false ]
+    [ '//john.doe@www.example.com:123/forum/questions/', '//michal.zajic@www.example.com:123/forum/questions/', true, false ],
+    [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', true, true ]
+    
 ];
 
 const removeDotSegmentsData = [
@@ -318,6 +320,7 @@ describe('decodeSegments test', (() => {
     });
     test('4 path-abempty expected', () => {
         expect(() => uri.decodeSegments(' /a')).toThrow();
+        expect(() => uri.decodeSegments(' /a')).toThrow('path-abempty expected');
     });
 }));
 
@@ -334,6 +337,10 @@ test('encodeSegments tests', (() => {
     data = 4;
     expect(() => uri.encodeSegments(data)).toThrow();
 }));
+
+test('encodeSegments should throw error for non-array input', () => {
+    expect(() => uri.encodeSegments('not an array')).toThrow('IllegalArgumentException, array of segments expected');
+});
 
 test.each(segmentsData)(
     'segments test: %p',
