@@ -194,18 +194,14 @@ function removeDotSegments(path) {
         if (_in.indexOf('/../') === 0) {
             inputBufferStart += 3;
             const xi = output.lastIndexOf('/');
-            if (xi !== -1 && xi !== output.length) {
-                output = output.substring(0, xi);
-            }
+            output = xi === -1?"":output.substring(0, xi);
             continue;
         }
         if (_in === '/..') {
             _in = '/';
             inputBufferStart += 3;
             const xi = output.lastIndexOf('/');
-            if (xi !== -1 && xi !== output.length) {
-                output = output.substring(0, xi);
-            }
+            output = xi === -1?"":output.substring(0, xi);
         }
         if (_in === '.') {
             inputBufferStart += 1;
