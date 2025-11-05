@@ -48,8 +48,7 @@ const isSubordinateData = [
     [ '//john.doe@www.example.com:123/forum/questions/', '//john.doe@www.example.com:123/forum/questions/', true, true ],
     [ '//john.doe@www.example.com:123/forum/questions/', '//michal.zajic@www.example.com:123/forum/questions/', true, false ],
     [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', true, true ],
-    [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', false, false ]
-    
+    [ '/a/b', '/a/b', false, false ]
 ];
 
 const removeDotSegmentsData = [
@@ -63,11 +62,14 @@ const removeDotSegmentsData = [
     [ '.', '' ],
     [ '../', '' ],
     [ '/..', '/' ],
-    [ './', '' ] // modified from 6.2.2.
+    [ './', '' ], // modified from 6.2.2.,
+    [ 'nothingToRemove', 'nothingToRemove' ]
 ];
 
 const resolveData = [
     // ref //base //expected value
+    [ 'c', 'foo:a/b', 'foo:a/c' ],
+  
     [ 'g:h', 'http://a/b/c/d;p?q', 'g:h' ],
     [ 'g', 'http://a/b/c/d;p?q', 'http://a/b/c/g' ],
     [ './g', 'http://a/b/c/d;p?q', 'http://a/b/c/g' ],
@@ -119,6 +121,7 @@ const resolveData = [
     [ './../g', 'http://john.doe@www.example.com:123', 'http://john.doe@www.example.com:123/g' ],
     [ './../^g*', 'http://a/b/c;p?q', 'http://a/^g*' ],
     [ './../^g*', 'http:', 'http:^g*' ]
+   
 ];
 
 const segmentsData = [
