@@ -64,15 +64,16 @@ function param(that) {
     return (typeof that == 'string') ? uri.decomposeComponents(that) : clone(that);
 }
 function _resolve(base, ref) {
+     // normal code
+    if (base.scheme) { 
+        return uri.resolve(base, ref);
+    }
     // less strict version of uri.resolve, scheme is not required
-    const scheme = base.scheme;
-    if (!scheme) {
-        base.scheme = 'http';
-    }
-    const s = uri.resolve(base, ref);
-    if (!scheme) {
-        delete s.scheme;
-    }
+    // If no scheme, create a temporary clone with a default scheme for resolving.
+    // Stryker disable next-line StringLiteral: The value of the temporary scheme does not matter, it is only there to pass a `scheme != null` check.
+    const tempBase = Object.assign({}, base, { scheme: 'whatever' });
+    const s = uri.resolve(tempBase, ref);
+    delete s.scheme; //remove temporary scheme
     return s;
 }
 
