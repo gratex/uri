@@ -59,6 +59,10 @@
         "testEnvironment": "jsdom",
         "testEnvironmentOptions": {
             "url": "http://localhost/foo/"
-        }
+        },
+        "testMatch": [
+            "**/test/*.test.js",
+            "**/test/*.test2.js"
+        ]
     }
 }

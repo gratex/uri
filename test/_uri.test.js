@@ -382,6 +382,10 @@ describe('parseQuery test', (() => {
         const a3 = uri.parseQuery(null);
         expect(a3).toBeNull();
     });
+    test('undefined expected using false', () => {
+        const a3 = uri.parseQuery(undefined);
+        expect(a3).toBeNull();
+    });
     test('string query expected', () => {
         const a4 = uri.parseQuery('x=10&y=5&x=6&x=8', true);
         expect(a4).toEqual({ x: [ '10', '6', '8' ], y: '5' });

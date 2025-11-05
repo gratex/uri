@@ -45,7 +45,7 @@ function equalsQueryStr(query1, query2) {
         }
         return undefined; // isEqualWith will do the job if we return undef
     }
-
+    // Stryker disable next-line LogicalOperator // (mutant will change || to &&), identical strings will always return the same if quick exit or parseQuery
     if (!query1 || !query2) {
         return query1 === query2;
     }
