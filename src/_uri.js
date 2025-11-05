@@ -1,10 +1,10 @@
 /**
-	 Credits to:
-	 -------------------------
+     Credits to:
+     -------------------------
      1.	uri_funcs.js - URI functions based on STD 66 / RFC 3986
         Author (original): Mike J. Brown <mike at skew.org>  Version: 2007-01-04
-	 2.	http://jena.sourceforge.net/iri/javadoc/index.html
-	 -------------------------
+     2.	http://jena.sourceforge.net/iri/javadoc/index.html
+     -------------------------
  **/
 
 /**
@@ -71,7 +71,7 @@ const RQL_VALUE = RFC3986_QUERY.replace(/[=><!,:&|/()]/g, '');
 
 function decomposeComponents(uriStr) {
     /* eslint-disable-next-line array-bracket-spacing */ // (formatter has problems when starting with ,)
-    const [,, scheme,, authority,, userInfo, host,,, port, path,, query,, fragment ] = uriStr.match(splitUriRegex);
+    const [, , scheme, , authority, , userInfo, host, , , port, path, , query, , fragment] = uriStr.match(splitUriRegex);
     const u = { scheme, authority, path, query, fragment };
     if (u.authority != null) {
         Object.assign(u, { userInfo, port, host });
@@ -189,19 +189,17 @@ function removeDotSegments(path) {
         if (_in === '/.') {
             _in = '/';
             inputBufferStart += 2;
-        // force end of loop
+            // force end of loop
         }
         if (_in.indexOf('/../') === 0) {
             inputBufferStart += 3;
-            const xi = output.lastIndexOf('/');
-            output = xi === -1?"":output.substring(0, xi);
+            output = output.substring(0, output.lastIndexOf('/')); // remove last segment
             continue;
         }
         if (_in === '/..') {
             _in = '/';
             inputBufferStart += 3;
-            const xi = output.lastIndexOf('/');
-            output = xi === -1?"":output.substring(0, xi);
+            output = output.substring(0, output.lastIndexOf('/')); // remove last segment
         }
         if (_in === '.') {
             inputBufferStart += 1;
@@ -220,6 +218,8 @@ function removeDotSegments(path) {
     }
     // 5.2.4 3
     return output;
+
+
 }
 
 // 5.2.3.  Merge Paths
@@ -229,6 +229,8 @@ function _merge({ authority, path }, refPath) { // object,string
         return `/${refPath}`;
     }
     const xi = path.lastIndexOf('/');
+    // Stryker disable next-line ConditionalExpression 
+    // condition is rendundant since path.substring(0, xi + 1) + refPath is the same as relPath when xi === -1
     return (xi === -1) ? refPath : path.substring(0, xi + 1) + refPath;
 }
 
@@ -408,11 +410,11 @@ function parseQuery(query, bDecode) {
     if (query === '') { return {}; }
 
     return query.split('&').reduce((obj, part) => {
-        const [ name, val ] = part.split('=').map(bDecode ? decodeURIComponent : (p) => p);
+        const [name, val] = part.split('=').map(bDecode ? decodeURIComponent : (p) => p);
         const currVal = obj[name];
         return {
             ...obj,
-            [name]: currVal == null ? val : (Array.isArray(currVal) ? (currVal.push(val), currVal) : [ currVal, val ])
+            [name]: currVal == null ? val : (Array.isArray(currVal) ? (currVal.push(val), currVal) : [currVal, val])
         };
     }, {});
 }
