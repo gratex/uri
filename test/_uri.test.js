@@ -47,7 +47,8 @@ const isSubordinateData = [
     [ ' ', '/a/b/c/', true, false ],
     [ '//john.doe@www.example.com:123/forum/questions/', '//john.doe@www.example.com:123/forum/questions/', true, true ],
     [ '//john.doe@www.example.com:123/forum/questions/', '//michal.zajic@www.example.com:123/forum/questions/', true, false ],
-    [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', true, true ]
+    [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', true, true ],
+    [ '//john.doe@www.example.com:123/forum/questions/', '/forum/questions/', false, false ]
     
 ];
 
